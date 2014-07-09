@@ -1,5 +1,4 @@
 #include "GameScene.h"
-#include "Enemy.h"
 USING_NS_CC;
 #define objPosX(obj) obj.at("x").asInt() + obj.at("width").asInt()/2
 #define objPosY(obj) obj.at("y").asInt() + obj.at("height").asInt()/2
@@ -7,26 +6,26 @@ USING_NS_CC;
 Scene* Game::createScene(){
 	auto scene = Scene::create();
 	auto layer = Game::create();
-    scene->addChild(layer);
-    return scene;
+	scene->addChild(layer);
+	return scene;
 }
 
 bool Game::init()
 {
-    if ( !Layer::init() )
-    {
-        return false;
-    }
+	if ( !Layer::init() )
+	{
+		return false;
+	}
 
 	Size visibleSize = Director::getInstance()->getVisibleSize();
-    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	auto closeItem = MenuItemImage::create("CloseNormal.png",
-                                           "CloseSelected.png",
-										   CC_CALLBACK_1(Game::menuCloseCallback, this));
+		"CloseSelected.png",
+		CC_CALLBACK_1(Game::menuCloseCallback, this));
 	closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
-                                origin.y + closeItem->getContentSize().height/2));
-    auto menu = Menu::create(closeItem, NULL);
-    menu->setPosition(Vec2::ZERO);
+		origin.y + closeItem->getContentSize().height/2));
+	auto menu = Menu::create(closeItem, NULL);
+	menu->setPosition(Vec2::ZERO);
 	this->addChild(menu);
 
 	m_map = TMXTiledMap::create("map1.tmx");
@@ -43,11 +42,12 @@ bool Game::init()
 	ValueMap enemyObject = peopleObjectGroup->getObject("enemy");	//获取一个name为“baby”的对象
 	m_enemyPosition = Vec2(objPosX(enemyObject),objPosY(enemyObject));	//enemy对象的起始位置
 
-	TMXObjectGroup* towerObjectGroup = m_map->getObjectGroup("tower");	//读取对象层“tower”
-	ValueVector towerObjects = towerObjectGroup->getObjects();	//获得“tower”对象层里面的所有对象
 	SpriteBatchNode* towerbase = SpriteBatchNode::create("towerbase.png");	//用图片创建一个Batch
 	towerbase->setPosition(Vec2::ZERO);	//设置这个Batch的位置
 	this->addChild(towerbase);	//将这个Batch加到场景里
+
+	TMXObjectGroup* towerObjectGroup = m_map->getObjectGroup("tower");	//读取对象层“tower”
+	ValueVector towerObjects = towerObjectGroup->getObjects();	//获得“tower”对象层里面的所有对象
 	for (ValueVector::iterator it = towerObjects.begin(); it != towerObjects.end(); it++){//对“tower”层里的每一个对象
 		ValueMap towerObject = it->asValueMap();	//得到这个对象的属性
 		int tower_x = objPosX(towerObject);
@@ -59,8 +59,30 @@ bool Game::init()
 		tower->runAction(actionRepeateFadeOutIn);	//给精灵赋予特效
 	}
 
+	TMXObjectGroup* roadObjectGroup = m_map->getObjectGroup("road");	//读取对象层“road”
+	ValueVector roadObjects = roadObjectGroup->getObjects();	//获得“road”对象层里面的所有对象
+	for (ValueVector::iterator it = roadObjects.begin(); it != roadObjects.end(); it++)//对“road”层里的每一个对象
+	{
+		ValueMap roadObject = it->asValueMap();	//得到这个对象的属性
+		std::string directionStr = roadObject.at("direction").asString();
+		int direction;
+		if ("left" == directionStr){
+			direction = LEFT;
+		} else if ("up" == directionStr) {
+			direction = UP;
+		} else if ("right" == directionStr) {
+			direction = RIGHT;
+		} else {
+			direction = DOWN;
+		}
+		m_roads.push_back(Road(roadObject.at("x").asFloat(), roadObject.at("y").asFloat(),
+			roadObject.at("width").asFloat(), roadObject.at("height").asFloat(),
+			direction));	//把这个对象看作长方形储存到数组里
+	}
+
 	this->scheduleOnce(schedule_selector(Game::addEnemy), 1.0f);
-    return true;
+	this->schedule(schedule_selector(Game::moveEnemy), 0.5f);
+	return true;
 }
 
 void Game::addEnemy(float dt){
@@ -69,6 +91,20 @@ void Game::addEnemy(float dt){
 		return;
 	enemy->setPosition(m_enemyPosition);
 	this->addChild(enemy);
+	m_enemies.pushBack(enemy);
+}
+
+void Game::moveEnemy(float dt){
+	for (int i = 0; i < m_enemies.size(); i++){
+		Enemy* enemy = m_enemies.at(i);
+		Vec2 enemy_position = enemy->getPosition();
+		for (std::vector<Road>::iterator it = m_roads.begin(); it != m_roads.end(); it++){
+			if (it->containsPoint(enemy_position)){
+				enemy->runAction(MoveBy::create(0.5f, it->getDirection() * enemy->getSpeed()));
+				break;
+			}
+		}
+	}
 }
 
 void Game::menuCloseCallback(Ref* pSender)

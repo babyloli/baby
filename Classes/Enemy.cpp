@@ -43,6 +43,7 @@ bool Enemy::init(){
 	{
 	case VIRUS_TYPE_0:
 		enemy = Sprite::create("s1.png");
+		m_curSpeed = m_originSpeed = 50;
 	default:
 		break;
 	}
