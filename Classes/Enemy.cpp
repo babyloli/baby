@@ -2,126 +2,105 @@
 #include <math.h>
 USING_NS_CC;
 
-Enemy::Enemy(){
+Enemy::Enemy()
+	:m_damage(1)
+	,m_originSpeed(3)
+	,m_curSpeed(3)
+	,m_magicalDefence(0)
+	,m_physicalDefebce(0)
+	,m_type(0)
+	,m_pProTimer(NULL)
+{
 }
 
-Enemy::~Enemy(){
+Enemy::Enemy(int type)
+	:m_damage(1)
+	,m_originSpeed(3)
+	,m_curSpeed(3)
+	,m_magicalDefence(0)
+	,m_physicalDefebce(0)
+	,m_type(type)
+	,m_pProTimer(NULL)
+{
+}
+
+Enemy* Enemy::create(int type){
+	Enemy *pRet = new Enemy(type);
+	if (pRet && pRet->init()) {
+		pRet->autorelease();
+		return pRet;
+	}
+	else {
+		delete pRet;
+		pRet = NULL;
+		return NULL;
+	} 
 }
 
 bool Enemy::init(){
-	auto enemy = Sprite::create("s1.png");
+	Sprite* enemy = NULL;
+	switch (m_type)
+	{
+	case VIRUS_TYPE_0:
+		enemy = Sprite::create("s1.png");
+	default:
+		break;
+	}
+	if (!enemy)
+		return false;
 	this->addChild(enemy);
-	auto hpBar = Sprite::create("hpbar.png");
-	auto MaxhpBar = Sprite::create("Maxhpbar.png");
-	MaxhpBar->setScale(0.06);
-	this->addChild(MaxhpBar);
-	auto protimer=ProgressTimer::create(hpBar);
-	protimer->setType(ProgressTimer::Type::BAR);
-    protimer->setMidpoint(ccp(0, 0.5));
-    protimer->setBarChangeRate(ccp(1, 0));
-	protimer->setPercentage(30);
-	protimer->setScale(0.06);
-	this->addChild(protimer);
-	protimer->setPosition(0,25);
-	MaxhpBar->setPosition(0,25);
-	pointCount=0;
+	
+	auto hpBar = Sprite::create("Maxhpbar.png");
+	if (!hpBar)
+		return false;
+	m_pProTimer = ProgressTimer::create(hpBar);
+	m_pProTimer->setType(ProgressTimer::Type::BAR);
+	m_pProTimer->setMidpoint(Vec2(0, 0.5f));
+	m_pProTimer->setBarChangeRate(Vec2(1, 0));
+	m_pProTimer->setPercentage(30);
+	m_pProTimer->setScale(0.06f);
+	m_pProTimer->setPosition(0,25);
+	this->addChild(m_pProTimer);
+
 	return true;
 }
 
-bool Enemy::SetObjectGroup(TMXObjectGroup* obj){
-	this->objects=obj;
-	return true;
-}
-
-void Enemy::InitWayPoints(float offx){
-	Node* WayPoint = NULL;
-	int count = 0;
-	ValueMap point;
-	point=objects->getObject(std::to_string(count));
-	do{
-		float x=point.at("x").asFloat();
-		float y=point.at("y").asFloat();
-		WayPoint=Node::create();
-		WayPoint->setPosition(Vec2(x-offx,y));
-		this->pointsVector.pushBack(WayPoint);
-		count++;
-		point=objects->getObject(std::to_string(count));
-	} while(point.begin()!=point.end());
-	WayPoint=NULL;
-}
-
-Node* Enemy::currPoint(){
- 
-	return this->pointsVector.at(pointCount);
-}
-
-Node* Enemy::nextPoint(){
-	int maxcount=this->pointsVector.size();
-	pointCount++;
-	if(pointCount<maxcount){
-		return this->pointsVector.at(pointCount);
-	}
-	else{
-	    return this->pointsVector.at(pointCount-1);
-	}
-	return NULL;
-}
-
-void Enemy::runbyWay(){
-	int maxcount=this->pointsVector.size();
-	Vector<FiniteTimeAction*> Actions;
-	auto wayPoint=currPoint();
-	setPosition(wayPoint->getPosition());
-	while(pointCount<maxcount){
-		auto wayPoint=currPoint();
-	    auto goalpoint=nextPoint();
-		float distance=sqrtf(pow((wayPoint->getPositionX()-goalpoint->getPositionX()),2)+pow((wayPoint->getPositionY()-goalpoint->getPositionY()),2));
-		Actions.pushBack(MoveTo::create(distance/OriSpeed,goalpoint->getPosition()));
-	}
-	run=Sequence::create(Actions);
-	runAction(run);
-}
-
-bool Enemy::changeSpeed(int rspeed){
-	this->getScheduler()->setTimeScale(100);
-	return true;
-}
+//----------------get/set-----------------------
 
 int Enemy::getType(){
-	return this->type;
+	return this->m_type;
 }
 bool Enemy::setType(int type){
-	this->type=type;
+	this->m_type=type;
 	return true;
-}
-int Enemy::getMaxHp(){
-	return this->MaxHp;
-}
-bool Enemy::setMaxHp(int hp){
-	this->MaxHp=hp;
-	return true;
-}
-int Enemy::getHp(){
-	return this->Hp;
-	
 }
 
-bool Enemy::setHp(int hp){
-	this->Hp=hp;
-	return true;
+float Enemy::getHp(){
+	if (m_pProTimer){
+		return m_pProTimer->getPercentage();
+	}
+	return 0;
 }
-int Enemy::getOriSpeed(){
-	return this->OriSpeed;
+
+bool Enemy::setHp(float hp){
+	if (m_pProTimer){
+		m_pProTimer->setPercentage(hp);
+		return true;
+	}
+	return false;
 }
-bool Enemy::setOriSpeed(int ospeed){
-	this->OriSpeed=ospeed;
+int Enemy::getOriginSpeed(){
+	return this->m_originSpeed;
+}
+bool Enemy::setOriginSpeed(int ospeed){
+	this->m_originSpeed = ospeed;
 	return true;
 }
 int Enemy::getSpeed(){
-	return this->OriSpeed;
+	return this->m_curSpeed;
 }
 bool Enemy::setSpeed(int rspeed){
-	this->rSpeed=rspeed;
+	this->m_curSpeed = rspeed;
 	return true;
 }
 

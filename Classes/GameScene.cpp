@@ -41,7 +41,7 @@ bool Game::init()
 	this->addChild(m_baby);	//把精灵加到场景里
 
 	ValueMap enemyObject = peopleObjectGroup->getObject("enemy");	//获取一个name为“baby”的对象
-	Vec2 enemyPosition(objPosX(enemyObject),objPosY(enemyObject));	//enemy对象的起始位置
+	m_enemyPosition = Vec2(objPosX(enemyObject),objPosY(enemyObject));	//enemy对象的起始位置
 
 	TMXObjectGroup* towerObjectGroup = m_map->getObjectGroup("tower");	//读取对象层“tower”
 	ValueVector towerObjects = towerObjectGroup->getObjects();	//获得“tower”对象层里面的所有对象
@@ -59,18 +59,28 @@ bool Game::init()
 		tower->runAction(actionRepeateFadeOutIn);	//给精灵赋予特效
 	}
 
-//	auto enemy=Enemy::create();
-// 	enemy->setTag(123);
-// 	enemy->SetObjectGroup(map->getObjectGroup("OBJ"));
-// 	enemy->InitWayPoints(0);
-// 	enemy->setOriSpeed(10);
-// 	this->addChild(enemy);
-// 	enemy->runbyWay();
+	this->scheduleOnce(schedule_selector(Game::addEnemy), 1.0f);
     return true;
+}
+
+void Game::addEnemy(float dt){
+	Enemy* enemy = Enemy::create(VIRUS_TYPE_0);
+	if (!enemy)
+		return;
+	enemy->setPosition(m_enemyPosition);
+	this->addChild(enemy);
 }
 
 void Game::menuCloseCallback(Ref* pSender)
 {
-	Enemy* a=(Enemy*)getChildByTag(123);
-	a->changeSpeed(10);
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8) || (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+	MessageBox("You pressed the close button. Windows Store Apps do not implement a close button.","Alert");
+	return;
+#endif
+
+	Director::getInstance()->end();
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+	exit(0);
+#endif
 }

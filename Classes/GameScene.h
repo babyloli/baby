@@ -8,10 +8,13 @@ class Game : public cocos2d::Layer
 private:
 	TMXTiledMap* m_map;
 	Sprite* m_baby;
+	Vec2 m_enemyPosition;
 public:
     static cocos2d::Scene* createScene();
-	void menuCloseCallback(cocos2d::Ref* pSender);
     virtual bool init();  
-	CREATE_FUNC(Game);	
+	CREATE_FUNC(Game);
+
+	void menuCloseCallback(cocos2d::Ref* pSender);
+	void addEnemy(float dt);
 };
 #endif
