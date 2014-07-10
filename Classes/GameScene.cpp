@@ -2,10 +2,16 @@
 USING_NS_CC;
 #define objPosX(obj) obj.at("x").asInt() + obj.at("width").asInt()/2
 #define objPosY(obj) obj.at("y").asInt() + obj.at("height").asInt()/2
+#define objWidth(obj) obj.at("width").asFloat()
+#define objHeight(obj) obj.at("height").asFloat()
+#define MENU_ZORDER 10
 
 Scene* Game::createScene(){
-	auto scene = Scene::create();
+	auto scene = Scene::createWithPhysics();
+	scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
 	auto layer = Game::create();
+	scene->getPhysicsWorld()->setGravity(Vect(0.0f, 0.0f));
+	layer->setPhysicsWorld(scene->getPhysicsWorld());
 	scene->addChild(layer);
 	return scene;
 }
@@ -24,9 +30,15 @@ bool Game::init()
 		CC_CALLBACK_1(Game::menuCloseCallback, this));
 	closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
 		origin.y + closeItem->getContentSize().height/2));
-	auto menu = Menu::create(closeItem, NULL);
+	auto physicsItem = MenuItemImage::create("CloseNormal.png",
+		"CloseSelected.png",
+		CC_CALLBACK_1(Game::menuPhysicsCallback, this));
+	physicsItem->setPosition(Vec2(origin.x + visibleSize.width - physicsItem->getContentSize().width/2 ,
+		origin.y + visibleSize.height - physicsItem->getContentSize().height/2));
+	auto menu = Menu::create(closeItem, physicsItem, NULL);
 	menu->setPosition(Vec2::ZERO);
 	this->addChild(menu);
+	this->reorderChild(menu, MENU_ZORDER);
 
 	m_map = TMXTiledMap::create("map1.tmx");
 	this->addChild(m_map);
@@ -39,7 +51,7 @@ bool Game::init()
 	m_baby->setPosition(baby_x, baby_y);	//设置精灵的位置
 	this->addChild(m_baby);	//把精灵加到场景里
 
-	ValueMap enemyObject = peopleObjectGroup->getObject("enemy");	//获取一个name为“baby”的对象
+	ValueMap enemyObject = peopleObjectGroup->getObject("enemy");	//获取一个name为“enemy”的对象
 	m_enemyPosition = Vec2(objPosX(enemyObject),objPosY(enemyObject));	//enemy对象的起始位置
 
 	SpriteBatchNode* towerbase = SpriteBatchNode::create("towerbase.png");	//用图片创建一个Batch
@@ -76,8 +88,22 @@ bool Game::init()
 			direction = DOWN;
 		}
 		m_roads.push_back(Road(roadObject.at("x").asFloat(), roadObject.at("y").asFloat(),
-			roadObject.at("width").asFloat(), roadObject.at("height").asFloat(),
+			objWidth(roadObject), objHeight(roadObject),
 			direction));	//把这个对象看作长方形储存到数组里
+	}
+
+	PhysicsMaterial staticMaterial(PHYSICS_INFINITY, 0, 0.5f);
+	TMXObjectGroup* barrierObjectGroup = m_map->getObjectGroup("barrier");	//读取对象层“barrier”
+	ValueVector barrierObjects = barrierObjectGroup->getObjects();	//获得“barrier”对象层里面的所有对象
+	for (ValueVector::iterator it = barrierObjects.begin(); it != barrierObjects.end(); it++)//对“barrier”层里的每一个对象
+	{
+		ValueMap barrierObject = it->asValueMap();	//得到这个对象的属性
+		Node* node = Node::create();
+		auto body = PhysicsBody::createBox(Size(objWidth(barrierObject), objHeight(barrierObject)), staticMaterial);
+		body->setDynamic(false);
+		node->setPhysicsBody(body);
+		node->setPosition(objPosX(barrierObject), objPosY(barrierObject));
+		this->addChild(node);
 	}
 
 	this->scheduleOnce(schedule_selector(Game::addEnemy), 1.0f);
@@ -100,11 +126,17 @@ void Game::moveEnemy(float dt){
 		Vec2 enemy_position = enemy->getPosition();
 		for (std::vector<Road>::iterator it = m_roads.begin(); it != m_roads.end(); it++){
 			if (it->containsPoint(enemy_position)){
-				enemy->runAction(MoveBy::create(0.5f, it->getDirection() * enemy->getSpeed()));
+			//	enemy->runAction(MoveBy::create(0.5f, it->getDirection() * enemy->getSpeed()));
+				enemy->setVelocity(it->getDirection() * enemy->getSpeed());
 				break;
 			}
 		}
 	}
+}
+
+void Game::onEnter(){
+	Layer::onEnter();
+//	auto listener = EventListenerPhysicsContact::create();
 }
 
 void Game::menuCloseCallback(Ref* pSender)
@@ -119,4 +151,20 @@ void Game::menuCloseCallback(Ref* pSender)
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	exit(0);
 #endif
+}
+
+void Game::menuPhysicsCallback(cocos2d::Ref* pSender)
+{
+	if (m_physicsWorld->getDebugDrawMask() != PhysicsWorld::DEBUGDRAW_NONE)
+		m_physicsWorld->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_NONE);
+	else
+	{
+		m_physicsWorld->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+	}
+}
+
+//------------------get/sets-----------------------------
+
+void Game::setPhysicsWorld(PhysicsWorld* world){
+	m_physicsWorld = world;
 }

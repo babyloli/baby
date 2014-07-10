@@ -19,6 +19,7 @@ private:
 	int m_physicalDefebce;
 	int m_type;
 	ProgressTimer* m_pProTimer;
+	PhysicsBody* m_body;
 public:
 	CREATE_FUNC(Enemy);
 	Enemy();
@@ -34,6 +35,8 @@ public:
 	bool setOriginSpeed(int ospeed);
 	int getSpeed();
 	bool setSpeed(int rspeed);
+	Vec2 getVelocity();
+	void setVelocity(Vec2 v);
 	
 	float getHp();
 	bool setHp(float hp);

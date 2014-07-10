@@ -43,6 +43,9 @@ bool Enemy::init(){
 	{
 	case VIRUS_TYPE_0:
 		enemy = Sprite::create("s1.png");
+//		this->setPhysicsBody(PhysicsBody::createCircle(32.0f, PhysicsMaterial(1.0f, 0.0f, 0.1f)));
+		m_body = PhysicsBody::createCircle(16.0f);
+		this->setPhysicsBody(m_body);
 		m_curSpeed = m_originSpeed = 50;
 	default:
 		break;
@@ -105,3 +108,10 @@ bool Enemy::setSpeed(int rspeed){
 	return true;
 }
 
+Vec2 Enemy::getVelocity(){
+	return this->m_body->getVelocity();
+}
+
+void Enemy::setVelocity(Vec2 v){
+	return this->m_body->setVelocity(v);
+}
