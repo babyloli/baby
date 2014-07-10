@@ -69,6 +69,18 @@ bool Game::init()
 		this->addChild(tower);	//把精灵加到场景里
 		auto actionRepeateFadeOutIn = RepeatForever::create(Sequence::create(FadeOut::create(1), FadeIn::create(1), NULL));	//创建一个淡入淡出特效
 		tower->runAction(actionRepeateFadeOutIn);	//给精灵赋予特效
+		
+		auto listener = EventListenerTouchOneByOne::create();	//触摸监听器
+		listener->setSwallowTouches(true);
+		listener->onTouchBegan = [tower, actionRepeateFadeOutIn](Touch* touch, Event* event){
+ 			auto target = event->getCurrentTarget();
+			if (tower->getTextureRect().containsPoint(target->convertTouchToNodeSpace(touch))){
+				tower->stopAction(actionRepeateFadeOutIn);
+				return true;
+			}
+			return false;
+		};
+		this->_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, tower);
 	}
 
 	TMXObjectGroup* roadObjectGroup = m_map->getObjectGroup("road");	//读取对象层“road”
@@ -106,7 +118,7 @@ bool Game::init()
 		this->addChild(node);
 	}
 
-	this->scheduleOnce(schedule_selector(Game::addEnemy), 1.0f);
+	this->schedule(schedule_selector(Game::addEnemy), 2.0f);
 	this->schedule(schedule_selector(Game::moveEnemy), 0.5f);
 	return true;
 }
