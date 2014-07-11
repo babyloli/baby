@@ -5,6 +5,7 @@
 #include "cocos2d.h"
 #include "Enemy.h"
 #include "Road.h"
+#include "MenuItemTower.h"
 USING_NS_CC;
 class Game : public cocos2d::Layer
 {
@@ -12,6 +13,7 @@ private:
 	TMXTiledMap* m_map;
 	Sprite* m_baby;
 	Vec2 m_enemyPosition;
+	Vector<Menu*> m_menus;
 	Vector<Enemy*> m_enemies;
 	std::vector<Road> m_roads;
 	PhysicsWorld* m_physicsWorld;
@@ -24,6 +26,7 @@ public:
 
 	void menuCloseCallback(cocos2d::Ref* pSender);
 	void menuPhysicsCallback(cocos2d::Ref* pSender);
+	void towerCreateCallback(cocos2d::Ref* pSender);
 
 	void addEnemy(float dt);
 	void moveEnemy(float dt);

@@ -60,7 +60,8 @@ bool Game::init()
 
 	TMXObjectGroup* towerObjectGroup = m_map->getObjectGroup("tower");	//读取对象层“tower”
 	ValueVector towerObjects = towerObjectGroup->getObjects();	//获得“tower”对象层里面的所有对象
-	for (ValueVector::iterator it = towerObjects.begin(); it != towerObjects.end(); it++){//对“tower”层里的每一个对象
+	int i = 0;
+	for (ValueVector::iterator it = towerObjects.begin(); it != towerObjects.end(); it++, i++){//对“tower”层里的每一个对象
 		ValueMap towerObject = it->asValueMap();	//得到这个对象的属性
 		int tower_x = objPosX(towerObject);
 		int tower_y = objPosY(towerObject);
@@ -70,18 +71,35 @@ bool Game::init()
 		auto actionRepeateFadeOutIn = RepeatForever::create(Sequence::create(FadeOut::create(1), FadeIn::create(1), NULL));	//创建一个淡入淡出特效
 		tower->runAction(actionRepeateFadeOutIn);	//给精灵赋予特效
 		
+		auto towerItemSprite = Sprite::create("tower1.png");
+		auto towerItem = MenuItemTower::create(100, towerItemSprite, towerItemSprite, CC_CALLBACK_1(Game::towerCreateCallback, this));
+		towerItem->setPosition(Vec2::ZERO);
+		auto menu = Menu::create(towerItem, NULL);
+		menu->setPosition(Vec2(tower->getPositionX(), tower->getPositionY()));
+		m_menus.pushBack(menu);
+
 		auto listener = EventListenerTouchOneByOne::create();	//触摸监听器
 		listener->setSwallowTouches(true);
-		listener->onTouchBegan = [tower, actionRepeateFadeOutIn](Touch* touch, Event* event){
+		listener->onTouchBegan = [i, tower, this](Touch* touch, Event* event){
  			auto target = event->getCurrentTarget();
 			if (tower->getTextureRect().containsPoint(target->convertTouchToNodeSpace(touch))){
-				tower->stopAction(actionRepeateFadeOutIn);
-				return true;
+//				tower->stopAction(actionRepeateFadeOutIn);
+				Menu* menu = this->m_menus.at(i);
+				if (menu->getParent() == NULL){
+					this->addChild(menu);
+					this->reorderChild(menu, MENU_ZORDER);
+				}
+			}
+			else
+			{
+				Menu* menu = this->m_menus.at(i);
+				this->removeChild(menu, false);
 			}
 			return false;
 		};
 		this->_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, tower);
 	}
+	i = 0;
 
 	TMXObjectGroup* roadObjectGroup = m_map->getObjectGroup("road");	//读取对象层“road”
 	ValueVector roadObjects = roadObjectGroup->getObjects();	//获得“road”对象层里面的所有对象
@@ -173,6 +191,10 @@ void Game::menuPhysicsCallback(cocos2d::Ref* pSender)
 	{
 		m_physicsWorld->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
 	}
+}
+
+void Game::towerCreateCallback(cocos2d::Ref* pSender){
+
 }
 
 //------------------get/sets-----------------------------
