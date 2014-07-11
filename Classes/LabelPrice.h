@@ -4,7 +4,10 @@
 #include "cocos2d.h"
 USING_NS_CC;
 class LabelPrice : public Node{
-//	Sprite* backgroundSprite;
-//	Label* label;
+public:
+	CREATE_FUNC(LabelPrice);
+	LabelPrice();
+	static LabelPrice* create(const std::string& backgroundSprite, int price);
+	bool initWithSprite(const std::string& backgroundSprite, int price);
 };
 #endif
