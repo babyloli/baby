@@ -30,6 +30,12 @@
     <ClCompile Include="..\Classes\Road.cpp">
       <Filter>Classes</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\Bullet.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Tower.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -48,6 +54,12 @@
       <Filter>Classes</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Road.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Bullet.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Tower.h">
       <Filter>Classes</Filter>
     </ClInclude>
   </ItemGroup>

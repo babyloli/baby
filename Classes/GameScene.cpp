@@ -175,8 +175,36 @@ void Game::menuPhysicsCallback(cocos2d::Ref* pSender)
 	}
 }
 
+
+void Game::onTouchCreateTower(const std::vector<Touch*>& touches, Event* event)
+{
+	for(auto touch : touches)
+	{
+		Vec2 location = touch->getLocation();
+		addTower(location);
+	}
+}
+
+bool Game::addTower(Vec2 p)
+{
+	Tower* mytower = Tower::create(TOWER_TYPE_0);
+	if(!mytower)
+		return false;
+	mytower->setPosition(p);
+	this->addChild(mytower);
+	return true;
+}
+
+
+
 //------------------get/sets-----------------------------
 
 void Game::setPhysicsWorld(PhysicsWorld* world){
 	m_physicsWorld = world;
+}
+
+
+Vector<Enemy*> Game::getEnemies()
+{
+	return this->m_enemies;
 }
