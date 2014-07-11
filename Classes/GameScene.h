@@ -6,6 +6,9 @@
 #include "Enemy.h"
 #include "Road.h"
 #include "MenuItemTower.h"
+#include "Tower.h"
+#include "Bullet.h"
+
 USING_NS_CC;
 class Game : public cocos2d::Layer
 {
@@ -31,6 +34,10 @@ public:
 	void addEnemy(float dt);
 	void moveEnemy(float dt);
 
+	void onTouchCreateTower(const std::vector<Touch*>& touches, Event* event);
+	bool addTower(Vec2 location);
+
 	void setPhysicsWorld(PhysicsWorld* world);
+	Vector<Enemy*> getEnemies();
 };
 #endif
