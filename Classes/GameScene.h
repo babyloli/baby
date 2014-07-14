@@ -5,9 +5,7 @@
 #include "cocos2d.h"
 #include "Enemy.h"
 #include "Road.h"
-#include "MenuItemTower.h"
 #include "Tower.h"
-#include "Bullet.h"
 
 USING_NS_CC;
 class Game : public cocos2d::Layer
@@ -18,6 +16,7 @@ private:
 	Vec2 m_enemyPosition;
 	Vector<Menu*> m_menus;
 	Vector<Enemy*> m_enemies;
+	Vector<Tower*> m_towers;
 	std::vector<Road> m_roads;
 	PhysicsWorld* m_physicsWorld;
 public:
@@ -29,13 +28,11 @@ public:
 
 	void menuCloseCallback(cocos2d::Ref* pSender);
 	void menuPhysicsCallback(cocos2d::Ref* pSender);
-	void towerCreateCallback(cocos2d::Ref* pSender);
+	void towerCreateCallback(cocos2d::Ref* pSender, int type, Sprite* towerbase);
 
 	void addEnemy(float dt);
 	void moveEnemy(float dt);
-
-	void onTouchCreateTower(const std::vector<Touch*>& touches, Event* event);
-	bool addTower(Vec2 location);
+	void findEnemy(float dt);
 
 	void setPhysicsWorld(PhysicsWorld* world);
 	Vector<Enemy*> getEnemies();

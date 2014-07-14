@@ -1,10 +1,13 @@
 #include "GameScene.h"
+#include "ResourceManager.h"
+#include "MenuItemTower.h"
 USING_NS_CC;
 #define objPosX(obj) obj.at("x").asInt() + obj.at("width").asInt()/2
 #define objPosY(obj) obj.at("y").asInt() + obj.at("height").asInt()/2
 #define objWidth(obj) obj.at("width").asFloat()
 #define objHeight(obj) obj.at("height").asFloat()
 #define MENU_ZORDER 10
+#define TOWER_ZORDER 5
 
 Scene* Game::createScene(){
 	auto scene = Scene::createWithPhysics();
@@ -22,6 +25,7 @@ bool Game::init()
 	{
 		return false;
 	}
+	ResourceManager* rm = ResourceManager::getInstance();
 
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -67,15 +71,17 @@ bool Game::init()
 		int tower_y = objPosY(towerObject);
 		Sprite* tower = Sprite::createWithTexture(towerbase->getTexture());	//用Batch创建一个精灵来表示可创建Tower的位置
 		tower->setPosition(tower_x, tower_y);	//设置精灵的位置
-		this->addChild(tower);	//把精灵加到场景里
+		towerbase->addChild(tower);	//把精灵加到场景里
 		auto actionRepeateFadeOutIn = RepeatForever::create(Sequence::create(FadeOut::create(1), FadeIn::create(1), NULL));	//创建一个淡入淡出特效
 		tower->runAction(actionRepeateFadeOutIn);	//给精灵赋予特效
 		
-		auto towerItemSprite = Sprite::create("tower1.png");
-		auto towerItem = MenuItemTower::create(100, towerItemSprite, towerItemSprite, CC_CALLBACK_1(Game::towerCreateCallback, this));
+		auto towerItemSprite = Sprite::createWithTexture(rm->tower0);
+		auto towerItem = MenuItemTower::create(100, towerItemSprite, towerItemSprite, CC_CALLBACK_1(Game::towerCreateCallback, this, TOWER_TYPE_0, tower));
 		towerItem->setPosition(Vec2::ZERO);
 		auto menu = Menu::create(towerItem, NULL);
-		menu->setPosition(Vec2(tower->getPositionX(), tower->getPositionY()));
+//		menu->setPosition(Vec2(tower->getPositionX(), tower->getPositionY()));
+		menu->setPosition(Vec2(tower->getPositionX(),
+			tower->getPositionY() + tower->getContentSize().height / 2 + towerItem->getContentSize().height / 2));
 		m_menus.pushBack(menu);
 
 		auto listener = EventListenerTouchOneByOne::create();	//触摸监听器
@@ -136,12 +142,14 @@ bool Game::init()
 		this->addChild(node);
 	}
 
+	this->schedule(schedule_selector(Game::findEnemy), 1.0f);
 	this->schedule(schedule_selector(Game::addEnemy), 2.0f);
 	this->schedule(schedule_selector(Game::moveEnemy), 0.5f);
 	return true;
 }
 
-void Game::addEnemy(float dt){
+void Game::addEnemy(float dt)
+{	
 	Enemy* enemy = Enemy::create(VIRUS_TYPE_0);
 	if (!enemy)
 		return;
@@ -153,6 +161,7 @@ void Game::addEnemy(float dt){
 void Game::moveEnemy(float dt){
 	for (int i = 0; i < m_enemies.size(); i++){
 		Enemy* enemy = m_enemies.at(i);
+
 		Vec2 enemy_position = enemy->getPosition();
 		for (std::vector<Road>::iterator it = m_roads.begin(); it != m_roads.end(); it++){
 			if (it->containsPoint(enemy_position)){
@@ -164,9 +173,16 @@ void Game::moveEnemy(float dt){
 	}
 }
 
+void Game::findEnemy(float dt){
+	for (int i = 0; i < m_towers.size(); i++){
+		Tower* tower = m_towers.at(i);
+		tower->generateBullet();
+	}
+}
+
 void Game::onEnter(){
 	Layer::onEnter();
-//	auto listener = EventListenerPhysicsContact::create();
+//	auto listener = EventListenerPhysicsContactWithGroup::create();
 }
 
 void Game::menuCloseCallback(Ref* pSender)
@@ -193,27 +209,19 @@ void Game::menuPhysicsCallback(cocos2d::Ref* pSender)
 	}
 }
 
-void Game::towerCreateCallback(cocos2d::Ref* pSender){
+void Game::towerCreateCallback(cocos2d::Ref* pSender, int type, Sprite* towerbase){
+	Node* menuItemTower = static_cast<Node*>(pSender);
+	Node* menu = menuItemTower->getParent();
+	menu->removeFromParentAndCleanup(false);
 
-}
-
-void Game::onTouchCreateTower(const std::vector<Touch*>& touches, Event* event)
-{
-	for(auto touch : touches)
-	{
-		Vec2 location = touch->getLocation();
-		addTower(location);
-	}
-}
-
-bool Game::addTower(Vec2 p)
-{
-	Tower* mytower = Tower::create(TOWER_TYPE_0);
-	if(!mytower)
-		return false;
-	mytower->setPosition(p);
-	this->addChild(mytower);
-	return true;
+	Tower* tower = Tower::create(type);
+	if(!tower)
+		return;
+	tower->setPosition(towerbase->getPosition());
+	this->addChild(tower);
+	this->reorderChild(tower, TOWER_ZORDER);
+	this->m_towers.pushBack(tower);
+	towerbase->removeFromParentAndCleanup(true);
 }
 
 //------------------get/sets-----------------------------
@@ -227,3 +235,4 @@ Vector<Enemy*> Game::getEnemies()
 {
 	return this->m_enemies;
 }
+

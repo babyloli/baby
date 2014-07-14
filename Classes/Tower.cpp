@@ -1,47 +1,33 @@
 #include "Tower.h"
-
+#include "GameScene.h"
+#include "ResourceManager.h"
 
 Tower::Tower()
 {
-	this->range = 3;
-	this->type = 0;
-	this->level = 1;
-	target = NULL;
-	tower = NULL;
-}
-Tower::Tower(int type)
-{
-	this->type = type;
-	this->level = 1;
-	this->range = 3;
-	target = NULL;
-	tower = NULL;
-}
-Tower::~Tower(void)
-{
 }
 
-bool Tower::init()
+bool Tower::initWithType(int type)
 {
-	switch (type)
+	m_target = NULL;
+	this->m_type = type;
+	this->m_level = 1;
+
+	switch (m_type)
 	{
 	case TOWER_TYPE_0:
-		tower = Sprite::create("tower0.png");
-		break;
-	default:
+		m_sprite = Sprite::createWithTexture(ResourceManager::getInstance()->tower0);
+		this->addChild(m_sprite);
+		this->m_range = 300;
 		break;
 	}
-	if(!tower)
-		return false;
-	this->addChild(tower);
 	
 	return true;
 }
 
 Tower* Tower::create(int type)
 {
-	Tower* temp = new Tower(type);
-	if( temp && temp->init()) {
+	Tower* temp = new Tower();
+	if( temp && temp->initWithType(type)) {
 		temp->autorelease();
 		return temp;
 	}
@@ -59,15 +45,16 @@ Enemy* Tower::getCloseTarget()
 	double maxdistance = 9999;
 
 	Game* gamelayer = dynamic_cast<Game*>(this->getParent());
-	/*for (auto enemy : gamelayer->getEnemies()){
-		double currdistance = ccpDistance(this->getPosition(),enemy->getPosition());
+	for (auto enemy : gamelayer->getEnemies()){
+//		double currdistance = ccpDistance(this->getPosition(),enemy->getPosition());
+		double currdistance = this->getPosition().distance(enemy->getPosition());
 		if( currdistance < maxdistance){
 			closetarge = enemy;
 			maxdistance = currdistance;
 		}
 	}
-	*/
-	if(maxdistance < this->range )
+	
+	if(maxdistance < this->m_range )
 	{
 		return closetarge;
 	}
@@ -77,28 +64,28 @@ Enemy* Tower::getCloseTarget()
 
 void Tower::generateBullet()
 {
-	target = getCloseTarget();
-	if(!target)
+	m_target = getCloseTarget();
+	if(!m_target)
 		return ;
-	Bullet* t_bullet = Bullet::create(type,level,level+3);
+	Bullet* t_bullet = Bullet::create(m_type, m_level);
 
 	if(!t_bullet)
 		return;
 
-	t_bullet->setPosition(tower->getPosition());
+	t_bullet->setPosition(this->getPosition());
 	/////////
 	this->addChild(t_bullet);
 	//发射子弹
-	shotBullet(t_bullet,target);
+	shotBullet(t_bullet,m_target);
 	//把子弹放入vector中
-	bullets.pushBack(t_bullet);
+	m_bullets.pushBack(t_bullet);
 }
 
 void Tower::shotBullet(Bullet* bullet, Enemy* target)
 {
 	if(!bullet || !target)
 		return;
-	bullet->setBulletVelocity(target->getPosition());
+	bullet->setBulletVelocity(target->getPosition() - this->getPosition());
 }
 
 
@@ -112,25 +99,25 @@ void Tower::shotBullet(Bullet* bullet, Enemy* target)
 ///////////////////////////////////////////////////////////
 int Tower::getType()
 {
-	return type;
+	return m_type;
 }
 void Tower::setType(int type)
 {
-	this->type = type;
+	this->m_type = type;
 }
 int Tower::getlevel()
 {
-	return level;
+	return m_level;
 }
 void Tower::upgrade()
 {
-	level++;
+	m_level++;
 }
 int Tower::getRange()
 {
-	return range;
+	return m_range;
 }
 void Tower::setRange(int r)
 {
-	this->range = r;
+	this->m_range = r;
 }

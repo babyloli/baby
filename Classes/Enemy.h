@@ -3,12 +3,6 @@
 
 #include "cocos2d.h"
 USING_NS_CC;
-#define VIRUS_TYPE_0 0
-#define VIRUS_TYPE_1 1 
-#define VIRUS_TYPE_2 2
-#define VIRUS_TYPE_3 3
-#define VIRUS_TYPE_4 4
-#define VIRUS_TYPE_5 5
 
 class Enemy : public Node{
 private:
@@ -18,11 +12,18 @@ private:
 	int m_magicalDefence;
 	int m_physicalDefebce;
 	int m_type;
+
 	ProgressTimer* m_pProTimer;
 	PhysicsBody* m_body;
 public:
-	CREATE_FUNC(Enemy);
+	SpriteFrameCache* cache;
+	Sprite* enemy;
+	SpriteBatchNode* Actors;
+	Animation* walkAnimation;
+
+	//CREATE_FUNC(Enemy);
 	Enemy();
+
 	static Enemy* create(int type);
 	Enemy(int type);
 	virtual bool init() override;
@@ -40,6 +41,7 @@ public:
 	
 	float getHp();
 	bool setHp(float hp);
-	
+
+	Sprite* getEnemy();
 };
 #endif

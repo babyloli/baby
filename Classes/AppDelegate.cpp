@@ -1,6 +1,6 @@
 #include "AppDelegate.h"
 #include "GameScene.h"
-
+#include "ResourceManager.h"
 
 USING_NS_CC;
 
@@ -28,6 +28,9 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     // set FPS. the default value is 1.0/60 if you don't call this
     director->setAnimationInterval(1.0 / 60);
+
+	// load resources
+	ResourceManager::getInstance()->init();
 
     // create a scene. it's an autorelease object
 	auto scene = Game::createScene();

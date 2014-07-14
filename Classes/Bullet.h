@@ -4,34 +4,25 @@
 
 USING_NS_CC;
 
-#define BULLET_TYPE_0 0
-#define BULLET_TYPE_1 1
-#define BULLET_TYPE_2 2
-#define BULLET_TYPE_3 3
-#define BULLET_TYPE_4 4
-
-class Bullet: public Sprite
+class Bullet: public Node
 {
 private:
-	int type;
-	int level;
-	int speed;
-	PhysicsBody* body;
+	int m_type;
+	int m_level;
+	int m_damage;
+	PhysicsBody* m_body;
 
 public:
-	CREATE_FUNC(Bullet);
-	Bullet(void);
-	Bullet(int type,int level,int speed);
-	~Bullet(void);
-	virtual bool init();
-	static Bullet* create(int type,int level,int speed);
+	Bullet();
+	bool initWithTypeAndLevel(int type, int level);
+	static Bullet* create(int type, int level);
 
 	int getType();
 	void setType(int type);
 	int getLevel();
 	void setLevel(int level);
-	int getSpeed();
-	void setSpeed(int speed);
+	int getDamage();
+	void setDamage(int damage);
 	Vec2 getBulletVelocity();
 	void setBulletVelocity(Vec2 v);
 };

@@ -1,50 +1,37 @@
 #include "Bullet.h"
-
+#include "ResourceManager.h"
 
 Bullet::Bullet()
 {
-	this->type = 0;
-	this->level = 1;
-	this->speed = 5;
-	this->body = NULL;
-}
-Bullet::Bullet(int type,int level, int speed)
-{
-	this->type = type;
-	this->level = level;
-	this->speed = speed; 
-	this->body = NULL;
-}
-Bullet::~Bullet(void)
-{
 }
 
-
-bool Bullet::init()
+bool Bullet::initWithTypeAndLevel(int type, int level)
 {
+	m_type = type;
+	m_level = level;
 	Sprite* bullet = NULL;
 	switch (type)
 	{
-	case BULLET_TYPE_0:
+	case TOWER_TYPE_0:
 		switch (level)
 		{
 		case 1:
 			bullet = Sprite::create("bullet_0_1.png");
-			body = PhysicsBody::createCircle(16.0f);
-			this->setPhysicsBody(body);
-			speed = 5;
+			m_body = PhysicsBody::createCircle(16.0f);
+			this->setPhysicsBody(m_body);
+			m_damage = 50;
 			break;
 		case 2:
 			bullet = Sprite::create("bullet_0_2.png");
-			body = PhysicsBody::createCircle(16.0f);
-			this->setPhysicsBody(body);
-			speed = 6;
+			m_body = PhysicsBody::createCircle(16.0f);
+			this->setPhysicsBody(m_body);
+			m_damage = 60;
 			break;
 		case 3:
 			bullet = Sprite::create("bullet_0_3.png");
-			body = PhysicsBody::createCircle(16.0f);
-			this->setPhysicsBody(body);
-			speed = 8;
+			m_body = PhysicsBody::createCircle(16.0f);
+			this->setPhysicsBody(m_body);
+			m_damage = 80;
 			break;
 		default:
 			break;
@@ -60,10 +47,10 @@ bool Bullet::init()
 
 	return true;
 }
-Bullet* Bullet::create(int type,int level,int speed)
+Bullet* Bullet::create(int type, int level)
 {
-	Bullet* bultemp = new Bullet(type,level,speed);
-	if(bultemp && bultemp->init())
+	Bullet* bultemp = new Bullet();
+	if(bultemp && bultemp->initWithTypeAndLevel(type, level))
 	{
 		bultemp->autorelease();
 		return bultemp;
@@ -76,40 +63,37 @@ Bullet* Bullet::create(int type,int level,int speed)
 	}
 }
 
-
-
-
 ////////////////////////////////////////////////////////
 int Bullet::getType()
 {
-	return type;
+	return m_type;
 }
 void Bullet::setType(int type)
 {
-	this->type = type;
+	this->m_type = type;
 }
 int Bullet::getLevel()
 {
-	return level;
+	return m_level;
 }
 void Bullet::setLevel(int level)
 {
 	level++;
 }
-int Bullet::getSpeed()
+int Bullet::getDamage()
 {
-	return speed;
+	return m_damage;
 }
-void Bullet::setSpeed(int speed)
+void Bullet::setDamage(int damage)
 {
-	this->speed = speed;
+	this->m_damage = damage;
 }
 
 Vec2 Bullet::getBulletVelocity()
 {
-	return this->body->getVelocity();
+	return this->m_body->getVelocity();
 }
 void Bullet::setBulletVelocity(Vec2 v)
 {
-	this->body->setVelocity(v);
+	this->m_body->setVelocity(v);
 }

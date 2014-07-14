@@ -1,4 +1,5 @@
 #include "Enemy.h"
+#include "ResourceManager.h"
 #include <math.h>
 USING_NS_CC;
 
@@ -38,16 +39,30 @@ Enemy* Enemy::create(int type){
 }
 
 bool Enemy::init(){
-	Sprite* enemy = NULL;
+	SpriteFrameCache *cache = SpriteFrameCache::getInstance();
+	Vector<SpriteFrame*> walkFrames(4);
 	switch (m_type)
 	{
 	case VIRUS_TYPE_0:
-		enemy = Sprite::create("s1.png");
+		enemy = Sprite::createWithSpriteFrameName("Albinism_right1.png");  
+		  
+        char str[100] = {0};  
+        for (int i = 1; i <= 4; i++)  
+        {  
+            sprintf(str, "Albinism_right%1d.png",i);  
+            auto frame = cache->getSpriteFrameByName( str );  
+            //CCSpriteFrame *frame = cache->getSpriteFrameByName(CCString::createWithFormat("bear%1d.png", i)->getCString());  
+            walkFrames.pushBack(frame);  
+        }  
+          
+        // Creating animations  
+        auto *walkAnimation = Animation::createWithSpriteFrames(walkFrames, 1.0f / 12.0f);  
+        enemy->runAction( RepeatForever::create( Animate::create(walkAnimation) ) );  
+
 //		this->setPhysicsBody(PhysicsBody::createCircle(32.0f, PhysicsMaterial(1.0f, 0.0f, 0.1f)));
 		m_body = PhysicsBody::createCircle(16.0f);
 		this->setPhysicsBody(m_body);
 		m_curSpeed = m_originSpeed = 50;
-	default:
 		break;
 	}
 	if (!enemy)
@@ -114,4 +129,9 @@ Vec2 Enemy::getVelocity(){
 
 void Enemy::setVelocity(Vec2 v){
 	return this->m_body->setVelocity(v);
+}
+
+
+Sprite* Enemy::getEnemy(){
+	return enemy;	
 }
