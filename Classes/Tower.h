@@ -12,7 +12,6 @@ private:
 	int m_level;
 	int m_range;
 	Enemy* m_target;
-	Vector<Bullet*> m_bullets;
 	Sprite* m_sprite;
 public:
 	Tower();

@@ -17,6 +17,7 @@ private:
 	Vector<Menu*> m_menus;
 	Vector<Enemy*> m_enemies;
 	Vector<Tower*> m_towers;
+	Vector<Bullet*> m_bullets;
 	std::vector<Road> m_roads;
 	PhysicsWorld* m_physicsWorld;
 public:
@@ -33,8 +34,10 @@ public:
 	void addEnemy(float dt);
 	void moveEnemy(float dt);
 	void findEnemy(float dt);
+	void deleteBullet(float dt);
 
 	void setPhysicsWorld(PhysicsWorld* world);
-	Vector<Enemy*> getEnemies();
+	Vector<Enemy*>& getEnemies();
+	void addBullet(Bullet* bullet);
 };
 #endif

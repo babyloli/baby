@@ -59,8 +59,12 @@ bool Enemy::init(){
         auto *walkAnimation = Animation::createWithSpriteFrames(walkFrames, 1.0f / 12.0f);  
         enemy->runAction( RepeatForever::create( Animate::create(walkAnimation) ) );  
 
-//		this->setPhysicsBody(PhysicsBody::createCircle(32.0f, PhysicsMaterial(1.0f, 0.0f, 0.1f)));
-		m_body = PhysicsBody::createCircle(16.0f);
+		m_body = PhysicsBody::createBox(Size(64, 64), PhysicsMaterial(0.5f, 0.0f, 0.1f));
+//		m_body = PhysicsBody::createCircle(16.0f, PhysicsMaterial(0.5f, 0.0f, 0.1f));
+//		m_body = PhysicsBody::createCircle(16.0f);
+		m_body->setCategoryBitmask(CategoryBitMask_Enemy);
+		m_body->setContactTestBitmask(ContactTestBitMask_Enemy);
+		m_body->setCollisionBitmask(CollisionBitMask_Enemy);
 		this->setPhysicsBody(m_body);
 		m_curSpeed = m_originSpeed = 50;
 		break;

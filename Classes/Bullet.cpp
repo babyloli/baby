@@ -10,6 +10,7 @@ bool Bullet::initWithTypeAndLevel(int type, int level)
 	m_type = type;
 	m_level = level;
 	Sprite* bullet = NULL;
+	m_isDie = false;
 	switch (type)
 	{
 	case TOWER_TYPE_0:
@@ -33,12 +34,13 @@ bool Bullet::initWithTypeAndLevel(int type, int level)
 			this->setPhysicsBody(m_body);
 			m_damage = 80;
 			break;
-		default:
-			break;
 		}
 	default:
 		break;
 	}
+	m_body->setCategoryBitmask(CategoryBitMask_Bullet);
+	m_body->setCollisionBitmask(CollisionBitMask_Bullet);
+	m_body->setContactTestBitmask(ContactTestBitMask_Bullet);
 	if(!bullet)
 	{
 		return false;
@@ -47,6 +49,7 @@ bool Bullet::initWithTypeAndLevel(int type, int level)
 
 	return true;
 }
+
 Bullet* Bullet::create(int type, int level)
 {
 	Bullet* bultemp = new Bullet();
@@ -96,4 +99,12 @@ Vec2 Bullet::getBulletVelocity()
 void Bullet::setBulletVelocity(Vec2 v)
 {
 	this->m_body->setVelocity(v);
+}
+
+bool Bullet::isDie(){
+	return m_isDie;
+}
+
+void Bullet::setDie(){
+	m_isDie = true;
 }

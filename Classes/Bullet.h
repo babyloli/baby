@@ -11,7 +11,7 @@ private:
 	int m_level;
 	int m_damage;
 	PhysicsBody* m_body;
-
+	bool m_isDie;
 public:
 	Bullet();
 	bool initWithTypeAndLevel(int type, int level);
@@ -25,5 +25,7 @@ public:
 	void setDamage(int damage);
 	Vec2 getBulletVelocity();
 	void setBulletVelocity(Vec2 v);
+	bool isDie();
+	void setDie();
 };
 

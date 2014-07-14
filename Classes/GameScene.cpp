@@ -137,6 +137,9 @@ bool Game::init()
 		Node* node = Node::create();
 		auto body = PhysicsBody::createBox(Size(objWidth(barrierObject), objHeight(barrierObject)), staticMaterial);
 		body->setDynamic(false);
+		body->setCategoryBitmask(CategoryBitMask_Barrier);
+		body->setContactTestBitmask(ContactTestBitMask_Barrier);
+		body->setCollisionBitmask(CollisionBitMask_Barrier);
 		node->setPhysicsBody(body);
 		node->setPosition(objPosX(barrierObject), objPosY(barrierObject));
 		this->addChild(node);
@@ -145,6 +148,7 @@ bool Game::init()
 	this->schedule(schedule_selector(Game::findEnemy), 1.0f);
 	this->schedule(schedule_selector(Game::addEnemy), 2.0f);
 	this->schedule(schedule_selector(Game::moveEnemy), 0.5f);
+	this->schedule(schedule_selector(Game::deleteBullet), 1.0f);
 	return true;
 }
 
@@ -177,6 +181,24 @@ void Game::findEnemy(float dt){
 	for (int i = 0; i < m_towers.size(); i++){
 		Tower* tower = m_towers.at(i);
 		tower->generateBullet();
+	}
+}
+
+void Game::deleteBullet(float dt){
+	Size visibleSize = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	float minX = origin.x;
+	float minY = origin.y;
+	float maxX = minX + visibleSize.width;
+	float maxY = minY + visibleSize.height;
+	for (int i = 0; i < m_bullets.size(); i++){
+		Bullet* bullet = m_bullets.at(i);
+		float x = bullet->getPositionX();
+		float y = bullet->getPositionY();
+		if (bullet->isDie() || x < minX || x > maxX || y < minY || y > maxY)
+		{
+			bullet->removeFromParent();
+		}
 	}
 }
 
@@ -231,8 +253,11 @@ void Game::setPhysicsWorld(PhysicsWorld* world){
 }
 
 
-Vector<Enemy*> Game::getEnemies()
+Vector<Enemy*>& Game::getEnemies()
 {
 	return this->m_enemies;
 }
 
+void Game::addBullet(Bullet* bullet){
+	m_bullets.pushBack(bullet);
+}

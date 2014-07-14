@@ -73,19 +73,21 @@ void Tower::generateBullet()
 		return;
 
 	t_bullet->setPosition(this->getPosition());
-	/////////
-	this->addChild(t_bullet);
+//	this->addChild(t_bullet);
+	Game* gamelayer = dynamic_cast<Game*>(this->getParent());
+	gamelayer->addBullet(t_bullet);
+	gamelayer->addChild(t_bullet);
 	//发射子弹
 	shotBullet(t_bullet,m_target);
 	//把子弹放入vector中
-	m_bullets.pushBack(t_bullet);
+	
 }
 
 void Tower::shotBullet(Bullet* bullet, Enemy* target)
 {
 	if(!bullet || !target)
 		return;
-	bullet->setBulletVelocity(target->getPosition() - this->getPosition());
+	bullet->setBulletVelocity((target->getPosition() - this->getPosition()) * 2);
 }
 
 

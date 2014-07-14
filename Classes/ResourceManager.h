@@ -9,17 +9,17 @@ public :
 	void init();
 
 //----------------PhysicsMask----------------
-#define CategoryBitMask_Bullet	
-#define CategoryBitMask_Barrier
-#define CategoryBitMask_Enemy
+#define CategoryBitMask_Bullet		0x0000000F
+#define CategoryBitMask_Barrier		0x000000F0
+#define CategoryBitMask_Enemy		0x00000F00
 
-#define ContactTestBitMask_Bullet
-#define ContactTestBitMask_Barrier
-#define ContactTestBitMask_Enemy
+#define ContactTestBitMask_Bullet	0x00000F00
+#define ContactTestBitMask_Barrier	0x00000000
+#define ContactTestBitMask_Enemy	0x0000000F
 
-#define CollisionBitMask_Bullet
-#define CollisionBitMask_Barrier
-#define CollisionBitMask_Enemy
+#define CollisionBitMask_Bullet		0x00000F00
+#define CollisionBitMask_Barrier	0x00000F00
+#define CollisionBitMask_Enemy		0x000000FF
 
 //----------------Tower----------------------
 #define TOWER_TYPE_0 0
