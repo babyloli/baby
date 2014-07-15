@@ -134,3 +134,7 @@ void Tower::setRange(int r)
 {
 	this->range = r;
 }
+void Tower::setTowerTexture(const std::string& filename)
+{
+	tower->setTexture(filename);
+}

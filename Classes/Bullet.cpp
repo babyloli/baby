@@ -32,19 +32,19 @@ bool Bullet::init()
 			bullet = Sprite::create("bullet_0_1.png");
 			body = PhysicsBody::createCircle(16.0f);
 			this->setPhysicsBody(body);
-			speed = 5;
+			//speed = 5;
 			break;
 		case 2:
 			bullet = Sprite::create("bullet_0_2.png");
 			body = PhysicsBody::createCircle(16.0f);
 			this->setPhysicsBody(body);
-			speed = 6;
+			//speed = 6;
 			break;
 		case 3:
 			bullet = Sprite::create("bullet_0_3.png");
 			body = PhysicsBody::createCircle(16.0f);
 			this->setPhysicsBody(body);
-			speed = 8;
+			//speed = 8;
 			break;
 		default:
 			break;

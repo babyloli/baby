@@ -41,6 +41,7 @@ public:
 	void upgrade();//Éý¼¶
 	int getRange();
 	void setRange(int r);
+	void setTowerTexture(const std::string& filename);
 
 };
 

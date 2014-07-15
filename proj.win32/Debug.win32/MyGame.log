@@ -1,8 +1,9 @@
-﻿生成启动时间为 2014/7/11 11:05:06。
+﻿生成启动时间为 2014/7/11 15:56:31。
      1>项目“D:\Documents\GitHub\baby\proj.win32\MyGame.vcxproj”在节点 2 上(Build 个目标)。
      1>ClCompile:
-         D:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ID:\Documents\GitHub\baby\cocos2d\cocos\2d\..\..\cocos\audio\include /ID:\Documents\GitHub\baby\cocos2d\cocos\2d\..\..\external /ID:\Documents\GitHub\baby\cocos2d\cocos\2d\..\..\external\chipmunk\include\chipmunk /ID:\Documents\GitHub\baby\cocos2d\cocos\2d\..\..\extensions /I..\Classes /I.. /ID:\Documents\GitHub\baby\cocos2d\cocos\2d\..\..\cocos /ID:\Documents\GitHub\baby\cocos2d\cocos\2d\..\..\cocos\platform\win32 /ID:\Documents\GitHub\baby\cocos2d\cocos\2d\..\..\cocos\platform\desktop /ID:\Documents\GitHub\baby\cocos2d\cocos\2d\..\..\external\glfw3\include\win32 /I"D:\Documents\GitHub\baby\cocos2d\cocos\2d\..\..\external\win32-specific\gles\include\OGLES" /ZI /nologo /W3 /WX- /MP /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _USE_MATH_DEFINES /D GL_GLEXT_PROTOTYPES /D CC_ENABLE_CHIPMUNK_INTEGRATION=1 /D COCOS2D_DEBUG=1 /D _CRT_SECURE_NO_WARNINGS /D _SCL_SECURE_NO_WARNINGS /D _VARIADIC_MAX=10 /D _UNICODE /D UNICODE /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug.win32\\" /Fd"Debug.win32\vc110.pdb" /Gd /TP /wd4267 /wd4251 /wd4244 /analyze- /errorReport:prompt ..\Classes\AppDelegate.cpp ..\Classes\GameScene.cpp ..\Classes\StartScene.cpp ..\Classes\Tower.cpp
+         D:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ID:\Documents\GitHub\baby\cocos2d\cocos\2d\..\..\cocos\audio\include /ID:\Documents\GitHub\baby\cocos2d\cocos\2d\..\..\external /ID:\Documents\GitHub\baby\cocos2d\cocos\2d\..\..\external\chipmunk\include\chipmunk /ID:\Documents\GitHub\baby\cocos2d\cocos\2d\..\..\extensions /I..\Classes /I.. /ID:\Documents\GitHub\baby\cocos2d\cocos\2d\..\..\cocos /ID:\Documents\GitHub\baby\cocos2d\cocos\2d\..\..\cocos\platform\win32 /ID:\Documents\GitHub\baby\cocos2d\cocos\2d\..\..\cocos\platform\desktop /ID:\Documents\GitHub\baby\cocos2d\cocos\2d\..\..\external\glfw3\include\win32 /I"D:\Documents\GitHub\baby\cocos2d\cocos\2d\..\..\external\win32-specific\gles\include\OGLES" /ZI /nologo /W3 /WX- /MP /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _USE_MATH_DEFINES /D GL_GLEXT_PROTOTYPES /D CC_ENABLE_CHIPMUNK_INTEGRATION=1 /D COCOS2D_DEBUG=1 /D _CRT_SECURE_NO_WARNINGS /D _SCL_SECURE_NO_WARNINGS /D _VARIADIC_MAX=10 /D _UNICODE /D UNICODE /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug.win32\\" /Fd"Debug.win32\vc110.pdb" /Gd /TP /wd4267 /wd4251 /wd4244 /analyze- /errorReport:prompt ..\Classes\AppDelegate.cpp ..\Classes\Bullet.cpp ..\Classes\GameScene.cpp ..\Classes\StartScene.cpp ..\Classes\Tower.cpp
          AppDelegate.cpp
+         Bullet.cpp
          GameScene.cpp
          StartScene.cpp
          Tower.cpp
@@ -29,4 +30,4 @@
 
 生成成功。
 
-已用时间 00:00:57.98
+已用时间 00:01:07.14
