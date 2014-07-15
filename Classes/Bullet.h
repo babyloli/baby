@@ -10,6 +10,7 @@ private:
 	int m_type;
 	int m_level;
 	int m_damage;
+	float m_speed;
 	PhysicsBody* m_body;
 	bool m_isDie;
 public:
@@ -25,6 +26,8 @@ public:
 	void setDamage(int damage);
 	Vec2 getBulletVelocity();
 	void setBulletVelocity(Vec2 v);
+	float getSpeed();
+	void setSpeed(float speed);
 	bool isDie();
 	void setDie();
 };

@@ -45,6 +45,7 @@ public:
 	Texture2D* tower0;
 
 //----------------Bullet---------------------
+#define SPEED_BULLET_0 150
 #define DAMAGE_BULLET_0_1 20
 #define DAMAGE_BULLET_0_2 30
 #define DAMAGE_BULLET_0_3 50
@@ -58,7 +59,7 @@ public:
 #define VIRUS_TYPE_5 5
 
 #define DAMAGE_ENEMY_0 1
-#define SPEED_ENEMY_0 500
+#define SPEED_ENEMY_0 100
 #define DEFENCE_MAGICAL_0 10
 #define DEFENCE_PHYSICS_0 10
 	static std::string ANIMATION_WALK_RIGHT_0;

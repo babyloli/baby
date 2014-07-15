@@ -90,7 +90,14 @@ void Tower::shotBullet(Bullet* bullet, Enemy* target)
 {
 	if(!bullet || !target)
 		return;
-	bullet->setBulletVelocity((target->getPosition() - this->getPosition()) * 2);
+	Vec2 direction = target->getPosition() - this->getPosition();
+	direction.normalize();
+	float angle = acos(Vec2::dot(direction, Vec2(0.0f, -1.0f))) * 57.325f;
+	if (direction.x > 0)
+		angle = -angle;
+	this->setRotation(angle);
+	bullet->setRotation(angle);
+	bullet->setBulletVelocity(direction * bullet->getSpeed());
 }
 
 

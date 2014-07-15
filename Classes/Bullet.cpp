@@ -22,18 +22,21 @@ bool Bullet::initWithTypeAndLevel(int type, int level)
 			m_body = PhysicsBody::createCircle(16.0f);
 			this->setPhysicsBody(m_body);
 			m_damage = DAMAGE_BULLET_0_1;
+			m_speed = SPEED_BULLET_0;
 			break;
 		case 2:
 			bullet = Sprite::create("bullet_0_2.png");
 			m_body = PhysicsBody::createCircle(16.0f);
 			this->setPhysicsBody(m_body);
-			m_damage = DAMAGE_BULLET_0_2;
+			m_damage = SPEED_BULLET_0;
+			m_speed = 2;
 			break;
 		case 3:
 			bullet = Sprite::create("bullet_0_3.png");
 			m_body = PhysicsBody::createCircle(16.0f);
 			this->setPhysicsBody(m_body);
-			m_damage = DAMAGE_BULLET_0_3;
+			m_damage = SPEED_BULLET_0;
+			m_speed = 2;
 			break;
 		}
 	default:
@@ -108,4 +111,12 @@ bool Bullet::isDie(){
 
 void Bullet::setDie(){
 	m_isDie = true;
+}
+
+float Bullet::getSpeed(){
+	return m_speed;
+}
+
+void Bullet::setSpeed(float speed){
+	m_speed = speed;
 }
