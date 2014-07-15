@@ -14,6 +14,7 @@ private:
 	TMXTiledMap* m_map;
 	Sprite* m_baby;
 	Vec2 m_enemyPosition;
+	Rect m_babyPosition;
 	Vector<Menu*> m_menus;
 	Vector<Enemy*> m_enemies;
 	Vector<Tower*> m_towers;
@@ -35,6 +36,7 @@ public:
 	void moveEnemy(float dt);
 	void findEnemy(float dt);
 	void deleteObject(float dt);
+	void update(float dt);
 
 	void setPhysicsWorld(PhysicsWorld* world);
 	Vector<Enemy*>& getEnemies();

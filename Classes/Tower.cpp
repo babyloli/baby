@@ -9,15 +9,16 @@ Tower::Tower()
 bool Tower::initWithType(int type)
 {
 	m_target = NULL;
-	this->m_type = type;
-	this->m_level = 1;
-
+	m_type = type;
+	m_level = 1;
+	m_elapsedTime = 0.0f;
 	switch (m_type)
 	{
 	case TOWER_TYPE_0:
 		m_sprite = Sprite::createWithTexture(ResourceManager::getInstance()->tower0);
 		this->addChild(m_sprite);
-		this->m_range = 200;
+		m_range = 200;
+		m_speed = 1;
 		break;
 	}
 	
@@ -62,25 +63,27 @@ Enemy* Tower::getCloseTarget()
 		return NULL;
 }
 
-void Tower::generateBullet()
+void Tower::generateBullet(float dt)
 {
-	m_target = getCloseTarget();
-	if(!m_target)
-		return ;
-	Bullet* t_bullet = Bullet::create(m_type, m_level);
+	m_elapsedTime += dt;
+	if (m_elapsedTime > m_speed){
+		m_elapsedTime -= m_speed;
+		m_target = getCloseTarget();
+		if(!m_target)
+			return ;
+		Bullet* t_bullet = Bullet::create(m_type, m_level);
 
-	if(!t_bullet)
-		return;
+		if(!t_bullet)
+			return;
 
-	t_bullet->setPosition(this->getPosition());
-//	this->addChild(t_bullet);
-	Game* gamelayer = dynamic_cast<Game*>(this->getParent());
-	gamelayer->addBullet(t_bullet);
-	gamelayer->addChild(t_bullet);
-	//发射子弹
-	shotBullet(t_bullet,m_target);
-	//把子弹放入vector中
-	
+		t_bullet->setPosition(this->getPosition());
+		Game* gamelayer = dynamic_cast<Game*>(this->getParent());
+		gamelayer->addBullet(t_bullet);
+		//把子弹放入vector中
+		gamelayer->addChild(t_bullet);
+		//发射子弹
+		shotBullet(t_bullet,m_target);
+	}
 }
 
 void Tower::shotBullet(Bullet* bullet, Enemy* target)

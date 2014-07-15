@@ -4,32 +4,13 @@
 USING_NS_CC;
 
 Enemy::Enemy()
-	:m_damage(1)
-	,m_originSpeed(3)
-	,m_curSpeed(3)
-	,m_magicalDefence(0)
-	,m_physicalDefebce(0)
-	,m_type(0)
-	,m_isDie(false)
-	,m_pProTimer(NULL)
-{
-}
-
-Enemy::Enemy(int type)
-	:m_damage(1)
-	,m_originSpeed(3)
-	,m_curSpeed(3)
-	,m_magicalDefence(0)
-	,m_physicalDefebce(0)
-	,m_type(type)
-	,m_isDie(false)
-	,m_pProTimer(NULL)
+	:m_pProTimer(NULL)
 {
 }
 
 Enemy* Enemy::create(int type){
-	Enemy *pRet = new Enemy(type);
-	if (pRet && pRet->init()) {
+	Enemy *pRet = new Enemy();
+	if (pRet && pRet->initWithType(type)) {
 		pRet->autorelease();
 		return pRet;
 	}
@@ -40,43 +21,33 @@ Enemy* Enemy::create(int type){
 	} 
 }
 
-bool Enemy::init(){
+bool Enemy::initWithType(int type){
 	this->setTag(TAG_ENEMY);
-	SpriteFrameCache *cache = SpriteFrameCache::getInstance();
-	Vector<SpriteFrame*> walkFrames(4);
+	m_type = type;
+	m_isDie = false;
+	m_enemy = Sprite::create();
+	auto animationCache = AnimationCache::getInstance();
 	switch (m_type)
 	{
 	case VIRUS_TYPE_0:
-		enemy = Sprite::createWithSpriteFrameName("Albinism_right1.png");  
-		  
-        char str[100] = {0};  
-        for (int i = 1; i <= 4; i++)  
-        {  
-            sprintf(str, "Albinism_right%1d.png",i);  
-            auto frame = cache->getSpriteFrameByName( str );  
-            //CCSpriteFrame *frame = cache->getSpriteFrameByName(CCString::createWithFormat("bear%1d.png", i)->getCString());  
-            walkFrames.pushBack(frame);  
-        }  
-          
-        // Creating animations  
-        auto *walkAnimation = Animation::createWithSpriteFrames(walkFrames, 1.0f / 12.0f);  
-        enemy->runAction( RepeatForever::create( Animate::create(walkAnimation) ) );  
-
-		m_body = PhysicsBody::createBox(Size(32, 32), PhysicsMaterial(0.5f, 0.0f, 0.5f));
-//		m_body = PhysicsBody::createCircle(16.0f, PhysicsMaterial(0.5f, 0.0f, 0.5f));
-//		m_body = PhysicsBody::createCircle(16.0f);
-		m_body->setCategoryBitmask(CategoryBitMask_Enemy);
-		m_body->setContactTestBitmask(ContactTestBitMask_Enemy);
-		m_body->setCollisionBitmask(CollisionBitMask_Enemy);
-		m_body->setRotationEnable(false);
-		this->setPhysicsBody(m_body);
+        Animation* walkAnimation = animationCache->animationByName(ResourceManager::ANIMATION_WALK_0);
+        m_enemy->runAction( RepeatForever::create(Animate::create(walkAnimation)));
 		m_curSpeed = m_originSpeed = 50;
 		break;
 	}
-	if (!enemy)
+	if (!m_enemy)
 		return false;
-	this->addChild(enemy);
+	this->addChild(m_enemy);
+
+	//attach physics body
+	auto body = PhysicsBody::createBox(Size(32, 32), PhysicsMaterial(0.5f, 0.0f, 0.5f));
+	body->setCategoryBitmask(CategoryBitMask_Enemy);
+	body->setContactTestBitmask(ContactTestBitMask_Enemy);
+	body->setCollisionBitmask(CollisionBitMask_Enemy);
+	body->setRotationEnable(false);
+	this->setPhysicsBody(body);
 	
+	//´´½¨ÑªÌõ
 	auto hpBar = Sprite::create("Maxhpbar.png");
 	if (!hpBar)
 		return false;
@@ -138,11 +109,11 @@ bool Enemy::setSpeed(int rspeed){
 }
 
 Vec2 Enemy::getVelocity(){
-	return this->m_body->getVelocity();
+	return this->getPhysicsBody()->getVelocity();
 }
 
 void Enemy::setVelocity(Vec2 v){
-	return this->m_body->setVelocity(v);
+	return this->getPhysicsBody()->setVelocity(v);
 }
 
 bool Enemy::isDie(){
@@ -153,6 +124,14 @@ void Enemy::setDie(bool d){
 	m_isDie = d;
 }
 
+int Enemy::getDamage(){
+	return m_damage;
+}
+
+void Enemy::setDamage(int damage){
+	m_damage = damage;
+}
+
 Sprite* Enemy::getEnemy(){
-	return enemy;	
+	return m_enemy;	
 }

@@ -4,10 +4,7 @@
 USING_NS_CC;
 
 class ResourceManager {
-public :
-	static ResourceManager* getInstance();
-	void init();
-
+public:
 //----------------Tag------------------------
 #define TAG_LABELPRICE 9
 #define TAG_BULLET 8
@@ -53,8 +50,14 @@ public :
 #define VIRUS_TYPE_3 3
 #define VIRUS_TYPE_4 4
 #define VIRUS_TYPE_5 5
+	static std::string ANIMATION_WALK_0;
 
+//----------------Baby-----------------------
+	Texture2D* baby;
 
+public :
+	static ResourceManager* getInstance();
+	void init();
 private:
 	static ResourceManager* m_instance;
 	ResourceManager();

@@ -47,10 +47,13 @@ bool Game::init()
 
 	TMXObjectGroup* peopleObjectGroup = m_map->getObjectGroup("people");	//读取对象层“people”
 	ValueMap babyObject = peopleObjectGroup->getObject("baby");	//获取一个name为“baby”的对象
-	int baby_x = objPosX(babyObject);	
-	int baby_y = objPosY(babyObject);
-	m_baby = Sprite::create("baby.png");	//用图片创建一个baby精灵
-	m_baby->setPosition(baby_x, baby_y);	//设置精灵的位置
+	float baby_x = babyObject.at("x").asFloat();
+	float baby_y = babyObject.at("y").asFloat();
+	float baby_width = objWidth(babyObject);
+	float baby_height = objHeight(babyObject);
+	m_babyPosition = Rect(baby_x, baby_y, baby_width, baby_height);
+	m_baby = Sprite::createWithTexture(rm->baby);	//用图片创建一个baby精灵
+	m_baby->setPosition(objPosX(babyObject), objPosY(babyObject));	//设置精灵的位置
 	this->addChild(m_baby);	//把精灵加到场景里
 
 	ValueMap enemyObject = peopleObjectGroup->getObject("enemy");	//获取一个name为“enemy”的对象
@@ -143,11 +146,18 @@ bool Game::init()
 		this->addChild(node);
 	}
 
-	this->schedule(schedule_selector(Game::findEnemy), 1.0f);
-	this->schedule(schedule_selector(Game::addEnemy), 2.0f);
-	this->schedule(schedule_selector(Game::moveEnemy), 0.5f);
-	this->schedule(schedule_selector(Game::deleteObject), 1.0f);
+	this->scheduleUpdate();
+// 	this->schedule(schedule_selector(Game::findEnemy), 1.0f);
+ 	this->schedule(schedule_selector(Game::addEnemy), 2.0f);
+// 	this->schedule(schedule_selector(Game::moveEnemy), 0.5f);
+// 	this->schedule(schedule_selector(Game::deleteObject), 1.0f);
 	return true;
+}
+
+void Game::update(float dt){
+	deleteObject(dt);
+	moveEnemy(dt);
+	findEnemy(dt);
 }
 
 void Game::addEnemy(float dt)
@@ -168,11 +178,18 @@ void Game::moveEnemy(float dt){
 			m_enemies.eraseObject(enemy);
 		}else{
 			Vec2 enemy_position = enemy->getPosition();
-			for (std::vector<Road>::iterator it = m_roads.begin(); it != m_roads.end(); it++){
-				if (it->containsPoint(enemy_position)){
-					//	enemy->runAction(MoveBy::create(0.5f, it->getDirection() * enemy->getSpeed()));
-					enemy->setVelocity(it->getDirection() * enemy->getSpeed());
-					break;
+			if (m_babyPosition.containsPoint(enemy_position)){
+				enemy->removeFromParent();
+				m_enemies.eraseObject(enemy);
+			} 
+			else
+			{
+				for (std::vector<Road>::iterator it = m_roads.begin(); it != m_roads.end(); it++){
+					if (it->containsPoint(enemy_position)){
+						//	enemy->runAction(MoveBy::create(0.5f, it->getDirection() * enemy->getSpeed()));
+						enemy->setVelocity(it->getDirection() * enemy->getSpeed());
+						break;
+					}
 				}
 			}
 		}
@@ -182,7 +199,7 @@ void Game::moveEnemy(float dt){
 void Game::findEnemy(float dt){
 	for (int i = 0; i < m_towers.size(); i++){
 		Tower* tower = m_towers.at(i);
-		tower->generateBullet();
+		tower->generateBullet(dt);
 	}
 }
 

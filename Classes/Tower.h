@@ -11,6 +11,8 @@ private:
 	int m_type;
 	int m_level;
 	int m_range;
+	float m_speed;
+	float m_elapsedTime;
 	Enemy* m_target;
 	Sprite* m_sprite;
 public:
@@ -19,7 +21,7 @@ public:
 	bool initWithType(int type);
 
 	Enemy* getCloseTarget();
-	void generateBullet();//生成子弹并且向target发射
+	void generateBullet(float dt);//生成子弹并且向target发射
 	void shotBullet(Bullet* bullet,Enemy* target); //子弹向目标enemy发射
 
 	int getType();
