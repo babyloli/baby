@@ -8,13 +8,18 @@ class Baby : public Node
 private:
 	int m_hp;
 	Sprite* m_sprite;
+	Action* m_action;
 public:
 	Baby();
 	CREATE_FUNC(Baby);
 	virtual bool init() override;
+	void onEnter() override;
 
 	/**return true if game over*/
 	bool setDamage(int damage);
+	void hurt();
+
+	bool touchCallback(Touch* touch, Event* event);
 };
 
 #endif

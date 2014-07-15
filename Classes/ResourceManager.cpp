@@ -50,7 +50,7 @@ void ResourceManager::loadAnimation(){
 	loadAnimation("baby1normal%1d.png", 6, 0.2f, ANIMATION_BABY_NORMAL);
 	loadAnimation("baby1sad%1d.png", 6, 0.2f, ANIMATION_BABY_SAD);
 	loadAnimation("baby1cry%1d.png", 6, 0.2f, ANIMATION_BABY_CRY);
-	loadAnimation("baby1hurting%1d.png", 6, 0.2f, ANIMATION_BABY_HURTING);
+	loadAnimation("baby1hurting%1d.png", 4, 0.2f, ANIMATION_BABY_HURTING);
 	loadAnimation("baby1hurted%1d.png", 6, 0.2f, ANIMATION_BABY_HURTED);
 	loadAnimation("baby1angry%1d.png", 6, 0.2f, ANIMATION_BABY_ANGRY);
 	loadAnimation("baby1win%1d.png", 6, 0.2f, ANIMATION_BABY_WIN);

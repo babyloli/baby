@@ -182,16 +182,16 @@ void Game::moveEnemy(float dt){
 				bool gameover = m_baby->setDamage(enemy->getDamage());
 				enemy->removeFromParent();
 				m_enemies.eraseObject(enemy);
+				m_baby->hurt();
 				if (gameover)
 				{
-
+					//TODO-------------------------------------------------------------------------------------
 				}
 			} 
 			else
 			{
 				for (std::vector<Road>::iterator it = m_roads.begin(); it != m_roads.end(); it++){
 					if (it->containsPoint(enemy_position)){
-						//	enemy->runAction(MoveBy::create(0.5f, it->getDirection() * enemy->getSpeed()));
 						enemy->setVelocity(it->getDirectionVec2() * enemy->getSpeed());
 						enemy->setDirection(it->getDirection());
 						break;
