@@ -63,10 +63,13 @@ bool Baby::touchCallback(Touch* touch, Event* event){
 		m_action = RepeatForever::create(Animate::create(AnimationCache::getInstance()->getAnimation(ResourceManager::ANIMATION_BABY_LAUGH)));
 		m_sprite->runAction(m_action);
  	} 
-//	else if (m_hp > 6) {
-// 		m_sprite->stopAllActions();
-// 		m_action = Animate::create(AnimationCache::getInstance()->getAnimation(ResourceManager::ANIMATION_BABY_HAPPY));
-// 		m_sprite->runAction(m_action);
-// 	}
+	else if (m_hp > 6) {
+		m_sprite->stopAllActions();
+		m_sprite->runAction(Sequence::create(DelayTime::create(2.0f), CallFunc::create([this](){
+			this->setDamage(0);
+		}), NULL));
+		m_action = RepeatForever::create(Animate::create(AnimationCache::getInstance()->getAnimation(ResourceManager::ANIMATION_BABY_HAPPY)));
+		m_sprite->runAction(m_action);
+ 	}
 	return true;
 }
