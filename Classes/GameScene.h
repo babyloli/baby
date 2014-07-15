@@ -34,7 +34,7 @@ public:
 	void addEnemy(float dt);
 	void moveEnemy(float dt);
 	void findEnemy(float dt);
-	void deleteBullet(float dt);
+	void deleteObject(float dt);
 
 	void setPhysicsWorld(PhysicsWorld* world);
 	Vector<Enemy*>& getEnemies();

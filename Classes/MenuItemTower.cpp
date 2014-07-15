@@ -1,4 +1,5 @@
 #include "MenuItemTower.h"
+#include "ResourceManager.h"
 
 MenuItemTower* MenuItemTower::create(int price, Node* normalSprite, Node* selectedSprite, Node* disabledSprite /* = nullptr */){
 	return MenuItemTower::create(price, normalSprite, selectedSprite, disabledSprite, (const ccMenuCallback&)nullptr);

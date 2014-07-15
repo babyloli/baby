@@ -7,6 +7,7 @@ Bullet::Bullet()
 
 bool Bullet::initWithTypeAndLevel(int type, int level)
 {
+	this->setTag(TAG_BULLET);
 	m_type = type;
 	m_level = level;
 	Sprite* bullet = NULL;
@@ -20,19 +21,19 @@ bool Bullet::initWithTypeAndLevel(int type, int level)
 			bullet = Sprite::create("bullet_0_1.png");
 			m_body = PhysicsBody::createCircle(16.0f);
 			this->setPhysicsBody(m_body);
-			m_damage = 50;
+			m_damage = DAMAGE_0_1;
 			break;
 		case 2:
 			bullet = Sprite::create("bullet_0_2.png");
 			m_body = PhysicsBody::createCircle(16.0f);
 			this->setPhysicsBody(m_body);
-			m_damage = 60;
+			m_damage = DAMAGE_0_2;
 			break;
 		case 3:
 			bullet = Sprite::create("bullet_0_3.png");
 			m_body = PhysicsBody::createCircle(16.0f);
 			this->setPhysicsBody(m_body);
-			m_damage = 80;
+			m_damage = DAMAGE_0_3;
 			break;
 		}
 	default:

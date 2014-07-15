@@ -17,7 +17,7 @@ bool Tower::initWithType(int type)
 	case TOWER_TYPE_0:
 		m_sprite = Sprite::createWithTexture(ResourceManager::getInstance()->tower0);
 		this->addChild(m_sprite);
-		this->m_range = 300;
+		this->m_range = 200;
 		break;
 	}
 	
@@ -42,7 +42,7 @@ Tower* Tower::create(int type)
 Enemy* Tower::getCloseTarget()
 {
 	Enemy* closetarge = NULL;
-	double maxdistance = 9999;
+	double maxdistance = MAX_RANGE;
 
 	Game* gamelayer = dynamic_cast<Game*>(this->getParent());
 	for (auto enemy : gamelayer->getEnemies()){

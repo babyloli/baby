@@ -8,6 +8,16 @@ public :
 	static ResourceManager* getInstance();
 	void init();
 
+//----------------Tag------------------------
+#define TAG_LABELPRICE 9
+#define TAG_BULLET 8
+#define TAG_ENEMY 7
+//----------------Priority-------------------
+#define Priority_EventListenerPhysicsContact 10
+//----------------Z-Order--------------------
+#define ZORDER_LABELPRICE 4
+#define ZORDER_MENU 10
+#define ZORDER_TOWER 5
 //----------------PhysicsMask----------------
 #define CategoryBitMask_Bullet		0x0000000F
 #define CategoryBitMask_Barrier		0x000000F0
@@ -22,6 +32,7 @@ public :
 #define CollisionBitMask_Enemy		0x000000FF
 
 //----------------Tower----------------------
+#define MAX_RANGE 9999
 #define TOWER_TYPE_0 0
 #define TOWER_TYPE_1 1
 #define TOWER_TYPE_2 2
@@ -29,6 +40,11 @@ public :
 #define TOWER_TYPE_4 4
 #define TOWER_TYPE_5 5
 	Texture2D* tower0;
+
+//----------------Bullet---------------------
+#define DAMAGE_0_1 20
+#define DAMAGE_0_2 30
+#define DAMAGE_0_3 50
 
 //----------------Enemy----------------------
 #define VIRUS_TYPE_0 0

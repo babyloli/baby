@@ -10,6 +10,7 @@ Enemy::Enemy()
 	,m_magicalDefence(0)
 	,m_physicalDefebce(0)
 	,m_type(0)
+	,m_isDie(false)
 	,m_pProTimer(NULL)
 {
 }
@@ -21,6 +22,7 @@ Enemy::Enemy(int type)
 	,m_magicalDefence(0)
 	,m_physicalDefebce(0)
 	,m_type(type)
+	,m_isDie(false)
 	,m_pProTimer(NULL)
 {
 }
@@ -39,6 +41,7 @@ Enemy* Enemy::create(int type){
 }
 
 bool Enemy::init(){
+	this->setTag(TAG_ENEMY);
 	SpriteFrameCache *cache = SpriteFrameCache::getInstance();
 	Vector<SpriteFrame*> walkFrames(4);
 	switch (m_type)
@@ -59,12 +62,13 @@ bool Enemy::init(){
         auto *walkAnimation = Animation::createWithSpriteFrames(walkFrames, 1.0f / 12.0f);  
         enemy->runAction( RepeatForever::create( Animate::create(walkAnimation) ) );  
 
-		m_body = PhysicsBody::createBox(Size(64, 64), PhysicsMaterial(0.5f, 0.0f, 0.1f));
-//		m_body = PhysicsBody::createCircle(16.0f, PhysicsMaterial(0.5f, 0.0f, 0.1f));
+		m_body = PhysicsBody::createBox(Size(32, 32), PhysicsMaterial(0.5f, 0.0f, 0.5f));
+//		m_body = PhysicsBody::createCircle(16.0f, PhysicsMaterial(0.5f, 0.0f, 0.5f));
 //		m_body = PhysicsBody::createCircle(16.0f);
 		m_body->setCategoryBitmask(CategoryBitMask_Enemy);
 		m_body->setContactTestBitmask(ContactTestBitMask_Enemy);
 		m_body->setCollisionBitmask(CollisionBitMask_Enemy);
+		m_body->setRotationEnable(false);
 		this->setPhysicsBody(m_body);
 		m_curSpeed = m_originSpeed = 50;
 		break;
@@ -80,7 +84,7 @@ bool Enemy::init(){
 	m_pProTimer->setType(ProgressTimer::Type::BAR);
 	m_pProTimer->setMidpoint(Vec2(0, 0.5f));
 	m_pProTimer->setBarChangeRate(Vec2(1, 0));
-	m_pProTimer->setPercentage(30);
+	m_pProTimer->setPercentage(100);
 	m_pProTimer->setScale(0.06f);
 	m_pProTimer->setPosition(0,25);
 	this->addChild(m_pProTimer);
@@ -107,7 +111,13 @@ float Enemy::getHp(){
 
 bool Enemy::setHp(float hp){
 	if (m_pProTimer){
-		m_pProTimer->setPercentage(hp);
+		if (hp > 0)
+			m_pProTimer->setPercentage(hp);
+		else
+		{
+			m_pProTimer->setPercentage(0);
+			m_isDie = true;
+		}
 		return true;
 	}
 	return false;
@@ -135,6 +145,13 @@ void Enemy::setVelocity(Vec2 v){
 	return this->m_body->setVelocity(v);
 }
 
+bool Enemy::isDie(){
+	return m_isDie;
+}
+
+void Enemy::setDie(bool d){
+	m_isDie = d;
+}
 
 Sprite* Enemy::getEnemy(){
 	return enemy;	

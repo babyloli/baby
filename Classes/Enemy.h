@@ -12,7 +12,7 @@ private:
 	int m_magicalDefence;
 	int m_physicalDefebce;
 	int m_type;
-
+	bool m_isDie;
 	ProgressTimer* m_pProTimer;
 	PhysicsBody* m_body;
 public:
@@ -38,7 +38,8 @@ public:
 	bool setSpeed(int rspeed);
 	Vec2 getVelocity();
 	void setVelocity(Vec2 v);
-	
+	bool isDie();
+	void setDie(bool d);
 	float getHp();
 	bool setHp(float hp);
 

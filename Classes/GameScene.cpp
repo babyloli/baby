@@ -6,8 +6,6 @@ USING_NS_CC;
 #define objPosY(obj) obj.at("y").asInt() + obj.at("height").asInt()/2
 #define objWidth(obj) obj.at("width").asFloat()
 #define objHeight(obj) obj.at("height").asFloat()
-#define MENU_ZORDER 10
-#define TOWER_ZORDER 5
 
 Scene* Game::createScene(){
 	auto scene = Scene::createWithPhysics();
@@ -42,7 +40,7 @@ bool Game::init()
 	auto menu = Menu::create(closeItem, physicsItem, NULL);
 	menu->setPosition(Vec2::ZERO);
 	this->addChild(menu);
-	this->reorderChild(menu, MENU_ZORDER);
+	this->reorderChild(menu, ZORDER_MENU);
 
 	m_map = TMXTiledMap::create("map1.tmx");
 	this->addChild(m_map);
@@ -93,7 +91,7 @@ bool Game::init()
 				Menu* menu = this->m_menus.at(i);
 				if (menu->getParent() == NULL){
 					this->addChild(menu);
-					this->reorderChild(menu, MENU_ZORDER);
+					this->reorderChild(menu, ZORDER_MENU);
 				}
 			}
 			else
@@ -148,7 +146,7 @@ bool Game::init()
 	this->schedule(schedule_selector(Game::findEnemy), 1.0f);
 	this->schedule(schedule_selector(Game::addEnemy), 2.0f);
 	this->schedule(schedule_selector(Game::moveEnemy), 0.5f);
-	this->schedule(schedule_selector(Game::deleteBullet), 1.0f);
+	this->schedule(schedule_selector(Game::deleteObject), 1.0f);
 	return true;
 }
 
@@ -165,13 +163,17 @@ void Game::addEnemy(float dt)
 void Game::moveEnemy(float dt){
 	for (int i = 0; i < m_enemies.size(); i++){
 		Enemy* enemy = m_enemies.at(i);
-
-		Vec2 enemy_position = enemy->getPosition();
-		for (std::vector<Road>::iterator it = m_roads.begin(); it != m_roads.end(); it++){
-			if (it->containsPoint(enemy_position)){
-			//	enemy->runAction(MoveBy::create(0.5f, it->getDirection() * enemy->getSpeed()));
-				enemy->setVelocity(it->getDirection() * enemy->getSpeed());
-				break;
+		if (enemy->isDie()){
+			enemy->removeFromParent();
+			m_enemies.eraseObject(enemy);
+		}else{
+			Vec2 enemy_position = enemy->getPosition();
+			for (std::vector<Road>::iterator it = m_roads.begin(); it != m_roads.end(); it++){
+				if (it->containsPoint(enemy_position)){
+					//	enemy->runAction(MoveBy::create(0.5f, it->getDirection() * enemy->getSpeed()));
+					enemy->setVelocity(it->getDirection() * enemy->getSpeed());
+					break;
+				}
 			}
 		}
 	}
@@ -184,7 +186,7 @@ void Game::findEnemy(float dt){
 	}
 }
 
-void Game::deleteBullet(float dt){
+void Game::deleteObject(float dt){
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	float minX = origin.x;
@@ -198,13 +200,37 @@ void Game::deleteBullet(float dt){
 		if (bullet->isDie() || x < minX || x > maxX || y < minY || y > maxY)
 		{
 			bullet->removeFromParent();
+			m_bullets.eraseObject(bullet);
 		}
 	}
 }
 
 void Game::onEnter(){
 	Layer::onEnter();
-//	auto listener = EventListenerPhysicsContactWithGroup::create();
+	auto listener = EventListenerPhysicsContact::create();
+	listener->onContactBegin = [this](PhysicsContact &contact)->bool{
+		auto nodeA = contact.getShapeA()->getBody()->getNode();
+		auto nodeB = contact.getShapeB()->getBody()->getNode();
+		Bullet* bullet = NULL;
+		Enemy* enemy = NULL;
+		int tagA = nodeA->getTag();
+		int tagB = nodeB->getTag();
+		if (TAG_BULLET == tagA && TAG_ENEMY == tagB){
+			bullet = dynamic_cast<Bullet*>(nodeA);
+			enemy = dynamic_cast<Enemy*>(nodeB);
+		} else if (TAG_ENEMY == tagA && TAG_BULLET == tagB){
+			bullet = dynamic_cast<Bullet*>(nodeB);
+			enemy = dynamic_cast<Enemy*>(nodeA);
+		}
+		if (bullet && enemy){
+			int damage = bullet->getDamage();
+			enemy->setHp(enemy->getHp() - damage);
+			bullet->setDie();
+			return true;
+		}
+		return false;
+	};
+	_eventDispatcher->addEventListenerWithFixedPriority(listener, Priority_EventListenerPhysicsContact);
 }
 
 void Game::menuCloseCallback(Ref* pSender)
@@ -241,7 +267,7 @@ void Game::towerCreateCallback(cocos2d::Ref* pSender, int type, Sprite* towerbas
 		return;
 	tower->setPosition(towerbase->getPosition());
 	this->addChild(tower);
-	this->reorderChild(tower, TOWER_ZORDER);
+	this->reorderChild(tower, ZORDER_TOWER);
 	this->m_towers.pushBack(tower);
 	towerbase->removeFromParentAndCleanup(true);
 }
