@@ -3,6 +3,12 @@
 #include "cocos2d.h"
 USING_NS_CC;
 
+#define LEFT 0
+#define UP 1
+#define RIGHT 2
+#define DOWN 3
+#define NO_DIRECTION 4
+
 class ResourceManager {
 public:
 //----------------Tag------------------------
@@ -39,9 +45,9 @@ public:
 	Texture2D* tower0;
 
 //----------------Bullet---------------------
-#define DAMAGE_0_1 20
-#define DAMAGE_0_2 30
-#define DAMAGE_0_3 50
+#define DAMAGE_BULLET_0_1 20
+#define DAMAGE_BULLET_0_2 30
+#define DAMAGE_BULLET_0_3 50
 
 //----------------Enemy----------------------
 #define VIRUS_TYPE_0 0
@@ -50,11 +56,26 @@ public:
 #define VIRUS_TYPE_3 3
 #define VIRUS_TYPE_4 4
 #define VIRUS_TYPE_5 5
-	static std::string ANIMATION_WALK_0;
 
+#define DAMAGE_ENEMY_0 1
+#define SPEED_ENEMY_0 500
+#define DEFENCE_MAGICAL_0 10
+#define DEFENCE_PHYSICS_0 10
+	static std::string ANIMATION_WALK_RIGHT_0;
+	static std::string ANIMATION_WALK_UP_0;
+	static std::string ANIMATION_WALK_LEFT_0;
+	static std::string ANIMATION_WALK_DOWN_0;
 //----------------Baby-----------------------
 	Texture2D* baby;
-
+	static std::string ANIMATION_BABY_LAUGH;
+	static std::string ANIMATION_BABY_HAPPY;
+	static std::string ANIMATION_BABY_NORMAL;
+	static std::string ANIMATION_BABY_SAD;
+	static std::string ANIMATION_BABY_CRY;
+	static std::string ANIMATION_BABY_HURTING;
+	static std::string ANIMATION_BABY_HURTED;
+	static std::string ANIMATION_BABY_ANGRY;
+	static std::string ANIMATION_BABY_WIN;
 public :
 	static ResourceManager* getInstance();
 	void init();
@@ -64,6 +85,9 @@ private:
 	virtual ~ResourceManager();
 	ResourceManager(const ResourceManager&);
 	ResourceManager &operator = (const ResourceManager&);
+
+	void loadAnimation();
+	void loadAnimation(const char* format, int size, float delay, const std::string &name);
 };
 
 #endif

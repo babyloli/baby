@@ -52,7 +52,7 @@ bool Game::init()
 	float baby_width = objWidth(babyObject);
 	float baby_height = objHeight(babyObject);
 	m_babyPosition = Rect(baby_x, baby_y, baby_width, baby_height);
-	m_baby = Sprite::createWithTexture(rm->baby);	//用图片创建一个baby精灵
+	m_baby = Baby::create();	//用图片创建一个baby精灵
 	m_baby->setPosition(objPosX(babyObject), objPosY(babyObject));	//设置精灵的位置
 	this->addChild(m_baby);	//把精灵加到场景里
 
@@ -179,15 +179,21 @@ void Game::moveEnemy(float dt){
 		}else{
 			Vec2 enemy_position = enemy->getPosition();
 			if (m_babyPosition.containsPoint(enemy_position)){
+				bool gameover = m_baby->setDamage(enemy->getDamage());
 				enemy->removeFromParent();
 				m_enemies.eraseObject(enemy);
+				if (gameover)
+				{
+
+				}
 			} 
 			else
 			{
 				for (std::vector<Road>::iterator it = m_roads.begin(); it != m_roads.end(); it++){
 					if (it->containsPoint(enemy_position)){
 						//	enemy->runAction(MoveBy::create(0.5f, it->getDirection() * enemy->getSpeed()));
-						enemy->setVelocity(it->getDirection() * enemy->getSpeed());
+						enemy->setVelocity(it->getDirectionVec2() * enemy->getSpeed());
+						enemy->setDirection(it->getDirection());
 						break;
 					}
 				}

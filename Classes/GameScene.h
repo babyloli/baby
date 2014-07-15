@@ -6,13 +6,14 @@
 #include "Enemy.h"
 #include "Road.h"
 #include "Tower.h"
+#include "Baby.h"
 
 USING_NS_CC;
 class Game : public cocos2d::Layer
 {
 private:
 	TMXTiledMap* m_map;
-	Sprite* m_baby;
+	Baby* m_baby;
 	Vec2 m_enemyPosition;
 	Rect m_babyPosition;
 	Vector<Menu*> m_menus;

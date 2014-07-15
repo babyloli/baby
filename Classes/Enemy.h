@@ -10,8 +10,9 @@ private:
 	int m_originSpeed;
 	int m_curSpeed;
 	int m_magicalDefence;
-	int m_physicalDefebce;
+	int m_physicalDefence;
 	int m_type;
+	int m_direction;
 	bool m_isDie;
 	ProgressTimer* m_pProTimer;
 	Sprite* m_enemy;
@@ -36,6 +37,8 @@ public:
 	bool setHp(float hp);
 	int getDamage();
 	void setDamage(int damage);
+	int getDirection();
+	void setDirection(int direction);
 	Sprite* getEnemy();
 };
 #endif

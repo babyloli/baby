@@ -25,14 +25,18 @@ bool Enemy::initWithType(int type){
 	this->setTag(TAG_ENEMY);
 	m_type = type;
 	m_isDie = false;
+	m_direction = NO_DIRECTION;
 	m_enemy = Sprite::create();
 	auto animationCache = AnimationCache::getInstance();
 	switch (m_type)
 	{
 	case VIRUS_TYPE_0:
-        Animation* walkAnimation = animationCache->animationByName(ResourceManager::ANIMATION_WALK_0);
-        m_enemy->runAction( RepeatForever::create(Animate::create(walkAnimation)));
-		m_curSpeed = m_originSpeed = 50;
+//        m_enemy->runAction( RepeatForever::create(Animate::create(
+//			animationCache->getAnimation(ResourceManager::ANIMATION_WALK_RIGHT_0))));
+		m_damage = DAMAGE_ENEMY_0;
+		m_curSpeed = m_originSpeed = SPEED_ENEMY_0;
+		m_physicalDefence = DEFENCE_PHYSICS_0;
+		m_magicalDefence = DEFENCE_MAGICAL_0;
 		break;
 	}
 	if (!m_enemy)
@@ -130,6 +134,36 @@ int Enemy::getDamage(){
 
 void Enemy::setDamage(int damage){
 	m_damage = damage;
+}
+
+int Enemy::getDirection(){
+	return m_direction;
+}
+
+void Enemy::setDirection(int direction){
+	if (direction != m_direction){
+		m_enemy->stopAllActions();
+		switch (direction)
+		{
+		case RIGHT:
+			m_enemy->runAction( RepeatForever::create(Animate::create(
+				AnimationCache::getInstance()->getAnimation(ResourceManager::ANIMATION_WALK_RIGHT_0))));
+			break;
+		case UP:
+			m_enemy->runAction( RepeatForever::create(Animate::create(
+				AnimationCache::getInstance()->getAnimation(ResourceManager::ANIMATION_WALK_UP_0))));
+			break;
+		case LEFT:
+			m_enemy->runAction( RepeatForever::create(Animate::create(
+				AnimationCache::getInstance()->getAnimation(ResourceManager::ANIMATION_WALK_LEFT_0))));
+			break;
+		case DOWN:
+			m_enemy->runAction( RepeatForever::create(Animate::create(
+				AnimationCache::getInstance()->getAnimation(ResourceManager::ANIMATION_WALK_DOWN_0))));
+			break;
+		}		
+		m_direction = direction;
+	}
 }
 
 Sprite* Enemy::getEnemy(){

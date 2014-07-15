@@ -21,19 +21,19 @@ bool Bullet::initWithTypeAndLevel(int type, int level)
 			bullet = Sprite::create("bullet_0_1.png");
 			m_body = PhysicsBody::createCircle(16.0f);
 			this->setPhysicsBody(m_body);
-			m_damage = DAMAGE_0_1;
+			m_damage = DAMAGE_BULLET_0_1;
 			break;
 		case 2:
 			bullet = Sprite::create("bullet_0_2.png");
 			m_body = PhysicsBody::createCircle(16.0f);
 			this->setPhysicsBody(m_body);
-			m_damage = DAMAGE_0_2;
+			m_damage = DAMAGE_BULLET_0_2;
 			break;
 		case 3:
 			bullet = Sprite::create("bullet_0_3.png");
 			m_body = PhysicsBody::createCircle(16.0f);
 			this->setPhysicsBody(m_body);
-			m_damage = DAMAGE_0_3;
+			m_damage = DAMAGE_BULLET_0_3;
 			break;
 		}
 	default:
