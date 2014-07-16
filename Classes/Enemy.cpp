@@ -52,7 +52,7 @@ bool Enemy::initWithType(int type){
 	this->setPhysicsBody(body);
 	
 	//´´½¨ÑªÌõ
-	auto hpBar = Sprite::create("Maxhpbar.png");
+	auto hpBar = Sprite::createWithTexture(ResourceManager::getInstance()->hpBar);
 	if (!hpBar)
 		return false;
 	m_pProTimer = ProgressTimer::create(hpBar);

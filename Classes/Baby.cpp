@@ -8,7 +8,7 @@ Baby::Baby()
 {}
 
 bool Baby::init(){
-	m_sprite = Sprite::createWithTexture(ResourceManager::getInstance()->baby);
+	m_sprite = Sprite::create();
 	this->addChild(m_sprite);
 	m_action = RepeatForever::create(Animate::create(
 		AnimationCache::getInstance()->getAnimation(ANIMATION_BABY_NORMAL)));

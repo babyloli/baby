@@ -42,7 +42,7 @@ bool Game::init()
 	this->addChild(menu);
 	this->reorderChild(menu, ZORDER_MENU);
 
-	m_map = TMXTiledMap::create("map1.tmx");
+	m_map = TMXTiledMap::create(MAP1);
 	this->addChild(m_map);
 
 	TMXObjectGroup* peopleObjectGroup = m_map->getObjectGroup("people");	//读取对象层“people”
@@ -59,7 +59,7 @@ bool Game::init()
 	ValueMap enemyObject = peopleObjectGroup->getObject("enemy");	//获取一个name为“enemy”的对象
 	m_enemyPosition = Vec2(objPosX(enemyObject),objPosY(enemyObject));	//enemy对象的起始位置
 
-	SpriteBatchNode* towerbase = SpriteBatchNode::create("towerbase.png");	//用图片创建一个Batch
+	SpriteBatchNode* towerbase = SpriteBatchNode::create(PATH_TOWERBASE);	//用图片创建一个Batch
 	towerbase->setPosition(Vec2::ZERO);	//设置这个Batch的位置
 	this->addChild(towerbase);	//将这个Batch加到场景里
 

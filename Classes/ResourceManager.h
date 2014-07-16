@@ -49,7 +49,9 @@ public:
 #define DAMAGE_BULLET_0_1 20
 #define DAMAGE_BULLET_0_2 30
 #define DAMAGE_BULLET_0_3 50
-
+	Texture2D* bullet_0_1;
+	Texture2D* bullet_0_2;
+	Texture2D* bullet_0_3;
 //----------------Enemy----------------------
 #define VIRUS_TYPE_0 0
 #define VIRUS_TYPE_1 1 
@@ -57,7 +59,6 @@ public:
 #define VIRUS_TYPE_3 3
 #define VIRUS_TYPE_4 4
 #define VIRUS_TYPE_5 5
-
 #define DAMAGE_ENEMY_0 1
 #define SPEED_ENEMY_0 50
 #define DEFENCE_MAGICAL_0 10
@@ -66,6 +67,7 @@ public:
 #define ANIMATION_WALK_UP_0 "walk_up_0"
 #define ANIMATION_WALK_LEFT_0 "walk_left_0"
 #define ANIMATION_WALK_DOWN_0 "walk_down_0"
+	Texture2D* hpBar;
 //----------------Baby-----------------------
 #define ANIMATION_BABY_LAUGH "baby_laugh"
 #define ANIMATION_BABY_HAPPY "baby_happy"
@@ -76,10 +78,12 @@ public:
 #define ANIMATION_BABY_HURTED "baby_hurt"
 #define ANIMATION_BABY_ANGRY "baby_angry"
 #define ANIMATION_BABY_WIN "baby_win"
-	Texture2D* baby;
 //----------------Price-----------------------
 #define FONTSIZE_PRICE 20
-#define FONT_PRICE "cardFont.ttf"
+#define FONT_PRICE "fonts/cardFont.ttf"
+//-----------------Game-----------------------
+#define MAP1 "maps/map1.tmx"
+#define PATH_TOWERBASE "images/tower/towerbase.png"
 	Texture2D* background_price;
 public :
 	static ResourceManager* getInstance();

@@ -18,21 +18,21 @@ bool Bullet::initWithTypeAndLevel(int type, int level)
 		switch (level)
 		{
 		case 1:
-			bullet = Sprite::create("bullet_0_1.png");
+			bullet = Sprite::createWithTexture(ResourceManager::getInstance()->bullet_0_1);
 			m_body = PhysicsBody::createCircle(16.0f);
 			this->setPhysicsBody(m_body);
 			m_damage = DAMAGE_BULLET_0_1;
 			m_speed = SPEED_BULLET_0;
 			break;
 		case 2:
-			bullet = Sprite::create("bullet_0_2.png");
+			bullet = Sprite::createWithTexture(ResourceManager::getInstance()->bullet_0_2);
 			m_body = PhysicsBody::createCircle(16.0f);
 			this->setPhysicsBody(m_body);
 			m_damage = SPEED_BULLET_0;
 			m_speed = 2;
 			break;
 		case 3:
-			bullet = Sprite::create("bullet_0_3.png");
+			bullet = Sprite::createWithTexture(ResourceManager::getInstance()->bullet_0_1);
 			m_body = PhysicsBody::createCircle(16.0f);
 			this->setPhysicsBody(m_body);
 			m_damage = SPEED_BULLET_0;

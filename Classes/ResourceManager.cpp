@@ -7,14 +7,15 @@ void ResourceManager::init(){
 	auto textureCache = director->getTextureCache();
 	//--------------------SpriteFrameCache---------------------------
 	SpriteFrameCache* spriteFrameCache = SpriteFrameCache::getInstance();
-	spriteFrameCache->addSpriteFramesWithFile("icedog.plist");
-	spriteFrameCache->addSpriteFramesWithFile("baby1.plist");
+	spriteFrameCache->addSpriteFramesWithFile("images/enemy/icedog.plist");
+	spriteFrameCache->addSpriteFramesWithFile("images/baby/baby1.plist");
 	loadAnimation();
 
 	//---------------------Texture----------------------------
-	tower0 = textureCache->addImage("tower0.png");
-	baby = textureCache->addImage("baby.png");
-	background_price = textureCache->addImage("priceBackground.png");
+	tower0 = textureCache->addImage("images/tower/tower0.png");
+	background_price = textureCache->addImage("images/priceBackground.png");
+	hpBar = textureCache->addImage("images/enemy/Maxhpbar.png");
+	bullet_0_1 = textureCache->addImage("images/tower/bullet_0_1.png");
 }
 
 void ResourceManager::loadAnimation(const char* format, int size, float delay, const std::string &name){
