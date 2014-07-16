@@ -54,22 +54,24 @@ void Baby::hurt(){
 }
 
 bool Baby::touchCallback(Touch* touch, Event* event){
-//	Baby* baby = static_cast<Baby*>(pSender);
-	if (m_hp >= 8){
-		m_sprite->stopAllActions();
-		m_sprite->runAction(Sequence::create(DelayTime::create(2.0f), CallFunc::create([this](){
-			this->setDamage(0);
-		}), NULL));
-		m_action = RepeatForever::create(Animate::create(AnimationCache::getInstance()->getAnimation(ANIMATION_BABY_LAUGH)));
-		m_sprite->runAction(m_action);
- 	} 
-	else if (m_hp > 6) {
-		m_sprite->stopAllActions();
-		m_sprite->runAction(Sequence::create(DelayTime::create(2.0f), CallFunc::create([this](){
-			this->setDamage(0);
-		}), NULL));
-		m_action = RepeatForever::create(Animate::create(AnimationCache::getInstance()->getAnimation(ANIMATION_BABY_HAPPY)));
-		m_sprite->runAction(m_action);
- 	}
-	return true;
+	if (m_position.containsPoint(touch->getLocation())){
+		if (m_hp >= 8){
+			m_sprite->stopAllActions();
+			m_sprite->runAction(Sequence::create(DelayTime::create(2.0f), CallFunc::create([this](){
+				this->setDamage(0);
+			}), NULL));
+			m_action = RepeatForever::create(Animate::create(AnimationCache::getInstance()->getAnimation(ANIMATION_BABY_LAUGH)));
+			m_sprite->runAction(m_action);
+		} 
+		else if (m_hp > 6) {
+			m_sprite->stopAllActions();
+			m_sprite->runAction(Sequence::create(DelayTime::create(2.0f), CallFunc::create([this](){
+				this->setDamage(0);
+			}), NULL));
+			m_action = RepeatForever::create(Animate::create(AnimationCache::getInstance()->getAnimation(ANIMATION_BABY_HAPPY)));
+			m_sprite->runAction(m_action);
+		}
+		return true;
+	}
+	return false;
 }

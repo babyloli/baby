@@ -25,7 +25,7 @@ bool Enemy::initWithType(int type){
 	this->setTag(TAG_ENEMY);
 	m_type = type;
 	m_isDie = false;
-	m_direction = NO_DIRECTION;
+	m_direction = ROAD_NONE;
 	m_enemy = Sprite::create();
 	auto animationCache = AnimationCache::getInstance();
 	switch (m_type)
@@ -145,19 +145,19 @@ void Enemy::setDirection(int direction){
 		m_enemy->stopAllActions();
 		switch (direction)
 		{
-		case RIGHT:
+		case ROAD_RIGHT:
 			m_enemy->runAction( RepeatForever::create(Animate::create(
 				AnimationCache::getInstance()->getAnimation(ANIMATION_WALK_RIGHT_0))));
 			break;
-		case UP:
+		case ROAD_UP:
 			m_enemy->runAction( RepeatForever::create(Animate::create(
 				AnimationCache::getInstance()->getAnimation(ANIMATION_WALK_UP_0))));
 			break;
-		case LEFT:
+		case ROAD_LEFT:
 			m_enemy->runAction( RepeatForever::create(Animate::create(
 				AnimationCache::getInstance()->getAnimation(ANIMATION_WALK_LEFT_0))));
 			break;
-		case DOWN:
+		case ROAD_DOWN:
 			m_enemy->runAction( RepeatForever::create(Animate::create(
 				AnimationCache::getInstance()->getAnimation(ANIMATION_WALK_DOWN_0))));
 			break;

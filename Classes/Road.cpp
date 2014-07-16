@@ -8,13 +8,13 @@ Road::Road(float x, float y, float width, float height, int direction)
 }
 
 Vec2 Road::getDirectionVec2(){
-	if (m_direction == LEFT)
+	if (m_direction == ROAD_LEFT)
 		return Vec2(-1, 0);
-	if (m_direction == UP)
+	if (m_direction == ROAD_UP)
 		return Vec2(0, 1);
-	if (m_direction == RIGHT)
+	if (m_direction == ROAD_RIGHT)
 		return Vec2(1, 0);
-	if (m_direction == DOWN)
+	if (m_direction == ROAD_DOWN)
 		return Vec2(0, -1);
 	return Vec2::ZERO;
 }

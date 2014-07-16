@@ -1,6 +1,6 @@
 #include "AppDelegate.h"
-#include "GameScene.h"
 #include "ResourceManager.h"
+#include "HelloWorldScene.h"
 
 USING_NS_CC;
 
@@ -15,7 +15,6 @@ AppDelegate::~AppDelegate()
 bool AppDelegate::applicationDidFinishLaunching() {
     // initialize director
     auto director = Director::getInstance();
-	
     auto glview = director->getOpenGLView();
     if(!glview) {
         glview = GLView::create("My Game");
@@ -29,11 +28,10 @@ bool AppDelegate::applicationDidFinishLaunching() {
     // set FPS. the default value is 1.0/60 if you don't call this
     director->setAnimationInterval(1.0 / 60);
 
-	// load resources
 	ResourceManager::getInstance()->init();
-
     // create a scene. it's an autorelease object
-	auto scene = Game::createScene();
+    auto scene = HelloWorld::createScene();
+	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("music/bgm.mp3");
     // run
     director->runWithScene(scene);
 

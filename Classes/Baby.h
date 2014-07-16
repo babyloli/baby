@@ -10,6 +10,8 @@ private:
 	Sprite* m_sprite;
 	Action* m_action;
 public:
+	Rect m_position;
+public:
 	Baby();
 	CREATE_FUNC(Baby);
 	virtual bool init() override;

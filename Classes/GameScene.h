@@ -1,8 +1,9 @@
 #ifndef __GAME_SCENE_H__
 #define __GAME_SCENE_H__
-
 #include <vector>
 #include "cocos2d.h"
+#include "ui/CocosGUI.h"
+#include "cocostudio/CocoStudio.h"
 #include "Enemy.h"
 #include "Road.h"
 #include "Tower.h"
@@ -15,7 +16,9 @@ private:
 	TMXTiledMap* m_map;
 	Baby* m_baby;
 	Vec2 m_enemyPosition;
-	Rect m_babyPosition;
+	MenuItem* m_goItem;
+	MenuItem* m_restartItem;
+	MenuItem* m_backItem;
 	Vector<Menu*> m_menus;
 	Vector<Enemy*> m_enemies;
 	Vector<Tower*> m_towers;
@@ -31,6 +34,7 @@ public:
 
 	void menuCloseCallback(cocos2d::Ref* pSender);
 	void menuPhysicsCallback(cocos2d::Ref* pSender);
+	void menuStopCallback(cocos2d::Ref* pSender);
 	void towerCreateCallback(cocos2d::Ref* pSender, int type, Sprite* towerbase);
 
 	void addEnemy(float dt);

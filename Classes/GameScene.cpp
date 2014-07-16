@@ -1,6 +1,7 @@
 #include "GameScene.h"
 #include "ResourceManager.h"
 #include "MenuItemTower.h"
+#include "HelloWorldScene.h"
 USING_NS_CC;
 #define objPosX(obj) obj.at("x").asInt() + obj.at("width").asInt()/2
 #define objPosY(obj) obj.at("y").asInt() + obj.at("height").asInt()/2
@@ -27,20 +28,65 @@ bool Game::init()
 
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
-	auto closeItem = MenuItemImage::create("CloseNormal.png",
-		"CloseSelected.png",
-		CC_CALLBACK_1(Game::menuCloseCallback, this));
-	closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
-		origin.y + closeItem->getContentSize().height/2));
+// 	auto closeItem = MenuItemImage::create("CloseNormal.png",
+// 		"CloseSelected.png",
+// 		CC_CALLBACK_1(Game::menuCloseCallback, this));
+// 	closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
+// 		origin.y + closeItem->getContentSize().height/2));
+
 	auto physicsItem = MenuItemImage::create("CloseNormal.png",
 		"CloseSelected.png",
 		CC_CALLBACK_1(Game::menuPhysicsCallback, this));
 	physicsItem->setPosition(Vec2(origin.x + visibleSize.width - physicsItem->getContentSize().width/2 ,
 		origin.y + visibleSize.height - physicsItem->getContentSize().height/2));
-	auto menu = Menu::create(closeItem, physicsItem, NULL);
+
+	auto stopItem = MenuItemImage::create("stop.png", "stop.png", 
+		CC_CALLBACK_1(Game::menuStopCallback, this));
+	stopItem->setPosition(Vec2(origin.x + visibleSize.width - stopItem->getContentSize().width/2 ,
+		origin.y + stopItem->getContentSize().height*0.6));
+
+	m_restartItem = MenuItemImage::create("restart.png", "restart.png", [](cocos2d::Ref* pSender){
+		auto scene = Game::createScene();
+		Director::getInstance()->replaceScene(scene);
+		Director::getInstance()->resume();
+	});
+	m_restartItem->setPosition(Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2));
+	m_restartItem->setVisible(false);
+
+	m_goItem = MenuItemImage::create("go.png", "go.png", [=](cocos2d::Ref* pSender){
+		MenuItem* menuItem = static_cast<MenuItem*>(pSender);
+		menuItem->setVisible(false);
+		m_restartItem->setVisible(false);
+		m_backItem->setVisible(false);
+		stopItem->setVisible(true);
+		Director::getInstance()->resume();
+	});
+	m_goItem->setPosition(Vec2(origin.x + visibleSize.width/2 + m_restartItem->getContentSize().width/2 +
+		m_goItem->getContentSize().width, origin.y + visibleSize.height/2));
+	m_goItem->setVisible(false);
+
+	m_backItem = MenuItemImage::create("back.png", "back.png", [](cocos2d::Ref* pSender){
+		auto scene = HelloWorld::createScene();
+		Director::getInstance()->replaceScene(scene);
+		Director::getInstance()->resume();
+	});
+	m_backItem->setPosition(Vec2(origin.x + visibleSize.width/2 - m_restartItem->getContentSize().width/2 -
+		m_backItem->getContentSize().width,	origin.y + visibleSize.height/2));
+	m_backItem->setVisible(false);
+
+	auto menu = Menu::create(/*closeItem,*/physicsItem, stopItem, m_goItem, m_restartItem, m_backItem, NULL);
 	menu->setPosition(Vec2::ZERO);
 	this->addChild(menu);
 	this->reorderChild(menu, ZORDER_MENU);
+
+	auto modalLayer = Sprite::create("modalLayer.png");
+	modalLayer->setPosition(Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2));
+	auto modalLayer_touchListener = EventListenerTouchOneByOne::create();
+	modalLayer_touchListener->onTouchBegan = [](cocos2d::Touch* touch, cocos2d::Event* unused_event){
+		return true;
+	};
+	this->_eventDispatcher->addEventListenerWithFixedPriority(modalLayer_touchListener, -1);
+	this->addChild(modalLayer, ZORDER_MENU - 1);
 
 	m_map = TMXTiledMap::create(MAP1);
 	this->addChild(m_map);
@@ -51,8 +97,8 @@ bool Game::init()
 	float baby_y = babyObject.at("y").asFloat();
 	float baby_width = objWidth(babyObject);
 	float baby_height = objHeight(babyObject);
-	m_babyPosition = Rect(baby_x, baby_y, baby_width, baby_height);
 	m_baby = Baby::create();	//用图片创建一个baby精灵
+	m_baby->m_position = Rect(baby_x, baby_y, baby_width, baby_height);
 	m_baby->setPosition(objPosX(babyObject), objPosY(babyObject));	//设置精灵的位置
 	this->addChild(m_baby);	//把精灵加到场景里
 
@@ -116,13 +162,13 @@ bool Game::init()
 		std::string directionStr = roadObject.at("direction").asString();
 		int direction;
 		if ("left" == directionStr){
-			direction = LEFT;
+			direction = ROAD_LEFT;
 		} else if ("up" == directionStr) {
-			direction = UP;
+			direction = ROAD_UP;
 		} else if ("right" == directionStr) {
-			direction = RIGHT;
+			direction = ROAD_RIGHT;
 		} else {
-			direction = DOWN;
+			direction = ROAD_DOWN;
 		}
 		m_roads.push_back(Road(roadObject.at("x").asFloat(), roadObject.at("y").asFloat(),
 			objWidth(roadObject), objHeight(roadObject),
@@ -178,7 +224,7 @@ void Game::moveEnemy(float dt){
 			m_enemies.eraseObject(enemy);
 		}else{
 			Vec2 enemy_position = enemy->getPosition();
-			if (m_babyPosition.containsPoint(enemy_position)){
+			if (m_baby->m_position.containsPoint(enemy_position)){
 				bool gameover = m_baby->setDamage(enemy->getDamage());
 				enemy->removeFromParent();
 				m_enemies.eraseObject(enemy);
@@ -277,6 +323,17 @@ void Game::menuPhysicsCallback(cocos2d::Ref* pSender)
 	else
 	{
 		m_physicsWorld->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+	}
+}
+
+void Game::menuStopCallback(cocos2d::Ref* pSender){
+	if(!Director::getInstance()->isPaused()){
+		Director::getInstance()->pause();
+		MenuItem* menuItem = static_cast<MenuItem*>(pSender);
+		menuItem->setVisible(false);
+		m_goItem->setVisible(true);
+		m_restartItem->setVisible(true);
+		m_backItem->setVisible(true);
 	}
 }
 

@@ -3,14 +3,13 @@
 #include "cocos2d.h"
 USING_NS_CC;
 
-#define LEFT 0
-#define UP 1
-#define RIGHT 2
-#define DOWN 3
-#define NO_DIRECTION 4
-
 class ResourceManager {
 public:
+#define ROAD_LEFT 0
+#define ROAD_UP 1
+#define ROAD_RIGHT 2
+#define ROAD_DOWN 3
+#define ROAD_NONE 4
 //----------------Tag------------------------
 #define TAG_LABELPRICE 9
 #define TAG_BULLET 8
