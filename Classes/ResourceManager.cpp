@@ -1,19 +1,6 @@
 #include "ResourceManager.h"
 
 ResourceManager* ResourceManager::m_instance = nullptr;
-std::string ResourceManager::ANIMATION_WALK_RIGHT_0 = "walk_right_0";
-std::string ResourceManager::ANIMATION_WALK_UP_0 = "walk_up_0";
-std::string ResourceManager::ANIMATION_WALK_LEFT_0 = "walk_left_0";
-std::string ResourceManager::ANIMATION_WALK_DOWN_0 = "walk_down_0";
-std::string ResourceManager::ANIMATION_BABY_LAUGH = "laugh";
-std::string ResourceManager::ANIMATION_BABY_HAPPY = "happy";
-std::string ResourceManager::ANIMATION_BABY_NORMAL = "normal";
-std::string ResourceManager::ANIMATION_BABY_SAD = "sad";
-std::string ResourceManager::ANIMATION_BABY_CRY = "cry";
-std::string ResourceManager::ANIMATION_BABY_HURTING = "hurting";
-std::string ResourceManager::ANIMATION_BABY_HURTED = "hurt";
-std::string ResourceManager::ANIMATION_BABY_ANGRY = "angry";
-std::string ResourceManager::ANIMATION_BABY_WIN = "win";
 
 void ResourceManager::init(){
 	auto director = Director::getInstance();
@@ -27,6 +14,7 @@ void ResourceManager::init(){
 	//---------------------Texture----------------------------
 	tower0 = textureCache->addImage("tower0.png");
 	baby = textureCache->addImage("baby.png");
+	background_price = textureCache->addImage("priceBackground.png");
 }
 
 void ResourceManager::loadAnimation(const char* format, int size, float delay, const std::string &name){

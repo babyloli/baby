@@ -147,19 +147,19 @@ void Enemy::setDirection(int direction){
 		{
 		case RIGHT:
 			m_enemy->runAction( RepeatForever::create(Animate::create(
-				AnimationCache::getInstance()->getAnimation(ResourceManager::ANIMATION_WALK_RIGHT_0))));
+				AnimationCache::getInstance()->getAnimation(ANIMATION_WALK_RIGHT_0))));
 			break;
 		case UP:
 			m_enemy->runAction( RepeatForever::create(Animate::create(
-				AnimationCache::getInstance()->getAnimation(ResourceManager::ANIMATION_WALK_UP_0))));
+				AnimationCache::getInstance()->getAnimation(ANIMATION_WALK_UP_0))));
 			break;
 		case LEFT:
 			m_enemy->runAction( RepeatForever::create(Animate::create(
-				AnimationCache::getInstance()->getAnimation(ResourceManager::ANIMATION_WALK_LEFT_0))));
+				AnimationCache::getInstance()->getAnimation(ANIMATION_WALK_LEFT_0))));
 			break;
 		case DOWN:
 			m_enemy->runAction( RepeatForever::create(Animate::create(
-				AnimationCache::getInstance()->getAnimation(ResourceManager::ANIMATION_WALK_DOWN_0))));
+				AnimationCache::getInstance()->getAnimation(ANIMATION_WALK_DOWN_0))));
 			break;
 		}		
 		m_direction = direction;

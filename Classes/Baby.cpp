@@ -11,7 +11,7 @@ bool Baby::init(){
 	m_sprite = Sprite::createWithTexture(ResourceManager::getInstance()->baby);
 	this->addChild(m_sprite);
 	m_action = RepeatForever::create(Animate::create(
-		AnimationCache::getInstance()->getAnimation(ResourceManager::ANIMATION_BABY_NORMAL)));
+		AnimationCache::getInstance()->getAnimation(ANIMATION_BABY_NORMAL)));
 	m_sprite->runAction(m_action);
 	
 	return true;
@@ -34,23 +34,23 @@ bool Baby::setDamage(int damage){
 	auto cache = AnimationCache::getInstance();
 	if (m_hp > 0 && m_hp <= 2){
 		m_action = RepeatForever::create(Animate::create(
-			cache->getAnimation(ResourceManager::ANIMATION_BABY_HURTED)));
+			cache->getAnimation(ANIMATION_BABY_HURTED)));
 	} else if (m_hp > 2 && m_hp <= 4){
 		m_action = RepeatForever::create(Animate::create(
-			cache->getAnimation(ResourceManager::ANIMATION_BABY_CRY)));
+			cache->getAnimation(ANIMATION_BABY_CRY)));
 	} else if (m_hp > 4 && m_hp <= 6){
 		m_action = RepeatForever::create(Animate::create(
-			cache->getAnimation(ResourceManager::ANIMATION_BABY_SAD)));
+			cache->getAnimation(ANIMATION_BABY_SAD)));
 	} else if (m_hp > 6 && m_hp <= 8){
 		m_action = RepeatForever::create(Animate::create(
-			cache->getAnimation(ResourceManager::ANIMATION_BABY_NORMAL)));
+			cache->getAnimation(ANIMATION_BABY_NORMAL)));
 	} 
 	m_sprite->runAction(m_action);
 	return false;
 }
 
 void Baby::hurt(){
-	m_sprite->runAction(Animate::create(AnimationCache::getInstance()->getAnimation(ResourceManager::ANIMATION_BABY_HURTING)));
+	m_sprite->runAction(Animate::create(AnimationCache::getInstance()->getAnimation(ANIMATION_BABY_HURTING)));
 }
 
 bool Baby::touchCallback(Touch* touch, Event* event){
@@ -60,7 +60,7 @@ bool Baby::touchCallback(Touch* touch, Event* event){
 		m_sprite->runAction(Sequence::create(DelayTime::create(2.0f), CallFunc::create([this](){
 			this->setDamage(0);
 		}), NULL));
-		m_action = RepeatForever::create(Animate::create(AnimationCache::getInstance()->getAnimation(ResourceManager::ANIMATION_BABY_LAUGH)));
+		m_action = RepeatForever::create(Animate::create(AnimationCache::getInstance()->getAnimation(ANIMATION_BABY_LAUGH)));
 		m_sprite->runAction(m_action);
  	} 
 	else if (m_hp > 6) {
@@ -68,7 +68,7 @@ bool Baby::touchCallback(Touch* touch, Event* event){
 		m_sprite->runAction(Sequence::create(DelayTime::create(2.0f), CallFunc::create([this](){
 			this->setDamage(0);
 		}), NULL));
-		m_action = RepeatForever::create(Animate::create(AnimationCache::getInstance()->getAnimation(ResourceManager::ANIMATION_BABY_HAPPY)));
+		m_action = RepeatForever::create(Animate::create(AnimationCache::getInstance()->getAnimation(ANIMATION_BABY_HAPPY)));
 		m_sprite->runAction(m_action);
  	}
 	return true;

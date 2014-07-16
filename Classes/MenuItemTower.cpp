@@ -27,7 +27,8 @@ bool MenuItemTower::initWithPriceAndNormalSprite(int price, Node* normalSprite, 
 
 bool MenuItemTower::setPrice(int price){
 	m_price = price;
-	auto labelPrice = LabelPrice::create("priceBackground.png", price);
+//	auto labelPrice = LabelPrice::create("priceBackground.png", price);
+	auto labelPrice = LabelPrice::create(ResourceManager::getInstance()->background_price, price);
 	if (labelPrice == NULL)
 		return false;
 	Node* child = this->getChildByTag(TAG_LABELPRICE);
