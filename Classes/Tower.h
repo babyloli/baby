@@ -31,5 +31,6 @@ public:
 	int getRange();
 	void setRange(int r);
 
+	static int getPrice(int type, int level);
 };
 

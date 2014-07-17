@@ -26,6 +26,7 @@ bool LabelPrice::initWithFile(const std::string& backgroundSprite, int price){
 	if (!sprite)
 		return false;
 	this->addChild(sprite);
+	this->setContentSize(sprite->getContentSize());
 	m_label = Label::createWithTTF(m_config, std::to_string(price));
 	this->addChild(m_label);
 	return true;
@@ -50,6 +51,7 @@ bool LabelPrice::initWithTexture(Texture2D* texture, int price)
 	if (!sprite)
 		return false;
 	this->addChild(sprite);
+	this->setContentSize(sprite->getContentSize());
 	m_label = Label::createWithTTF(m_config, std::to_string(price));
 	this->addChild(m_label);
 	return true;

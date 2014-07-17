@@ -100,15 +100,7 @@ void Tower::shotBullet(Bullet* bullet, Enemy* target)
 	bullet->setBulletVelocity(direction * bullet->getSpeed());
 }
 
-
-
-
-
-
-
-
-
-///////////////////////////////////////////////////////////
+//-------------------------get/sets------------------------
 int Tower::getType()
 {
 	return m_type;
@@ -132,4 +124,23 @@ int Tower::getRange()
 void Tower::setRange(int r)
 {
 	this->m_range = r;
+}
+int Tower::getPrice(int type, int level){
+	switch (type)
+	{
+	case TOWER_TYPE_0:
+		switch (level)
+		{
+		case 1:
+			return 100;
+		case 2:
+			return 200;
+		case 3:
+			return 300;
+		default:
+			return 9999;
+		}
+	default:
+		return 9999;
+	}
 }

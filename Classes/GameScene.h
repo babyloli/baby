@@ -8,6 +8,7 @@
 #include "Road.h"
 #include "Tower.h"
 #include "Baby.h"
+#include "LabelPrice.h"
 
 USING_NS_CC;
 class Game : public cocos2d::Layer
@@ -25,6 +26,8 @@ private:
 	Vector<Bullet*> m_bullets;
 	std::vector<Road> m_roads;
 	PhysicsWorld* m_physicsWorld;
+	LabelPrice* m_labelPrice;
+	int m_money;
 public:
     static cocos2d::Scene* createScene();
     virtual bool init();  
@@ -34,7 +37,6 @@ public:
 
 	void menuCloseCallback(cocos2d::Ref* pSender);
 	void menuPhysicsCallback(cocos2d::Ref* pSender);
-	void menuStopCallback(cocos2d::Ref* pSender);
 	void towerCreateCallback(cocos2d::Ref* pSender, int type, Sprite* towerbase);
 
 	void addEnemy(float dt);
@@ -44,6 +46,7 @@ public:
 	void update(float dt);
 
 	void setPhysicsWorld(PhysicsWorld* world);
+	void addMoney(int money);
 	Vector<Enemy*>& getEnemies();
 	void addBullet(Bullet* bullet);
 };

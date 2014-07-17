@@ -14,7 +14,6 @@ public:
 #define TAG_LABELPRICE 9
 #define TAG_BULLET 8
 #define TAG_ENEMY 7
-#define TAG_MODALLAYER 6
 //----------------Priority-------------------
 #define Priority_EventListenerPhysicsContact 10
 //----------------Z-Order--------------------
@@ -45,6 +44,7 @@ public:
 #define TOWER_TYPE_4 4
 #define TOWER_TYPE_5 5
 	Texture2D* tower0;
+	Texture2D* tower1;
 
 //----------------Bullet---------------------
 #define SPEED_BULLET_0 200
@@ -66,6 +66,7 @@ public:
 #define SPEED_ENEMY_0 50
 #define DEFENCE_MAGICAL_0 10
 #define DEFENCE_PHYSICS_0 10
+#define PRICE_ENEMY_0 50
 #define ANIMATION_WALK_RIGHT_0 "walk_right_0"
 #define ANIMATION_WALK_UP_0 "walk_up_0"
 #define ANIMATION_WALK_LEFT_0 "walk_left_0"
@@ -87,7 +88,9 @@ public:
 //-----------------Game-----------------------
 #define MAP1 "maps/map1.tmx"
 #define PATH_TOWERBASE "images/tower/towerbase.png"
+#define INIT_PRICE 200
 	Texture2D* background_price;
+	Texture2D* background_price_big;
 public :
 	static ResourceManager* getInstance();
 	void init();

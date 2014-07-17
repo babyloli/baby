@@ -2,6 +2,7 @@
 #include "ResourceManager.h"
 #include "MenuItemTower.h"
 #include "HelloWorldScene.h"
+#include "Utils.h"
 USING_NS_CC;
 #define objPosX(obj) obj.at("x").asInt() + obj.at("width").asInt()/2
 #define objPosY(obj) obj.at("y").asInt() + obj.at("height").asInt()/2
@@ -38,12 +39,11 @@ bool Game::init()
 		"CloseSelected.png",
 		CC_CALLBACK_1(Game::menuPhysicsCallback, this));
 	physicsItem->setPosition(Vec2(origin.x + visibleSize.width - physicsItem->getContentSize().width/2 ,
-		origin.y + visibleSize.height - physicsItem->getContentSize().height/2));
+		origin.y + visibleSize.height - physicsItem->getContentSize().height));
 
 	auto modalSprite = Sprite::create("images/modalLayer.png");
 	modalSprite->setPosition(Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2));
 	modalSprite->setVisible(false);
-	this->setTag(TAG_MODALLAYER);
 	this->addChild(modalSprite, ZORDER_MODAL);
 	
 	auto stopItem = MenuItemImage::create("stop.png", "stop.png", [=](cocos2d::Ref* pSender){
@@ -106,6 +106,12 @@ bool Game::init()
 	this->addChild(menu);
 	this->reorderChild(menu, ZORDER_MENU);
 
+	m_money = INIT_PRICE;
+	m_labelPrice = LabelPrice::create(rm->background_price_big, m_money);
+	m_labelPrice->setPosition(origin.x + m_labelPrice->getContentSize().width/2, origin.y + 
+		visibleSize.height - m_labelPrice->getContentSize().height);
+	this->addChild(m_labelPrice, ZORDER_LABELPRICE);
+
 	m_map = TMXTiledMap::create(MAP1);
 	this->addChild(m_map);
 
@@ -139,14 +145,31 @@ bool Game::init()
 		towerbase->addChild(tower);	//把精灵加到场景里
 		auto actionRepeateFadeOutIn = RepeatForever::create(Sequence::create(FadeOut::create(1), FadeIn::create(1), NULL));	//创建一个淡入淡出特效
 		tower->runAction(actionRepeateFadeOutIn);	//给精灵赋予特效
-		
-		auto towerItemSprite = Sprite::createWithTexture(rm->tower0);
-		auto towerItem = MenuItemTower::create(100, towerItemSprite, towerItemSprite, CC_CALLBACK_1(Game::towerCreateCallback, this, TOWER_TYPE_0, tower));
-		towerItem->setPosition(Vec2::ZERO);
-		auto menu = Menu::create(towerItem, NULL);
-//		menu->setPosition(Vec2(tower->getPositionX(), tower->getPositionY()));
-		menu->setPosition(Vec2(tower->getPositionX(),
-			tower->getPositionY() + tower->getContentSize().height / 2 + towerItem->getContentSize().height / 2));
+
+		auto menu = Menu::create();
+		std::string type = towerObject.at("type").asString();
+		std::vector<std::string> types;
+		split(type, ",", &types);
+		for (int j = 0; j < types.size(); j++)
+		{
+			int temp = std::atoi(types.at(j).c_str());
+			Sprite* towerItemSprite = NULL;
+			switch (temp)
+			{
+			case 0:
+				towerItemSprite = Sprite::createWithTexture(rm->tower0);
+				break;
+			case 1:
+				towerItemSprite = Sprite::createWithTexture(rm->tower1);
+				break;
+			}
+			if (towerItemSprite){
+				auto towerItem = MenuItemTower::create(Tower::getPrice(temp, 1), towerItemSprite, towerItemSprite, CC_CALLBACK_1(Game::towerCreateCallback, this, TOWER_TYPE_0, tower));
+				towerItem->setPosition(Vec2(j * towerItem->getContentSize().width,0));//
+				menu->addChild(towerItem);
+			}			
+		}
+		menu->setPosition(Vec2(tower->getPositionX(), tower->getPositionY() + tower->getContentSize().height));
 		m_menus.pushBack(menu);
 
 		auto listener = EventListenerTouchOneByOne::create();	//触摸监听器
@@ -157,6 +180,18 @@ bool Game::init()
 //				tower->stopAction(actionRepeateFadeOutIn);
 				Menu* menu = this->m_menus.at(i);
 				if (menu->getParent() == NULL){
+					for (Node* node : menu->getChildren())
+					{
+						MenuItemTower* item = dynamic_cast<MenuItemTower*>(node);
+						if (item){
+							if (item->getPrice() > m_money){
+								item->setEnabled(false);
+							}else
+							{
+								item->setEnabled(true);
+							}
+						}
+					}
 					this->addChild(menu);
 					this->reorderChild(menu, ZORDER_MENUITEMTOWER);
 				}
@@ -213,14 +248,14 @@ bool Game::init()
 	this->scheduleUpdate();
 // 	this->schedule(schedule_selector(Game::findEnemy), 1.0f);
  	this->schedule(schedule_selector(Game::addEnemy), 2.0f);
-// 	this->schedule(schedule_selector(Game::moveEnemy), 0.5f);
-// 	this->schedule(schedule_selector(Game::deleteObject), 1.0f);
+ 	this->schedule(schedule_selector(Game::moveEnemy), 0.5f);
+ 	this->schedule(schedule_selector(Game::deleteObject), 0.5f);
 	return true;
 }
 
 void Game::update(float dt){
-	deleteObject(dt);
-	moveEnemy(dt);
+//	deleteObject(dt);
+//	moveEnemy(dt);
 	findEnemy(dt);
 }
 
@@ -235,25 +270,26 @@ void Game::addEnemy(float dt)
 }
 
 void Game::moveEnemy(float dt){
-	for (int i = 0; i < m_enemies.size(); i++){
+	for (int i = 0; i < m_enemies.size(); i++){		//对每个enemy
 		Enemy* enemy = m_enemies.at(i);
-		if (enemy->isDie()){
-			enemy->removeFromParent();
-			m_enemies.eraseObject(enemy);
-		}else{
-			Vec2 enemy_position = enemy->getPosition();
-			if (m_baby->m_position.containsPoint(enemy_position)){
-				bool gameover = m_baby->setDamage(enemy->getDamage());
-				enemy->removeFromParent();
-				m_enemies.eraseObject(enemy);
-				m_baby->hurt();
+		if (enemy->isDie()){	//如果它死了
+			this->addMoney(enemy->getPrice());	//那么它会掉金钱
+			enemy->removeFromParent();	//然后就把它消除掉
+			m_enemies.eraseObject(enemy);	//容器里也要释放哦
+		}else{	//如果它没死
+			Vec2 enemy_position = enemy->getPosition();	//看看它的位置
+			if (m_baby->m_position.containsPoint(enemy_position)){	//如果碰到Baby了
+				bool gameover = m_baby->setDamage(enemy->getDamage());	//扣Baby的血看她死不死
+				enemy->removeFromParent();	//把enemy消除掉
+				m_enemies.eraseObject(enemy);	//容器里也要释放哦
+				m_baby->hurt();	//Baby痛了一下
 				if (gameover)
 				{
 					//TODO-------------------------------------------------------------------------------------
 				}
 			} 
 			else
-			{
+			{	//根据所在的road调整速度（方向）
 				for (std::vector<Road>::iterator it = m_roads.begin(); it != m_roads.end(); it++){
 					if (it->containsPoint(enemy_position)){
 						enemy->setVelocity(it->getDirectionVec2() * enemy->getSpeed());
@@ -344,21 +380,11 @@ void Game::menuPhysicsCallback(cocos2d::Ref* pSender)
 	}
 }
 
-void Game::menuStopCallback(cocos2d::Ref* pSender){
-	if(!Director::getInstance()->isPaused()){
-		Director::getInstance()->pause();
-		MenuItem* menuItem = static_cast<MenuItem*>(pSender);
-		menuItem->setVisible(false);
-		m_goItem->setVisible(true);
-		m_restartItem->setVisible(true);
-		m_backItem->setVisible(true);
-	}
-}
-
 void Game::towerCreateCallback(cocos2d::Ref* pSender, int type, Sprite* towerbase){
-	Node* menuItemTower = static_cast<Node*>(pSender);
+	MenuItemTower* menuItemTower = static_cast<MenuItemTower*>(pSender);
 	Node* menu = menuItemTower->getParent();
 	menu->removeFromParentAndCleanup(false);
+	this->addMoney(-menuItemTower->getPrice());
 
 	Tower* tower = Tower::create(type);
 	if(!tower)
@@ -368,6 +394,8 @@ void Game::towerCreateCallback(cocos2d::Ref* pSender, int type, Sprite* towerbas
 	this->reorderChild(tower, ZORDER_TOWER);
 	this->m_towers.pushBack(tower);
 	towerbase->removeFromParentAndCleanup(true);
+
+
 }
 
 //------------------get/sets-----------------------------
@@ -380,6 +408,11 @@ void Game::setPhysicsWorld(PhysicsWorld* world){
 Vector<Enemy*>& Game::getEnemies()
 {
 	return this->m_enemies;
+}
+
+void Game::addMoney(int money){
+	m_money += money;
+	m_labelPrice->setPrice(m_money);
 }
 
 void Game::addBullet(Bullet* bullet){

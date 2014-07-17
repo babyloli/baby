@@ -67,8 +67,16 @@
   </object>
  </objectgroup>
  <objectgroup name="tower" width="40" height="22">
-  <object x="544" y="128" width="64" height="64"/>
-  <object x="768" y="128" width="64" height="64"/>
+  <object x="544" y="128" width="64" height="64">
+   <properties>
+    <property name="type" value="0"/>
+   </properties>
+  </object>
+  <object x="768" y="128" width="64" height="64">
+   <properties>
+    <property name="type" value="0,1"/>
+   </properties>
+  </object>
   <object x="960" y="128" width="64" height="64"/>
   <object x="1024" y="256" width="64" height="64"/>
   <object x="1152" y="352" width="64" height="64"/>

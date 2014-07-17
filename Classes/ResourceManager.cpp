@@ -13,7 +13,9 @@ void ResourceManager::init(){
 
 	//---------------------Texture----------------------------
 	tower0 = textureCache->addImage("images/tower/tower0.png");
+	tower1 = textureCache->addImage("images/tower/tower0.png");
 	background_price = textureCache->addImage("images/priceBackground.png");
+	background_price_big = textureCache->addImage("images/priceBackground2.png");
 	hpBar = textureCache->addImage("images/enemy/Maxhpbar.png");
 	bullet_0_1 = textureCache->addImage("images/tower/bullet_0_1.png");
 }

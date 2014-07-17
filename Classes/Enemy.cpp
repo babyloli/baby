@@ -37,6 +37,7 @@ bool Enemy::initWithType(int type){
 		m_curSpeed = m_originSpeed = SPEED_ENEMY_0;
 		m_physicalDefence = DEFENCE_PHYSICS_0;
 		m_magicalDefence = DEFENCE_MAGICAL_0;
+		m_price = PRICE_ENEMY_0;
 		break;
 	}
 	if (!m_enemy)
@@ -164,6 +165,14 @@ void Enemy::setDirection(int direction){
 		}		
 		m_direction = direction;
 	}
+}
+
+int Enemy::getPrice(){
+	return m_price;
+}
+
+void Enemy::setPrice(int price){
+	m_price = price;
 }
 
 Sprite* Enemy::getEnemy(){

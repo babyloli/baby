@@ -11,6 +11,7 @@ private:
 	int m_curSpeed;
 	int m_magicalDefence;
 	int m_physicalDefence;
+	int m_price;
 	int m_type;
 	int m_direction;
 	bool m_isDie;
@@ -39,6 +40,8 @@ public:
 	void setDamage(int damage);
 	int getDirection();
 	void setDirection(int direction);
+	int getPrice();
+	void setPrice(int price);
 	Sprite* getEnemy();
 };
 #endif
