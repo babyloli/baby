@@ -19,7 +19,7 @@ bool Bullet::initWithTypeAndLevel(int type, int level)
 		{
 		case 1:
 			bullet = Sprite::createWithTexture(ResourceManager::getInstance()->bullet_0_1);
-			m_body = PhysicsBody::createCircle(16.0f);
+			m_body = PhysicsBody::createCircle(16.0f, MATERIAL_BULLET_0);
 			this->setPhysicsBody(m_body);
 			m_damage = DAMAGE_BULLET_0_1;
 			m_speed = SPEED_BULLET_0;

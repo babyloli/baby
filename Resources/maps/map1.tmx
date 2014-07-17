@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="40" height="22" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="map_00" tilewidth="32" tileheight="32">
+  <image source="map_00.png" width="512" height="416"/>
+ </tileset>
+ <layer name="floor" width="40" height="22">
+  <data encoding="base64" compression="zlib">
+   eJztw0ENAAAMA6HzL6NKZ2MPSFg1VVVV3z/MFyz/
+  </data>
+ </layer>
+ <layer name="background" width="40" height="22">
+  <data encoding="base64" compression="zlib">
+   eJztzkERgCAURdFfiq2SQE2A1EITOCQQy3ljPGbe4uzPEhGrqIwNu6hjgl/BKaqi4RJ140ES1f3zzz///JPkn3/+zf17MUR9+AGwBvmh
+  </data>
+ </layer>
+ <layer name="road" width="40" height="22">
+  <data encoding="base64" compression="zlib">
+   eJztVlEKgDAI9WTRSaLv6gTVCapD5z6EELS5nBH04DHGnL5sbgL8+PFtNMjWuKbt8UaH7I1r2p4cDMgxmJNB34bcA7kgV4M+gvc54f5oPkOZvqfnhGvi/mheqk+KY0HON3ro88ilBNJ3l4OIutX03eUg2aVaqlmrmj4JvI486pZ88FGLC4IdryOPs0Y++KjFBcGOQP83+u3IvZ+j340rjwx9tfuKp/2M9x3H49bqZ0rxVtwonGiUdeU=
+  </data>
+ </layer>
+ <layer name="scenery" width="40" height="22">
+  <data encoding="base64" compression="zlib">
+   eJztVstNA0EMnSufBiBcgSRw2BN/CgAqgPQAqSBQAeQAiBIoAMGWx7OyFg9rPJkJRNlDnvSU7Kw9+2afHSeEJZZoN9bAdbO2Aq468TvgbkG8l5OLDrhF1xW4AW468QfgoVlLxXPOLXgHDsHeLGLnjBF4Dz6AJ4uVEsUj+ASOw0SfvM9hRh7XzzP47vCVciTuhe69FegUb08bveNmjb234PqpwQvwErwy+mvKqc11CWLesvcpyDOvwRtw0Kyp/o/w874+wa9/0Fc1n+w9r1vIM8/Ac3DfiakS+SX6un/YY54QfXK+o0ULMZC+6IdJb8yaK9yjde2NEi+8eWH7Ytqe2/T9mPTx+bQ32ItptRebMVaf+tumGuR3oB61rQa1XqzX7Imd0/0Cyrlz/o94MVovoq8b4rVi57SeqRd+9wZD60TibX3FtHg1qJB91Fur0c5pPhPXiL6vivaJzSarReNT3uT+xnh9G7vPMTnzI1Vjgm/cPjsu
+  </data>
+ </layer>
+ <objectgroup name="barrier" width="40" height="22">
+  <object x="192" y="160" width="992" height="32"/>
+  <object x="1152" y="192" width="32" height="416"/>
+  <object x="96" y="576" width="1056" height="32"/>
+  <object x="96" y="352" width="32" height="224"/>
+  <object x="128" y="352" width="800" height="32"/>
+  <object x="192" y="448" width="736" height="32"/>
+  <object x="192" y="480" width="896" height="32"/>
+  <object x="192" y="256" width="896" height="32"/>
+  <object x="1056" y="288" width="32" height="192"/>
+ </objectgroup>
+ <objectgroup name="people" width="40" height="22">
+  <object name="baby" x="928" y="352" width="96" height="96"/>
+  <object name="nest" x="96" y="192" width="96" height="96"/>
+  <object name="enemy" x="198" y="206" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup name="road" width="40" height="22">
+  <object x="192" y="192" width="928" height="64">
+   <properties>
+    <property name="direction" value="right"/>
+   </properties>
+  </object>
+  <object x="1088" y="192" width="64" height="352">
+   <properties>
+    <property name="direction" value="down"/>
+   </properties>
+  </object>
+  <object x="160" y="512" width="992" height="64">
+   <properties>
+    <property name="direction" value="left"/>
+   </properties>
+  </object>
+  <object x="128" y="416" width="64" height="160">
+   <properties>
+    <property name="direction" value="up"/>
+   </properties>
+  </object>
+  <object x="128" y="384" width="800" height="64">
+   <properties>
+    <property name="direction" value="right"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="tower" width="40" height="22">
+  <object x="544" y="128" width="64" height="64"/>
+  <object x="768" y="128" width="64" height="64"/>
+  <object x="960" y="128" width="64" height="64"/>
+  <object x="1024" y="256" width="64" height="64"/>
+  <object x="1152" y="352" width="64" height="64"/>
+  <object x="1184" y="448" width="64" height="64"/>
+  <object x="896" y="256" width="64" height="64"/>
+  <object x="800" y="288" width="64" height="64"/>
+  <object x="864" y="448" width="64" height="64"/>
+  <object x="800" y="448" width="64" height="64"/>
+  <object x="736" y="448" width="64" height="64"/>
+  <object x="1024" y="448" width="64" height="64"/>
+  <object x="1088" y="576" width="64" height="64"/>
+  <object x="896" y="576" width="64" height="64"/>
+  <object x="768" y="608" width="64" height="64"/>
+  <object x="128" y="576" width="64" height="64"/>
+  <object x="64" y="448" width="64" height="64"/>
+  <object x="192" y="448" width="64" height="64"/>
+  <object x="352" y="320" width="64" height="64"/>
+  <object x="256" y="256" width="64" height="64"/>
+ </objectgroup>
+ <objectgroup name="menu" width="40" height="22">
+  <object name="back" x="27" y="29" width="96" height="96"/>
+  <object name="stop" x="1184" y="608" width="64" height="64"/>
+ </objectgroup>
+</map>

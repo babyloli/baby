@@ -40,8 +40,33 @@ bool Game::init()
 	physicsItem->setPosition(Vec2(origin.x + visibleSize.width - physicsItem->getContentSize().width/2 ,
 		origin.y + visibleSize.height - physicsItem->getContentSize().height/2));
 
-	auto stopItem = MenuItemImage::create("stop.png", "stop.png", 
-		CC_CALLBACK_1(Game::menuStopCallback, this));
+	auto modalSprite = Sprite::create("images/modalLayer.png");
+	modalSprite->setPosition(Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2));
+	modalSprite->setVisible(false);
+	this->setTag(TAG_MODALLAYER);
+	this->addChild(modalSprite, ZORDER_MODAL);
+	
+	auto stopItem = MenuItemImage::create("stop.png", "stop.png", [=](cocos2d::Ref* pSender){
+	if(!Director::getInstance()->isPaused()){
+		Director::getInstance()->pause();
+		MenuItem* menuItem = static_cast<MenuItem*>(pSender);
+		menuItem->setVisible(false);
+		m_goItem->setVisible(true);
+		m_restartItem->setVisible(true);
+		m_backItem->setVisible(true);
+		modalSprite->setVisible(true);
+		auto listener1 = EventListenerTouchOneByOne::create();//创建一个触摸监听    
+		listener1->setSwallowTouches(true);//设置不想向下传递触摸  true是不想 默认为false  
+		listener1->onTouchBegan = [](Touch* touch, Event* event){   
+			return true;   
+		};    
+		listener1->onTouchMoved = [](Touch* touch, Event* event){      
+		};    
+
+		listener1->onTouchEnded = [](Touch* touch, Event* event){    
+		};
+		this->_eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, modalSprite);
+	}});
 	stopItem->setPosition(Vec2(origin.x + visibleSize.width - stopItem->getContentSize().width/2 ,
 		origin.y + stopItem->getContentSize().height*0.6));
 
@@ -59,6 +84,8 @@ bool Game::init()
 		m_restartItem->setVisible(false);
 		m_backItem->setVisible(false);
 		stopItem->setVisible(true);
+		modalSprite->setVisible(false);
+		this->_eventDispatcher->removeEventListenersForTarget(modalSprite);
 		Director::getInstance()->resume();
 	});
 	m_goItem->setPosition(Vec2(origin.x + visibleSize.width/2 + m_restartItem->getContentSize().width/2 +
@@ -78,15 +105,6 @@ bool Game::init()
 	menu->setPosition(Vec2::ZERO);
 	this->addChild(menu);
 	this->reorderChild(menu, ZORDER_MENU);
-
-	auto modalLayer = Sprite::create("modalLayer.png");
-	modalLayer->setPosition(Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2));
-	auto modalLayer_touchListener = EventListenerTouchOneByOne::create();
-	modalLayer_touchListener->onTouchBegan = [](cocos2d::Touch* touch, cocos2d::Event* unused_event){
-		return true;
-	};
-	this->_eventDispatcher->addEventListenerWithFixedPriority(modalLayer_touchListener, -1);
-	this->addChild(modalLayer, ZORDER_MENU - 1);
 
 	m_map = TMXTiledMap::create(MAP1);
 	this->addChild(m_map);
@@ -140,7 +158,7 @@ bool Game::init()
 				Menu* menu = this->m_menus.at(i);
 				if (menu->getParent() == NULL){
 					this->addChild(menu);
-					this->reorderChild(menu, ZORDER_MENU);
+					this->reorderChild(menu, ZORDER_MENUITEMTOWER);
 				}
 			}
 			else

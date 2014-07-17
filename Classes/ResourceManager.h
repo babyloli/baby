@@ -14,11 +14,14 @@ public:
 #define TAG_LABELPRICE 9
 #define TAG_BULLET 8
 #define TAG_ENEMY 7
+#define TAG_MODALLAYER 6
 //----------------Priority-------------------
 #define Priority_EventListenerPhysicsContact 10
 //----------------Z-Order--------------------
 #define ZORDER_LABELPRICE 4
 #define ZORDER_MENU 10
+#define ZORDER_MODAL 9
+#define ZORDER_MENUITEMTOWER 8
 #define ZORDER_TOWER 5
 //----------------PhysicsMask----------------
 #define CategoryBitMask_Bullet		0x0000000F
@@ -44,7 +47,8 @@ public:
 	Texture2D* tower0;
 
 //----------------Bullet---------------------
-#define SPEED_BULLET_0 150
+#define SPEED_BULLET_0 200
+#define MATERIAL_BULLET_0 cocos2d::PhysicsMaterial(1.0, 0.0, 1.0)
 #define DAMAGE_BULLET_0_1 20
 #define DAMAGE_BULLET_0_2 30
 #define DAMAGE_BULLET_0_3 50

@@ -44,7 +44,7 @@ bool Enemy::initWithType(int type){
 	this->addChild(m_enemy);
 
 	//attach physics body
-	auto body = PhysicsBody::createBox(Size(32, 32), PhysicsMaterial(0.5f, 0.0f, 0.5f));
+	auto body = PhysicsBody::createBox(Size(50, 50), PhysicsMaterial(0.5f, 0.0f, 0.5f));
 	body->setCategoryBitmask(CategoryBitMask_Enemy);
 	body->setContactTestBitmask(ContactTestBitMask_Enemy);
 	body->setCollisionBitmask(CollisionBitMask_Enemy);
