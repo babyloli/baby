@@ -20,6 +20,7 @@ private:
 	MenuItem* m_goItem;
 	MenuItem* m_restartItem;
 	MenuItem* m_backItem;
+	Vector<Menu*> m_upgradeMenus;
 	Vector<Menu*> m_menus;
 	Vector<Enemy*> m_enemies;
 	Vector<Tower*> m_towers;
@@ -37,7 +38,9 @@ public:
 
 	void menuCloseCallback(cocos2d::Ref* pSender);
 	void menuPhysicsCallback(cocos2d::Ref* pSender);
-	void towerCreateCallback(cocos2d::Ref* pSender, int type, Sprite* towerbase);
+	void towerCreateCallback(cocos2d::Ref* pSender, int type, Sprite* towerbase, int menuId);
+	void towerUpgradeCallback(cocos2d::Ref* pSender, int towerId);
+	void towerDeleteCallback(cocos2d::Ref* pSender, int towerId, Sprite* towerbase);
 
 	void addEnemy(float dt);
 	void moveEnemy(float dt);

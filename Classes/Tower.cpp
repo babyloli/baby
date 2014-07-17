@@ -20,8 +20,16 @@ bool Tower::initWithType(int type)
 		m_range = 200;
 		m_speed = 1;
 		break;
+	case TOWER_TYPE_1:
+		m_sprite = Sprite::createWithTexture(ResourceManager::getInstance()->tower1);
+		this->addChild(m_sprite);
+		m_range = 200;
+		m_speed = 1;
+		break;
 	}
-	
+	if (m_sprite){
+		this->setContentSize(m_sprite->getContentSize());
+	}
 	return true;
 }
 

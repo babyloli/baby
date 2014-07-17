@@ -29,11 +29,6 @@ bool Game::init()
 
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
-// 	auto closeItem = MenuItemImage::create("CloseNormal.png",
-// 		"CloseSelected.png",
-// 		CC_CALLBACK_1(Game::menuCloseCallback, this));
-// 	closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
-// 		origin.y + closeItem->getContentSize().height/2));
 
 	auto physicsItem = MenuItemImage::create("CloseNormal.png",
 		"CloseSelected.png",
@@ -101,7 +96,7 @@ bool Game::init()
 		m_backItem->getContentSize().width,	origin.y + visibleSize.height/2));
 	m_backItem->setVisible(false);
 
-	auto menu = Menu::create(/*closeItem,*/physicsItem, stopItem, m_goItem, m_restartItem, m_backItem, NULL);
+	auto menu = Menu::create(physicsItem, stopItem, m_goItem, m_restartItem, m_backItem, NULL);
 	menu->setPosition(Vec2::ZERO);
 	this->addChild(menu);
 	this->reorderChild(menu, ZORDER_MENU);
@@ -131,20 +126,20 @@ bool Game::init()
 
 	SpriteBatchNode* towerbase = SpriteBatchNode::create(PATH_TOWERBASE);	//用图片创建一个Batch
 	towerbase->setPosition(Vec2::ZERO);	//设置这个Batch的位置
-	this->addChild(towerbase);	//将这个Batch加到场景里
+	this->addChild(towerbase, ZORDER_TOWER);	//将这个Batch加到场景里
 
 	TMXObjectGroup* towerObjectGroup = m_map->getObjectGroup("tower");	//读取对象层“tower”
 	ValueVector towerObjects = towerObjectGroup->getObjects();	//获得“tower”对象层里面的所有对象
-	int i = 0;
-	for (ValueVector::iterator it = towerObjects.begin(); it != towerObjects.end(); it++, i++){//对“tower”层里的每一个对象
+	int towerId = 0;
+	for (ValueVector::iterator it = towerObjects.begin(); it != towerObjects.end(); it++, towerId++){//对“tower”层里的每一个对象
 		ValueMap towerObject = it->asValueMap();	//得到这个对象的属性
 		int tower_x = objPosX(towerObject);
 		int tower_y = objPosY(towerObject);
 		Sprite* tower = Sprite::createWithTexture(towerbase->getTexture());	//用Batch创建一个精灵来表示可创建Tower的位置
 		tower->setPosition(tower_x, tower_y);	//设置精灵的位置
 		towerbase->addChild(tower);	//把精灵加到场景里
-		auto actionRepeateFadeOutIn = RepeatForever::create(Sequence::create(FadeOut::create(1), FadeIn::create(1), NULL));	//创建一个淡入淡出特效
-		tower->runAction(actionRepeateFadeOutIn);	//给精灵赋予特效
+//		auto actionRepeateFadeOutIn = RepeatForever::create(Sequence::create(FadeOut::create(1), FadeIn::create(1), NULL));	//创建一个淡入淡出特效
+//		tower->runAction(actionRepeateFadeOutIn);	//给精灵赋予特效
 
 		auto menu = Menu::create();
 		std::string type = towerObject.at("type").asString();
@@ -164,7 +159,8 @@ bool Game::init()
 				break;
 			}
 			if (towerItemSprite){
-				auto towerItem = MenuItemTower::create(Tower::getPrice(temp, 1), towerItemSprite, towerItemSprite, CC_CALLBACK_1(Game::towerCreateCallback, this, TOWER_TYPE_0, tower));
+				auto towerItem = MenuItemTower::create(Tower::getPrice(temp, 1), towerItemSprite, towerItemSprite,
+					CC_CALLBACK_1(Game::towerCreateCallback, this, temp, tower, towerId));
 				towerItem->setPosition(Vec2(j * towerItem->getContentSize().width,0));//
 				menu->addChild(towerItem);
 			}			
@@ -172,13 +168,25 @@ bool Game::init()
 		menu->setPosition(Vec2(tower->getPositionX(), tower->getPositionY() + tower->getContentSize().height));
 		m_menus.pushBack(menu);
 
+		auto upgradeItem = MenuItemImage::create("update.png", "update.png", CC_CALLBACK_1(Game::towerUpgradeCallback, this, towerId));
+//		upgradeItem->setPosition(-upgradeItem->getContentSize().width/2, upgradeItem->getContentSize().height/2);
+		upgradeItem->setPosition(0, upgradeItem->getContentSize().height);
+		
+		auto deleteItem = MenuItemImage::create("sell.png", "sell.png", CC_CALLBACK_1(Game::towerDeleteCallback, this, towerId, tower));
+//		deleteItem->setPosition(-deleteItem->getContentSize().width/2, -deleteItem->getContentSize().height/2);
+		deleteItem->setPosition(0, -deleteItem->getContentSize().height);
+
+		auto uMenu = Menu::create(upgradeItem, deleteItem, NULL);
+		uMenu->setPosition(tower->getPosition());
+		m_upgradeMenus.pushBack(uMenu);
+
 		auto listener = EventListenerTouchOneByOne::create();	//触摸监听器
 		listener->setSwallowTouches(true);
-		listener->onTouchBegan = [i, tower, this](Touch* touch, Event* event){
+		listener->onTouchBegan = [towerId, tower, this](Touch* touch, Event* event){
  			auto target = event->getCurrentTarget();
 			if (tower->getTextureRect().containsPoint(target->convertTouchToNodeSpace(touch))){
 //				tower->stopAction(actionRepeateFadeOutIn);
-				Menu* menu = this->m_menus.at(i);
+				Menu* menu = this->m_menus.at(towerId);
 				if (menu->getParent() == NULL){
 					for (Node* node : menu->getChildren())
 					{
@@ -198,14 +206,14 @@ bool Game::init()
 			}
 			else
 			{
-				Menu* menu = this->m_menus.at(i);
+				Menu* menu = this->m_menus.at(towerId);
 				this->removeChild(menu, false);
 			}
 			return false;
 		};
 		this->_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, tower);
 	}
-	i = 0;
+	towerId = 0;
 
 	TMXObjectGroup* roadObjectGroup = m_map->getObjectGroup("road");	//读取对象层“road”
 	ValueVector roadObjects = roadObjectGroup->getObjects();	//获得“road”对象层里面的所有对象
@@ -380,22 +388,68 @@ void Game::menuPhysicsCallback(cocos2d::Ref* pSender)
 	}
 }
 
-void Game::towerCreateCallback(cocos2d::Ref* pSender, int type, Sprite* towerbase){
-	MenuItemTower* menuItemTower = static_cast<MenuItemTower*>(pSender);
-	Node* menu = menuItemTower->getParent();
-	menu->removeFromParentAndCleanup(false);
-	this->addMoney(-menuItemTower->getPrice());
+void Game::towerCreateCallback(cocos2d::Ref* pSender, int type, Sprite* towerbase, int menuId){
+	MenuItemTower* menuItemTower = static_cast<MenuItemTower*>(pSender);	//转化为MenuItmeTower类型
+	Node* menu = menuItemTower->getParent();	//得到菜单
+	menu->removeFromParentAndCleanup(false);	//隐藏菜单
+	this->addMoney(-menuItemTower->getPrice());	//扣钱建塔
 
-	Tower* tower = Tower::create(type);
+	Tower* tower = Tower::create(type);	//创建一个对应类型的塔
 	if(!tower)
 		return;
-	tower->setPosition(towerbase->getPosition());
-	this->addChild(tower);
-	this->reorderChild(tower, ZORDER_TOWER);
-	this->m_towers.pushBack(tower);
-	towerbase->removeFromParentAndCleanup(true);
+	tower->setTag(menuId);
+	Vec2 towerPosition = towerbase->getPosition();	//得到塔的位置
+	tower->setPosition(towerPosition);	//设置塔的位置
+	this->addChild(tower);	//将塔加入场景
+	this->reorderChild(tower, ZORDER_TOWER);	//调整塔的优先级
+	this->m_towers.pushBack(tower);	//将塔加入容器
+//	towerbase->removeFromParentAndCleanup(true);	//清除塔基
+	towerbase->retain();
+	towerbase->removeFromParentAndCleanup(false);
 
+ 	auto listener = EventListenerTouchOneByOne::create();
+	listener->setSwallowTouches(true);
+	listener->onTouchBegan = [=](Touch* touch, Event* event)->bool{
+		Tower* tower = static_cast<Tower*>(event->getCurrentTarget());
+		float width = tower->getContentSize().width;
+		float height = tower->getContentSize().height;
+		Rect rect = Rect(-width/2, -height/2, width, height);
+		Vec2 point = tower->convertTouchToNodeSpace(touch);
+		if (rect.containsPoint(point)){
+			auto upgradeMenu = m_upgradeMenus.at(menuId);
+			if (upgradeMenu->getParent() == NULL){
+ 				this->addChild(upgradeMenu);
+ 				this->reorderChild(upgradeMenu, ZORDER_MENUITEMTOWER);
+//				tower->addChild(upgradeMenu);
+			}
+		}
+		else
+		{
+			auto upgradeMenu = m_upgradeMenus.at(menuId);
+			this->removeChild(upgradeMenu, false);
+//			tower->removeChild(upgradeMenu, false);
+		}
+		return false;
+	};
+	this->_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, tower);
+}
 
+void Game::towerUpgradeCallback(cocos2d::Ref* pSender, int towerId)
+{
+	auto menu = m_upgradeMenus.at(towerId);
+	menu->removeFromParentAndCleanup(false);
+}
+
+void Game::towerDeleteCallback(cocos2d::Ref* pSender, int towerId, Sprite* towerbase)
+{
+	auto menu = m_upgradeMenus.at(towerId);
+	menu->removeFromParentAndCleanup(false);
+	this->addChild(towerbase);
+	towerbase->release();
+	Tower* tower = static_cast<Tower*>(this->getChildByTag(towerId));
+	this->addMoney(tower->getPrice(tower->getType(), tower->getlevel()) * 0.5f);
+	this->removeChild(tower);
+	this->m_towers.eraseObject(tower);
 }
 
 //------------------get/sets-----------------------------
@@ -403,7 +457,6 @@ void Game::towerCreateCallback(cocos2d::Ref* pSender, int type, Sprite* towerbas
 void Game::setPhysicsWorld(PhysicsWorld* world){
 	m_physicsWorld = world;
 }
-
 
 Vector<Enemy*>& Game::getEnemies()
 {
