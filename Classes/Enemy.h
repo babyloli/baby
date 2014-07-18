@@ -12,18 +12,18 @@ private:
 	int m_magicalDefence;
 	int m_physicalDefence;
 	int m_price;
-	int m_type;
+	std::string m_name;
 	int m_direction;
 	bool m_isDie;
 	ProgressTimer* m_pProTimer;
 	Sprite* m_enemy;
 public:
-	static Enemy* create(int type);
+	static Enemy* create(std::string name);
 	Enemy();
-	bool initWithType(int type);
+	bool initWithType(std::string name);
 
-	int getType();
-	bool setType(int type);
+	std::string getName();
+	bool setName(std::string name);
 	int getMaxHp();
 	bool setMaxHp(int hp);
 	int getOriginSpeed();

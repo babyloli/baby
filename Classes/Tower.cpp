@@ -12,7 +12,7 @@ bool Tower::initWithType(int type)
 	m_type = type;
 	m_level = 1;
 	m_elapsedTime = 0.0f;
-	switch (m_type)
+	switch (m_type)//根据Id从csv读名字，然后从Plist读图片。
 	{
 	case TOWER_TYPE_0:
 		m_sprite = Sprite::createWithTexture(ResourceManager::getInstance()->tower0);

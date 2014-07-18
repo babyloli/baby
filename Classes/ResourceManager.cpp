@@ -3,11 +3,14 @@
 ResourceManager* ResourceManager::m_instance = nullptr;
 
 void ResourceManager::init(){
+	enemyData = new HCSVFile();
+	enemyData->openFile("data/monsters.csv");
+
 	auto director = Director::getInstance();
 	auto textureCache = director->getTextureCache();
 	//--------------------SpriteFrameCache---------------------------
 	SpriteFrameCache* spriteFrameCache = SpriteFrameCache::getInstance();
-	spriteFrameCache->addSpriteFramesWithFile("images/enemy/icedog.plist");
+	spriteFrameCache->addSpriteFramesWithFile("images/enemy/Monsters.plist");
 	spriteFrameCache->addSpriteFramesWithFile("images/baby/baby1.plist");
 	loadAnimation();
 
@@ -22,22 +25,38 @@ void ResourceManager::init(){
 	bullet_0_3 = textureCache->addImage("images/tower/bullet_0_1.png");
 }
 
-void ResourceManager::loadAnimation(const char* format, int size, float delay, const std::string &name){
+void ResourceManager::loadAnimation(const char* mosterName, const char* direction, int size, float delay, const std::string &name){
 	auto animationCache = AnimationCache::getInstance();
 	char str[100] = {0};
 	Vector<SpriteFrame*> spriteFrames;
 	for (int i = 1; i <= size; i++){
-		sprintf_s(str, format, i);
+		sprintf_s(str, "%s%s%1d.png", mosterName, direction, i);
+		spriteFrames.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName(str));
+	}
+	animationCache->addAnimation(Animation::createWithSpriteFrames(spriteFrames, delay), name);
+}
+
+void ResourceManager::loadAnimation(const char* fomat, int size, float delay, const std::string &name){
+	auto animationCache = AnimationCache::getInstance();
+	char str[100] = {0};
+	Vector<SpriteFrame*> spriteFrames;
+	for (int i = 1; i <= size; i++){
+		sprintf_s(str, fomat, i);
 		spriteFrames.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName(str));
 	}
 	animationCache->addAnimation(Animation::createWithSpriteFrames(spriteFrames, delay), name);
 }
 
 void ResourceManager::loadAnimation(){
-	loadAnimation("Albinism_right%1d.png", 4, 1.0f/12.0f, ANIMATION_WALK_RIGHT_0);
-	loadAnimation("Albinism_up%1d.png", 4, 1.0f/12.0f, ANIMATION_WALK_UP_0);
-	loadAnimation("Albinism_left%1d.png", 4, 1.0f/12.0f, ANIMATION_WALK_LEFT_0);
-	loadAnimation("Albinism_down%1d.png", 4, 1.0f/12.0f, ANIMATION_WALK_DOWN_0);
+	for (int i = 0; i < enemyData->getRows(); i++){
+		std::string monsterName = enemyData->getData(i, 2);
+		const char* monsterNameCString = monsterName.c_str();
+		int numOfFrames = std::atoi(enemyData->getData(i, 3));
+		loadAnimation(monsterNameCString, "right", numOfFrames, 0.08f, monsterName+"right");
+		loadAnimation(monsterNameCString, "up", numOfFrames, 0.08f, monsterName+"up");
+		loadAnimation(monsterNameCString, "left", numOfFrames, 0.08f, monsterName+"left");
+		loadAnimation(monsterNameCString, "down", numOfFrames, 0.08f, monsterName+"down");
+	}
 	loadAnimation("baby1laugh%1d.png", 6, 0.2f, ANIMATION_BABY_LAUGH);
 	loadAnimation("baby1happy%1d.png", 6, 0.2f, ANIMATION_BABY_HAPPY);
 	loadAnimation("baby1normal%1d.png", 6, 0.2f, ANIMATION_BABY_NORMAL);
@@ -59,6 +78,8 @@ ResourceManager* ResourceManager::getInstance(){
 ResourceManager::~ResourceManager()
 {
 	tower0->release();
+	if (enemyData)
+		delete enemyData;
 };
 
 ResourceManager::ResourceManager()

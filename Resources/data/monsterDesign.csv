@@ -1,0 +1,4 @@
+id,type,generateTime,generateRate,moveSpeed,attack,money,updateError,RoundNumber,numberPerRound,timeBetweenRound
+1,monster,1,0.9,100,1,25,3,5,30,15
+2,litBoss,1,0.1,90,1,40,4,5,30,15
+3,bigBoss,0,0,30,2,A_Trap,0,0,0,0

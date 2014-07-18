@@ -1,6 +1,8 @@
 #ifndef __RESOURCE_MANAGER_H__
 #define __RESOURCE_MANAGER_H__
 #include "cocos2d.h"
+#include "HCSVFile.h"
+#include <string>
 USING_NS_CC;
 
 class ResourceManager {
@@ -75,6 +77,7 @@ public:
 #define ANIMATION_WALK_UP_0 "walk_up_0"
 #define ANIMATION_WALK_LEFT_0 "walk_left_0"
 #define ANIMATION_WALK_DOWN_0 "walk_down_0"
+	HCSVFile *enemyData;
 	Texture2D* hpBar;
 //----------------Baby-----------------------
 #define ANIMATION_BABY_LAUGH "baby_laugh"
@@ -106,7 +109,8 @@ private:
 	ResourceManager &operator = (const ResourceManager&);
 
 	void loadAnimation();
-	void loadAnimation(const char* format, int size, float delay, const std::string &name);
+	void loadAnimation(const char* mosterName, const char* direction, int size, float delay, const std::string &name);
+	void loadAnimation(const char* fomat, int size, float delay, const std::string &name);
 };
 
 #endif

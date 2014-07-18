@@ -271,7 +271,7 @@ void Game::update(float dt){
 
 void Game::addEnemy(float dt)
 {	
-	Enemy* enemy = Enemy::create(VIRUS_TYPE_0);
+	Enemy* enemy = Enemy::create("ascarid");
 	if (!enemy)
 		return;
 	enemy->setPosition(m_enemyPosition);

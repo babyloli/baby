@@ -1,0 +1,14 @@
+id,level,name,numberOfFrame,physics_defense,magic_defense,moveSpeed
+0,1,ascarid,4,0,0,100
+1,1,demodex,4,0,0,90
+2,1,epstein_barrvirus,4,0,0,30
+3,1,hookworm,4,0,0,100
+4,1,Lagosbatvirus,4,0,0,90
+5,3,lupomania,4,0,0,30
+6,1,Norwalkviruses,4,0,0,100
+7,2,pestivirus,4,0,0,90
+8,1,pinworm,4,0,0,30
+9,1,sarcopticmite,4,0,0,100
+10,1,schistosoma,4,0,0,90
+11,1,T.rubrum,4,0,0,30
+12,2,Tick,4,0,0,100

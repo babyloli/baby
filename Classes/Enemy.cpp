@@ -8,9 +8,9 @@ Enemy::Enemy()
 {
 }
 
-Enemy* Enemy::create(int type){
+Enemy* Enemy::create(std::string name){
 	Enemy *pRet = new Enemy();
-	if (pRet && pRet->initWithType(type)) {
+	if (pRet && pRet->initWithType(name)) {
 		pRet->autorelease();
 		return pRet;
 	}
@@ -21,16 +21,16 @@ Enemy* Enemy::create(int type){
 	} 
 }
 
-bool Enemy::initWithType(int type){
+bool Enemy::initWithType(std::string name){
 	this->setTag(TAG_ENEMY);
-	m_type = type;
+	m_name = name;
 	m_isDie = false;
 	m_direction = ROAD_NONE;
 	m_enemy = Sprite::create();
 	auto animationCache = AnimationCache::getInstance();
-	switch (m_type)
-	{
-	case VIRUS_TYPE_0:
+//	switch (m_name)
+//	{
+//	default:
 //        m_enemy->runAction( RepeatForever::create(Animate::create(
 //			animationCache->getAnimation(ResourceManager::ANIMATION_WALK_RIGHT_0))));
 		m_damage = DAMAGE_ENEMY_0;
@@ -38,8 +38,8 @@ bool Enemy::initWithType(int type){
 		m_physicalDefence = DEFENCE_PHYSICS_0;
 		m_magicalDefence = DEFENCE_MAGICAL_0;
 		m_price = PRICE_ENEMY_0;
-		break;
-	}
+//		break;
+//	}
 	if (!m_enemy)
 		return false;
 	this->addChild(m_enemy);
@@ -70,11 +70,11 @@ bool Enemy::initWithType(int type){
 
 //----------------get/set-----------------------
 
-int Enemy::getType(){
-	return this->m_type;
+std::string Enemy::getName(){
+	return this->m_name;
 }
-bool Enemy::setType(int type){
-	this->m_type=type;
+bool Enemy::setName(std::string name){
+	this->m_name=name;
 	return true;
 }
 
@@ -144,25 +144,33 @@ int Enemy::getDirection(){
 void Enemy::setDirection(int direction){
 	if (direction != m_direction){
 		m_enemy->stopAllActions();
+		//�鴤ģʽ
+		HCSVFile* enemyData = ResourceManager::getInstance()->enemyData;
+		int selectMonster = rand()%(enemyData->getRows());
+		std::string monsterName = enemyData->getData(selectMonster,2);
+		m_name = monsterName;
+		m_originSpeed = m_curSpeed = std::atoi(enemyData->getData(selectMonster,6));
+		m_magicalDefence = std::atoi(enemyData->getData(selectMonster,5));
+		m_physicalDefence = std::atoi(enemyData->getData(selectMonster,4));
+
+		std::string dir_cur = "";
 		switch (direction)
 		{
 		case ROAD_RIGHT:
-			m_enemy->runAction( RepeatForever::create(Animate::create(
-				AnimationCache::getInstance()->getAnimation(ANIMATION_WALK_RIGHT_0))));
+			dir_cur = "right";
 			break;
 		case ROAD_UP:
-			m_enemy->runAction( RepeatForever::create(Animate::create(
-				AnimationCache::getInstance()->getAnimation(ANIMATION_WALK_UP_0))));
+			dir_cur = "up";
 			break;
 		case ROAD_LEFT:
-			m_enemy->runAction( RepeatForever::create(Animate::create(
-				AnimationCache::getInstance()->getAnimation(ANIMATION_WALK_LEFT_0))));
+			dir_cur = "left";
 			break;
 		case ROAD_DOWN:
-			m_enemy->runAction( RepeatForever::create(Animate::create(
-				AnimationCache::getInstance()->getAnimation(ANIMATION_WALK_DOWN_0))));
+			dir_cur = "down";
 			break;
-		}		
+		}
+		m_enemy->runAction( RepeatForever::create(Animate::create(
+			AnimationCache::getInstance()->getAnimation(m_name + dir_cur))));
 		m_direction = direction;
 	}
 }
