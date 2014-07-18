@@ -11,6 +11,7 @@ public:
 #define ROAD_DOWN 3
 #define ROAD_NONE 4
 //----------------Tag------------------------
+#define TAG_UPGRADE_ITEM 90
 #define TAG_LABELPRICE 9
 #define TAG_BULLET 8
 #define TAG_ENEMY 7
@@ -29,11 +30,14 @@ public:
 
 #define ContactTestBitMask_Bullet	0x00000F00
 #define ContactTestBitMask_Barrier	0x00000000
-#define ContactTestBitMask_Enemy	0x0000000F
+#define ContactTestBitMask_Enemy	0x0F00000F
 
 #define CollisionBitMask_Bullet		0x00000F00
 #define CollisionBitMask_Barrier	0x00000F00
 #define CollisionBitMask_Enemy		0x000000FF
+
+#define CategoryBitMask_Bullet2		0x0F000000
+#define CollisionBitMask_Bullet2	0x00000000
 
 //----------------Tower----------------------
 #define MAX_RANGE 9999

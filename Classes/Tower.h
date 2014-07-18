@@ -15,6 +15,7 @@ private:
 	float m_elapsedTime;
 	Enemy* m_target;
 	Sprite* m_sprite;
+	DrawNode* m_circle;
 public:
 	Tower();
 	static Tower* create(int type);
@@ -30,6 +31,7 @@ public:
 	void upgrade();//Éý¼¶
 	int getRange();
 	void setRange(int r);
+	void showRange(bool);
 
 	static int getPrice(int type, int level);
 };

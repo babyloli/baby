@@ -26,17 +26,19 @@ bool Bullet::initWithTypeAndLevel(int type, int level)
 			break;
 		case 2:
 			bullet = Sprite::createWithTexture(ResourceManager::getInstance()->bullet_0_2);
-			m_body = PhysicsBody::createCircle(16.0f);
+			bullet->setScale(1.1);
+			m_body = PhysicsBody::createCircle(18.0f);
 			this->setPhysicsBody(m_body);
-			m_damage = SPEED_BULLET_0;
-			m_speed = 2;
+			m_damage = DAMAGE_BULLET_0_2;
+			m_speed = SPEED_BULLET_0 * 1.2;
 			break;
 		case 3:
-			bullet = Sprite::createWithTexture(ResourceManager::getInstance()->bullet_0_1);
-			m_body = PhysicsBody::createCircle(16.0f);
+			bullet = Sprite::createWithTexture(ResourceManager::getInstance()->bullet_0_3);
+			bullet->setScale(1.2);
+			m_body = PhysicsBody::createCircle(20.0f);
 			this->setPhysicsBody(m_body);
-			m_damage = SPEED_BULLET_0;
-			m_speed = 2;
+			m_damage = DAMAGE_BULLET_0_3;
+			m_speed = SPEED_BULLET_0 * 1.5;
 			break;
 		}
 	default:

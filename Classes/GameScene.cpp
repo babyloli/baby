@@ -168,9 +168,11 @@ bool Game::init()
 		menu->setPosition(Vec2(tower->getPositionX(), tower->getPositionY() + tower->getContentSize().height));
 		m_menus.pushBack(menu);
 
-		auto upgradeItem = MenuItemImage::create("update.png", "update.png", CC_CALLBACK_1(Game::towerUpgradeCallback, this, towerId));
+		Sprite* updateSprite = Sprite::create("update.png");
+		auto upgradeItem = MenuItemTower::create(0, updateSprite, updateSprite, CC_CALLBACK_1(Game::towerUpgradeCallback, this, towerId));
 //		upgradeItem->setPosition(-upgradeItem->getContentSize().width/2, upgradeItem->getContentSize().height/2);
 		upgradeItem->setPosition(0, upgradeItem->getContentSize().height);
+		upgradeItem->setTag(TAG_UPGRADE_ITEM);
 		
 		auto deleteItem = MenuItemImage::create("sell.png", "sell.png", CC_CALLBACK_1(Game::towerDeleteCallback, this, towerId, tower));
 //		deleteItem->setPosition(-deleteItem->getContentSize().width/2, -deleteItem->getContentSize().height/2);
@@ -357,6 +359,8 @@ void Game::onEnter(){
 			int damage = bullet->getDamage();
 			enemy->setHp(enemy->getHp() - damage);
 			bullet->setDie();
+//			bullet->getPhysicsBody()->setCategoryBitmask(CategoryBitMask_Bullet2);
+//			bullet->getPhysicsBody()->setCollisionBitmask(CollisionBitMask_Bullet2);
 			return true;
 		}
 		return false;
@@ -418,6 +422,22 @@ void Game::towerCreateCallback(cocos2d::Ref* pSender, int type, Sprite* towerbas
 		if (rect.containsPoint(point)){
 			auto upgradeMenu = m_upgradeMenus.at(menuId);
 			if (upgradeMenu->getParent() == NULL){
+				MenuItemTower* menuItemTower = static_cast<MenuItemTower*>(upgradeMenu->getChildByTag(TAG_UPGRADE_ITEM));
+				int level = tower->getlevel() + 1;
+				if (level > 3){
+					menuItemTower->setEnabled(false);
+				} else
+				{
+					int price = tower->getPrice(tower->getType(), level);
+					menuItemTower->setPrice(price);
+					if (price > m_money)
+						menuItemTower->setEnabled(false);
+					else
+					{
+						menuItemTower->setEnabled(true);
+					}
+				}
+				tower->showRange(true);
  				this->addChild(upgradeMenu);
  				this->reorderChild(upgradeMenu, ZORDER_MENUITEMTOWER);
 //				tower->addChild(upgradeMenu);
@@ -425,6 +445,7 @@ void Game::towerCreateCallback(cocos2d::Ref* pSender, int type, Sprite* towerbas
 		}
 		else
 		{
+			tower->showRange(false);
 			auto upgradeMenu = m_upgradeMenus.at(menuId);
 			this->removeChild(upgradeMenu, false);
 //			tower->removeChild(upgradeMenu, false);
@@ -438,6 +459,9 @@ void Game::towerUpgradeCallback(cocos2d::Ref* pSender, int towerId)
 {
 	auto menu = m_upgradeMenus.at(towerId);
 	menu->removeFromParentAndCleanup(false);
+	Tower* tower = static_cast<Tower*>(this->getChildByTag(towerId));
+	tower->upgrade();
+	this->addMoney(-tower->getPrice(tower->getType(), tower->getlevel()));
 }
 
 void Game::towerDeleteCallback(cocos2d::Ref* pSender, int towerId, Sprite* towerbase)

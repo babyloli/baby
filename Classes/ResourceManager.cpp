@@ -18,6 +18,8 @@ void ResourceManager::init(){
 	background_price_big = textureCache->addImage("images/priceBackground2.png");
 	hpBar = textureCache->addImage("images/enemy/Maxhpbar.png");
 	bullet_0_1 = textureCache->addImage("images/tower/bullet_0_1.png");
+	bullet_0_2 = textureCache->addImage("images/tower/bullet_0_1.png");
+	bullet_0_3 = textureCache->addImage("images/tower/bullet_0_1.png");
 }
 
 void ResourceManager::loadAnimation(const char* format, int size, float delay, const std::string &name){

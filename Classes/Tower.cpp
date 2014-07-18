@@ -17,19 +17,23 @@ bool Tower::initWithType(int type)
 	case TOWER_TYPE_0:
 		m_sprite = Sprite::createWithTexture(ResourceManager::getInstance()->tower0);
 		this->addChild(m_sprite);
-		m_range = 200;
+		m_range = 150;
 		m_speed = 1;
 		break;
 	case TOWER_TYPE_1:
 		m_sprite = Sprite::createWithTexture(ResourceManager::getInstance()->tower1);
 		this->addChild(m_sprite);
-		m_range = 200;
+		m_range = 150;
 		m_speed = 1;
 		break;
 	}
 	if (m_sprite){
 		this->setContentSize(m_sprite->getContentSize());
 	}
+	m_circle = DrawNode::create();
+	m_circle->drawDot(Vec2::ZERO, m_range, Color4F(0.2f, 0.2f, 0.2f, 0.8f));
+	this->addChild(m_circle);
+	m_circle->setVisible(false);
 	return true;
 }
 
@@ -124,6 +128,13 @@ int Tower::getlevel()
 void Tower::upgrade()
 {
 	m_level++;
+	if (m_level == 2)
+		m_sprite->setScale(1.1f);
+	else if (m_level == 3)
+		m_sprite->setScale(1.2f);
+	m_circle->setVisible(false);
+//	if m_range changes:
+//	m_circle->drawDot(Vec2::ZERO, m_range, Color4F(0.2f, 0.2f, 0.2f, 0.8f));
 }
 int Tower::getRange()
 {
@@ -132,6 +143,9 @@ int Tower::getRange()
 void Tower::setRange(int r)
 {
 	this->m_range = r;
+}
+void Tower::showRange(bool b){
+	m_circle->setVisible(b);
 }
 int Tower::getPrice(int type, int level){
 	switch (type)
