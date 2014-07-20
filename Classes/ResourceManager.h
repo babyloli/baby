@@ -14,9 +14,9 @@ public:
 #define ROAD_NONE 4
 //----------------Tag------------------------
 #define TAG_UPGRADE_ITEM 90
-#define TAG_LABELPRICE 9
-#define TAG_BULLET 8
-#define TAG_ENEMY 7
+#define TAG_LABELPRICE 99
+#define TAG_BULLET 98
+#define TAG_ENEMY 97
 //----------------Priority-------------------
 #define Priority_EventListenerPhysicsContact 10
 //----------------Z-Order--------------------

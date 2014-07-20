@@ -144,14 +144,14 @@ int Enemy::getDirection(){
 void Enemy::setDirection(int direction){
 	if (direction != m_direction){
 		m_enemy->stopAllActions();
-		//抽搐模式
-		HCSVFile* enemyData = ResourceManager::getInstance()->enemyData;
-		int selectMonster = rand()%(enemyData->getRows());
-		std::string monsterName = enemyData->getData(selectMonster,2);
-		m_name = monsterName;
-		m_originSpeed = m_curSpeed = std::atoi(enemyData->getData(selectMonster,6));
-		m_magicalDefence = std::atoi(enemyData->getData(selectMonster,5));
-		m_physicalDefence = std::atoi(enemyData->getData(selectMonster,4));
+// 		抽搐模式
+// 				HCSVFile* enemyData = ResourceManager::getInstance()->enemyData;
+// 				int selectMonster = rand()%(enemyData->getRows());
+// 				std::string monsterName = enemyData->getData(selectMonster,2);
+// 				m_name = monsterName;
+// 				m_originSpeed = m_curSpeed = std::atoi(enemyData->getData(selectMonster,6));
+// 				m_magicalDefence = std::atoi(enemyData->getData(selectMonster,5));
+// 				m_physicalDefence = std::atoi(enemyData->getData(selectMonster,4));
 
 		std::string dir_cur = "";
 		switch (direction)

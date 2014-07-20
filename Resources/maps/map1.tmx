@@ -82,7 +82,11 @@
   <object x="1152" y="352" width="64" height="64"/>
   <object x="1184" y="448" width="64" height="64"/>
   <object x="896" y="256" width="64" height="64"/>
-  <object x="800" y="288" width="64" height="64"/>
+  <object x="800" y="288" width="64" height="64">
+   <properties>
+    <property name="type" value="0"/>
+   </properties>
+  </object>
   <object x="864" y="448" width="64" height="64"/>
   <object x="800" y="448" width="64" height="64"/>
   <object x="736" y="448" width="64" height="64"/>
