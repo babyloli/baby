@@ -1,0 +1,97 @@
+{
+  "classname": "CCNode",
+  "name": "selectScene",
+  "canedit": true,
+  "objecttag": 10000,
+  "rotation": 0,
+  "scalex": 1,
+  "scaley": 1,
+  "visible": 1,
+  "x": 0,
+  "y": 0,
+  "zorder": 1,
+  "gameobjects": [
+    {
+      "__type": "ComGameObjectSurrogate:#EditorCommon.JsonModel",
+      "classname": "CCNode",
+      "name": "backgroud",
+      "canedit": true,
+      "objecttag": 10003,
+      "rotation": 0,
+      "scalex": 1.24729121,
+      "scaley": 1.21419585,
+      "visible": 1,
+      "x": 642.0001220703125,
+      "y": 362.5,
+      "zorder": 1,
+      "gameobjects": [],
+      "components": [
+        {
+          "__type": "ComSpriteSurrogate:#EditorCommon.JsonModel.Component",
+          "classname": "CCSprite",
+          "name": "backgroundImg",
+          "file": null,
+          "fileData": {
+            "path": "background1.psd_Psd.Dir/background1.png",
+            "plistFile": "",
+            "resourceType": 0
+          }
+        }
+      ]
+    },
+    {
+      "__type": "ComGameObjectSurrogate:#EditorCommon.JsonModel",
+      "classname": "CCNode",
+      "name": "selectMenu",
+      "canedit": true,
+      "objecttag": 10006,
+      "rotation": 0,
+      "scalex": 1.239583,
+      "scaley": 1.239583,
+      "visible": 1,
+      "x": 25.000202178955078,
+      "y": -35.66656494140625,
+      "zorder": 1,
+      "gameobjects": [],
+      "components": [
+        {
+          "__type": "ComGUIAdapterSurrogate:#EditorCommon.JsonModel.Component",
+          "classname": "GUIComponent",
+          "name": "menu",
+          "file": null,
+          "fileData": {
+            "path": "UI/startUI_1_1/startUI_1.ExportJson",
+            "plistFile": "",
+            "resourceType": 0
+          }
+        }
+      ]
+    }
+  ],
+  "CanvasSize": {
+    "_height": 720,
+    "_width": 1280
+  },
+  "Triggers": null,
+  "Version": "1.5.0.0",
+  "components": [
+    {
+      "__type": "ComSceneSurrogate:#EditorCommon.JsonModel.Component",
+      "classname": "CCScene",
+      "name": "CCScene",
+      "scenename": "Start"
+    },
+    {
+      "__type": "ComSimpleAudioSurrogate:#EditorCommon.JsonModel.Component",
+      "classname": "CCBackgroundAudio",
+      "name": "CCBackgroundAudio",
+      "file": null,
+      "fileData": {
+        "path": null,
+        "plistFile": null,
+        "resourceType": 0
+      },
+      "loop": 1
+    }
+  ]
+}
