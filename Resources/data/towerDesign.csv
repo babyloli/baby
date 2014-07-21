@@ -1,4 +1,4 @@
 id,name,type:1physics&2magic,attackFrequency,attack,updateError,attackRadiu,updateRadiuError,cost,updateCostError,kill_return,bulletName,bulletSpeed
-1,tower1,1,1,30,10,150,10,100,60,0.5,pill,100
-2,tower2,2,0.9,40,10,160,15,180,60,0.5,injection,150
-3,tower3,1,0.7,50,10,170,20,260,60,0.5,bottle,200
+0,tower1,1,1,30,10,150,10,100,60,0.5,pill,100
+1,tower2,2,0.9,40,10,160,15,180,60,0.5,injection,150
+2,tower3,1,0.7,50,10,170,20,260,60,0.5,bottle,200

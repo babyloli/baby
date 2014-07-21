@@ -12,20 +12,20 @@ public:
 #define ROAD_RIGHT 2
 #define ROAD_DOWN 3
 #define ROAD_NONE 4
-//----------------Tag------------------------
+	//----------------Tag------------------------
 #define TAG_UPGRADE_ITEM 90
 #define TAG_LABELPRICE 99
 #define TAG_BULLET 98
 #define TAG_ENEMY 97
-//----------------Priority-------------------
+	//----------------Priority-------------------
 #define Priority_EventListenerPhysicsContact 10
-//----------------Z-Order--------------------
+	//----------------Z-Order--------------------
 #define ZORDER_LABELPRICE 4
 #define ZORDER_MENU 10
 #define ZORDER_MODAL 9
 #define ZORDER_MENUITEMTOWER 8
 #define ZORDER_TOWER 5
-//----------------PhysicsMask----------------
+	//----------------PhysicsMask----------------
 #define CategoryBitMask_Bullet		0x0000000F
 #define CategoryBitMask_Barrier		0x000000F0
 #define CategoryBitMask_Enemy		0x00000F00
@@ -41,7 +41,7 @@ public:
 #define CategoryBitMask_Bullet2		0x0F000000
 #define CollisionBitMask_Bullet2	0x00000000
 
-//----------------Tower----------------------
+	//----------------Tower----------------------
 #define MAX_RANGE 9999
 #define TOWER_TYPE_0 0
 #define TOWER_TYPE_1 1
@@ -52,7 +52,7 @@ public:
 	Texture2D* tower0;
 	Texture2D* tower1;
 
-//----------------Bullet---------------------
+	//----------------Bullet---------------------
 #define SPEED_BULLET_0 200
 #define MATERIAL_BULLET_0 cocos2d::PhysicsMaterial(1.0, 0.0, 1.0)
 #define DAMAGE_BULLET_0_1 20
@@ -61,7 +61,7 @@ public:
 	Texture2D* bullet_0_1;
 	Texture2D* bullet_0_2;
 	Texture2D* bullet_0_3;
-//----------------Enemy----------------------
+	//----------------Enemy----------------------
 #define VIRUS_TYPE_0 0
 #define VIRUS_TYPE_1 1 
 #define VIRUS_TYPE_2 2
@@ -77,9 +77,10 @@ public:
 #define ANIMATION_WALK_UP_0 "walk_up_0"
 #define ANIMATION_WALK_LEFT_0 "walk_left_0"
 #define ANIMATION_WALK_DOWN_0 "walk_down_0"
-	HCSVFile *enemyData;
+	HCSVFile * enemyData;
+	HCSVFile * enemyDesc;
 	Texture2D* hpBar;
-//----------------Baby-----------------------
+	//----------------Baby-----------------------
 #define ANIMATION_BABY_LAUGH "baby_laugh"
 #define ANIMATION_BABY_HAPPY "baby_happy"
 #define ANIMATION_BABY_NORMAL "baby_normal"
@@ -89,10 +90,10 @@ public:
 #define ANIMATION_BABY_HURTED "baby_hurt"
 #define ANIMATION_BABY_ANGRY "baby_angry"
 #define ANIMATION_BABY_WIN "baby_win"
-//----------------Price-----------------------
+	//----------------Price-----------------------
 #define FONTSIZE_PRICE 20
 #define FONT_PRICE "fonts/cardFont.ttf"
-//-----------------Game-----------------------
+	//-----------------Game-----------------------
 #define MAP1 "maps/map1.tmx"
 #define PATH_TOWERBASE "images/tower/towerbase.png"
 #define INIT_PRICE 200

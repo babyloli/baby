@@ -5,6 +5,8 @@ ResourceManager* ResourceManager::m_instance = nullptr;
 void ResourceManager::init(){
 	enemyData = new HCSVFile();
 	enemyData->openFile("data/monsters.csv");
+	enemyDesc = new HCSVFile();
+	enemyDesc->openFile("data/monsterDesign.csv");
 
 	auto director = Director::getInstance();
 	auto textureCache = director->getTextureCache();
@@ -80,6 +82,8 @@ ResourceManager::~ResourceManager()
 	tower0->release();
 	if (enemyData)
 		delete enemyData;
+	if (enemyDesc)
+		delete enemyDesc;
 };
 
 ResourceManager::ResourceManager()

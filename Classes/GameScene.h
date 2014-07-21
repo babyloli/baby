@@ -29,12 +29,32 @@ private:
 	PhysicsWorld* m_physicsWorld;
 	LabelPrice* m_labelPrice;
 	int m_money;
+	int m_numRound;
+	int m_curRound;
+	int m_numPerRound;
+	int m_curNumInRound;
+	float m_timeBetweenRound;
+	float m_elapsedTimeRound;
+	bool m_isWaiting;
+
+	int m_deltaMonsterDefence;
+	int m_deltaMonsterGenerateTime;
+	float m_deltaMonsterGenerateRate;
+	float m_elapsedTimeMonster;
+	int m_numMonster;
+
+	int m_deltaLittleBossDefence;
+	int m_numLittleBoss;
+
+	int m_bigBossAttack;
+	int m_numBigBoss;
 public:
-    static cocos2d::Scene* createScene();
-    virtual bool init();  
+	static cocos2d::Scene* createScene();
+	virtual bool init();  
 	CREATE_FUNC(Game);
 
 	void onEnter() override;
+	void loadData();
 
 	void menuCloseCallback(cocos2d::Ref* pSender);
 	void menuPhysicsCallback(cocos2d::Ref* pSender);
