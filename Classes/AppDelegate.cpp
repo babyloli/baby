@@ -1,8 +1,9 @@
 #include "AppDelegate.h"
-#include "GameScene.h"
+#include "IHomeMenuScene.h"
 
 
 USING_NS_CC;
+
 
 AppDelegate::AppDelegate() {
 
@@ -15,22 +16,25 @@ AppDelegate::~AppDelegate()
 bool AppDelegate::applicationDidFinishLaunching() {
     // initialize director
     auto director = Director::getInstance();
-	
     auto glview = director->getOpenGLView();
     if(!glview) {
         glview = GLView::create("My Game");
+		glview->setFrameSize(1280,720);
         director->setOpenGLView(glview);
     }
-	glview->setDesignResolutionSize(1280,720,ResolutionPolicy::SHOW_ALL);
 
     // turn on display FPS
     director->setDisplayStats(true);
-
-    // set FPS. the default value is 1.0/60 if you don't call this
+	
+	SimpleAudioEngine::sharedEngine()->preloadBackgroundMusic("music/bgm.mp3");
+	SimpleAudioEngine::sharedEngine()->playBackgroundMusic("music/bgm.mp3");
+   	
+	// set FPS. the default value is 1.0/60 if you don't call this
     director->setAnimationInterval(1.0 / 60);
 
     // create a scene. it's an autorelease object
-	auto scene = Game::createScene();
+    auto scene = IHomeMenu::createScene();
+
     // run
     director->runWithScene(scene);
 

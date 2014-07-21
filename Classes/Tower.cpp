@@ -1,47 +1,34 @@
 #include "Tower.h"
-
+#include "GameScene.h"
+#include "ResourceManager.h"
 
 Tower::Tower()
 {
-	this->range = 3;
-	this->type = 0;
-	this->level = 1;
-	target = NULL;
-	tower = NULL;
-}
-Tower::Tower(int type)
-{
-	this->type = type;
-	this->level = 1;
-	this->range = 3;
-	target = NULL;
-	tower = NULL;
-}
-Tower::~Tower(void)
-{
 }
 
-bool Tower::init()
+bool Tower::initWithType(int type)
 {
-	switch (type)
+	m_target = NULL;
+	m_type = type;
+	m_level = 1;
+	m_elapsedTime = 0.0f;
+	switch (m_type)
 	{
 	case TOWER_TYPE_0:
-		tower = Sprite::create("tower0.png");
-		break;
-	default:
+		m_sprite = Sprite::createWithTexture(ResourceManager::getInstance()->tower0);
+		this->addChild(m_sprite);
+		m_range = 200;
+		m_speed = 1;
 		break;
 	}
-	if(!tower)
-		return false;
-	this->addChild(tower);
 	
 	return true;
 }
 
 Tower* Tower::create(int type)
 {
-	Tower* temp = new Tower(type);
-	if( temp && temp->init()) {
+	Tower* temp = new Tower();
+	if( temp && temp->initWithType(type)) {
 		temp->autorelease();
 		return temp;
 	}
@@ -56,18 +43,19 @@ Tower* Tower::create(int type)
 Enemy* Tower::getCloseTarget()
 {
 	Enemy* closetarge = NULL;
-	double maxdistance = 9999;
+	double maxdistance = MAX_RANGE;
 
 	Game* gamelayer = dynamic_cast<Game*>(this->getParent());
-	/*for (auto enemy : gamelayer->getEnemies()){
-		double currdistance = ccpDistance(this->getPosition(),enemy->getPosition());
+	for (auto enemy : gamelayer->getEnemies()){
+//		double currdistance = ccpDistance(this->getPosition(),enemy->getPosition());
+		double currdistance = this->getPosition().distance(enemy->getPosition());
 		if( currdistance < maxdistance){
 			closetarge = enemy;
 			maxdistance = currdistance;
 		}
 	}
-	*/
-	if(maxdistance < this->range )
+	
+	if(maxdistance < this->m_range )
 	{
 		return closetarge;
 	}
@@ -75,30 +63,41 @@ Enemy* Tower::getCloseTarget()
 		return NULL;
 }
 
-void Tower::generateBullet()
+void Tower::generateBullet(float dt)
 {
-	target = getCloseTarget();
-	if(!target)
-		return ;
-	Bullet* t_bullet = Bullet::create(type,level,level+3);
+	m_elapsedTime += dt;
+	if (m_elapsedTime > m_speed){
+		m_elapsedTime -= m_speed;
+		m_target = getCloseTarget();
+		if(!m_target)
+			return ;
+		Bullet* t_bullet = Bullet::create(m_type, m_level);
 
-	if(!t_bullet)
-		return;
+		if(!t_bullet)
+			return;
 
-	t_bullet->setPosition(tower->getPosition());
-	/////////
-	this->addChild(t_bullet);
-	//发射子弹
-	shotBullet(t_bullet,target);
-	//把子弹放入vector中
-	bullets.pushBack(t_bullet);
+		t_bullet->setPosition(this->getPosition());
+		Game* gamelayer = dynamic_cast<Game*>(this->getParent());
+		gamelayer->addBullet(t_bullet);
+		//把子弹放入vector中
+		gamelayer->addChild(t_bullet);
+		//发射子弹
+		shotBullet(t_bullet,m_target);
+	}
 }
 
 void Tower::shotBullet(Bullet* bullet, Enemy* target)
 {
 	if(!bullet || !target)
 		return;
-	bullet->setBulletVelocity(target->getPosition());
+	Vec2 direction = target->getPosition() - this->getPosition();
+	direction.normalize();
+	float angle = acos(Vec2::dot(direction, Vec2(0.0f, -1.0f))) * 57.325f;
+	if (direction.x > 0)
+		angle = -angle;
+	this->setRotation(angle);
+	bullet->setRotation(angle);
+	bullet->setBulletVelocity(direction * bullet->getSpeed());
 }
 
 
@@ -112,29 +111,33 @@ void Tower::shotBullet(Bullet* bullet, Enemy* target)
 ///////////////////////////////////////////////////////////
 int Tower::getType()
 {
-	return type;
+	return m_type;
 }
 void Tower::setType(int type)
 {
-	this->type = type;
+	this->m_type = type;
 }
 int Tower::getlevel()
 {
-	return level;
+	return m_level;
 }
 void Tower::upgrade()
 {
-	level++;
+	m_level++;
 }
 int Tower::getRange()
 {
-	return range;
+	return m_range;
 }
 void Tower::setRange(int r)
 {
+<<<<<<< HEAD
 	this->range = r;
 }
 void Tower::setTowerTexture(const std::string& filename)
 {
 	tower->setTexture(filename);
+=======
+	this->m_range = r;
+>>>>>>> c3bb0836c44aea7a9d6fe286d95b8a4423bcdbd7
 }

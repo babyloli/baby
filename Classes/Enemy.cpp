@@ -1,32 +1,16 @@
 #include "Enemy.h"
+#include "ResourceManager.h"
 #include <math.h>
 USING_NS_CC;
 
 Enemy::Enemy()
-	:m_damage(1)
-	,m_originSpeed(3)
-	,m_curSpeed(3)
-	,m_magicalDefence(0)
-	,m_physicalDefebce(0)
-	,m_type(0)
-	,m_pProTimer(NULL)
-{
-}
-
-Enemy::Enemy(int type)
-	:m_damage(1)
-	,m_originSpeed(3)
-	,m_curSpeed(3)
-	,m_magicalDefence(0)
-	,m_physicalDefebce(0)
-	,m_type(type)
-	,m_pProTimer(NULL)
+	:m_pProTimer(NULL)
 {
 }
 
 Enemy* Enemy::create(int type){
-	Enemy *pRet = new Enemy(type);
-	if (pRet && pRet->init()) {
+	Enemy *pRet = new Enemy();
+	if (pRet && pRet->initWithType(type)) {
 		pRet->autorelease();
 		return pRet;
 	}
@@ -37,23 +21,37 @@ Enemy* Enemy::create(int type){
 	} 
 }
 
-bool Enemy::init(){
-	Sprite* enemy = NULL;
+bool Enemy::initWithType(int type){
+	this->setTag(TAG_ENEMY);
+	m_type = type;
+	m_isDie = false;
+	m_direction = NO_DIRECTION;
+	m_enemy = Sprite::create();
+	auto animationCache = AnimationCache::getInstance();
 	switch (m_type)
 	{
 	case VIRUS_TYPE_0:
-		enemy = Sprite::create("s1.png");
-//		this->setPhysicsBody(PhysicsBody::createCircle(32.0f, PhysicsMaterial(1.0f, 0.0f, 0.1f)));
-		m_body = PhysicsBody::createCircle(16.0f);
-		this->setPhysicsBody(m_body);
-		m_curSpeed = m_originSpeed = 50;
-	default:
+//        m_enemy->runAction( RepeatForever::create(Animate::create(
+//			animationCache->getAnimation(ResourceManager::ANIMATION_WALK_RIGHT_0))));
+		m_damage = DAMAGE_ENEMY_0;
+		m_curSpeed = m_originSpeed = SPEED_ENEMY_0;
+		m_physicalDefence = DEFENCE_PHYSICS_0;
+		m_magicalDefence = DEFENCE_MAGICAL_0;
 		break;
 	}
-	if (!enemy)
+	if (!m_enemy)
 		return false;
-	this->addChild(enemy);
+	this->addChild(m_enemy);
+
+	//attach physics body
+	auto body = PhysicsBody::createBox(Size(32, 32), PhysicsMaterial(0.5f, 0.0f, 0.5f));
+	body->setCategoryBitmask(CategoryBitMask_Enemy);
+	body->setContactTestBitmask(ContactTestBitMask_Enemy);
+	body->setCollisionBitmask(CollisionBitMask_Enemy);
+	body->setRotationEnable(false);
+	this->setPhysicsBody(body);
 	
+	//´´½¨ÑªÌõ
 	auto hpBar = Sprite::create("Maxhpbar.png");
 	if (!hpBar)
 		return false;
@@ -61,7 +59,7 @@ bool Enemy::init(){
 	m_pProTimer->setType(ProgressTimer::Type::BAR);
 	m_pProTimer->setMidpoint(Vec2(0, 0.5f));
 	m_pProTimer->setBarChangeRate(Vec2(1, 0));
-	m_pProTimer->setPercentage(30);
+	m_pProTimer->setPercentage(100);
 	m_pProTimer->setScale(0.06f);
 	m_pProTimer->setPosition(0,25);
 	this->addChild(m_pProTimer);
@@ -88,7 +86,13 @@ float Enemy::getHp(){
 
 bool Enemy::setHp(float hp){
 	if (m_pProTimer){
-		m_pProTimer->setPercentage(hp);
+		if (hp > 0)
+			m_pProTimer->setPercentage(hp);
+		else
+		{
+			m_pProTimer->setPercentage(0);
+			m_isDie = true;
+		}
 		return true;
 	}
 	return false;
@@ -109,9 +113,59 @@ bool Enemy::setSpeed(int rspeed){
 }
 
 Vec2 Enemy::getVelocity(){
-	return this->m_body->getVelocity();
+	return this->getPhysicsBody()->getVelocity();
 }
 
 void Enemy::setVelocity(Vec2 v){
-	return this->m_body->setVelocity(v);
+	return this->getPhysicsBody()->setVelocity(v);
+}
+
+bool Enemy::isDie(){
+	return m_isDie;
+}
+
+void Enemy::setDie(bool d){
+	m_isDie = d;
+}
+
+int Enemy::getDamage(){
+	return m_damage;
+}
+
+void Enemy::setDamage(int damage){
+	m_damage = damage;
+}
+
+int Enemy::getDirection(){
+	return m_direction;
+}
+
+void Enemy::setDirection(int direction){
+	if (direction != m_direction){
+		m_enemy->stopAllActions();
+		switch (direction)
+		{
+		case RIGHT:
+			m_enemy->runAction( RepeatForever::create(Animate::create(
+				AnimationCache::getInstance()->getAnimation(ResourceManager::ANIMATION_WALK_RIGHT_0))));
+			break;
+		case UP:
+			m_enemy->runAction( RepeatForever::create(Animate::create(
+				AnimationCache::getInstance()->getAnimation(ResourceManager::ANIMATION_WALK_UP_0))));
+			break;
+		case LEFT:
+			m_enemy->runAction( RepeatForever::create(Animate::create(
+				AnimationCache::getInstance()->getAnimation(ResourceManager::ANIMATION_WALK_LEFT_0))));
+			break;
+		case DOWN:
+			m_enemy->runAction( RepeatForever::create(Animate::create(
+				AnimationCache::getInstance()->getAnimation(ResourceManager::ANIMATION_WALK_DOWN_0))));
+			break;
+		}		
+		m_direction = direction;
+	}
+}
+
+Sprite* Enemy::getEnemy(){
+	return m_enemy;	
 }

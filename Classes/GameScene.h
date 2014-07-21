@@ -6,16 +6,20 @@
 #include "Enemy.h"
 #include "Road.h"
 #include "Tower.h"
-#include "Bullet.h"
+#include "Baby.h"
 
 USING_NS_CC;
 class Game : public cocos2d::Layer
 {
 private:
 	TMXTiledMap* m_map;
-	Sprite* m_baby;
+	Baby* m_baby;
 	Vec2 m_enemyPosition;
+	Rect m_babyPosition;
+	Vector<Menu*> m_menus;
 	Vector<Enemy*> m_enemies;
+	Vector<Tower*> m_towers;
+	Vector<Bullet*> m_bullets;
 	std::vector<Road> m_roads;
 	PhysicsWorld* m_physicsWorld;
 public:
@@ -27,14 +31,16 @@ public:
 
 	void menuCloseCallback(cocos2d::Ref* pSender);
 	void menuPhysicsCallback(cocos2d::Ref* pSender);
+	void towerCreateCallback(cocos2d::Ref* pSender, int type, Sprite* towerbase);
 
 	void addEnemy(float dt);
 	void moveEnemy(float dt);
-
-	void onTouchCreateTower(const std::vector<Touch*>& touches, Event* event);
-	bool addTower(Vec2 location);
+	void findEnemy(float dt);
+	void deleteObject(float dt);
+	void update(float dt);
 
 	void setPhysicsWorld(PhysicsWorld* world);
-	Vector<Enemy*> getEnemies();
+	Vector<Enemy*>& getEnemies();
+	void addBullet(Bullet* bullet);
 };
 #endif

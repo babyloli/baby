@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="40" height="22" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="地图111" tilewidth="32" tileheight="32">
+  <image source="map1.png" width="1280" height="704"/>
+ </tileset>
+ <layer name="background" width="40" height="22">
+  <data encoding="base64" compression="zlib">
+   eJyd1ktTE0EQwPHZcPWOIAH8Dp6FIEl468WDVfoRfL8RrPJ76MU330MvvvkO3tEAQW/+p9yudE16djs5/KqS3Znu6ZnOZnuNEA5xhGNMToRwGlOYxhnMoIlZzE2MPn4Bi2hhCRewjDY66KKXrKOPk8ZwTE+sUcdfDiG8xCu8xhu8Db7acjGfhf9iXM8aJOc7vMcermAHu/iEz/iCr/hWE/eAvftl7J+se6/MYcX9jh819/bL+mS/ejjEEY7RV9dinG08x4uyHtnb3H7slzmsuCf4U3Pvb1mfrH26YB8wgyZmi8G1XnlOH/CxrEf2Nrc+2d/fjXzv6s8HDrl4st45zONsMRhv5e07e1d/9tZhxWuzng66WMFqMchv5Y21eH4T+rO3jpZxNtfJdwM3cQu3i8F9K29ayxrWsYFNbOEiLo1Rx7Wi/rz12el4Vh/EWu7gLu7hPh7gIR7hMbbxBDvYxdOiOn9db+ua9VlYfTBu33v3x+oJPVf3rtUH4/6Oq9ZQF1PP1b37U60n7nE06u94slTVl3Ux9Vzdu6eMukft/wUlNy93z9pXXfu5hm895+M4LKKFpfgcwDLa6KCLFaxiDevYwCa2MudvXdN5rxrr8/Sf5z9Cxso9ax+sa3q+9Xzx9J+sxTN26F7Ff1uspe754jlvyecZO3Sv4r9tKplvPV9yuTxrsd655N1G3nWsnDp2Va/Ifufen/SZNJ3PynnnOBlT1SvpnPR7LnYa07OeNLeccdX5pHPS77m60pie302aW874H9cxm24=
+  </data>
+ </layer>
+ <layer name="border" width="40" height="22">
+  <data encoding="base64" compression="zlib">
+   eJzLYmZgyBpEOBuIc4A4F4jzgPgHE8OgBQqj7qMIDAX3gfBgBR5DIPxG3Uc+GOzuG01/lIFR91EGBnv5DHKbxyB332CP31H3kQ+GgvuGQv6F9UXygbiAhhi974PPPg8oBgA1qTXe
+  </data>
+ </layer>
+ <layer name="road" width="40" height="22">
+  <data encoding="base64" compression="zlib">
+   eJzt09k2lXEcBmA2JQpp5S44rKO6ixzWUd1FHVKKaDDPoqKRaCDzLBpQUTSjrLqB5qcb2H2LVtvB9679HP3ftX7vWnvvuLgwYcJsJDPMMsdTnvGceRZ4wUsWWeIVr3nDW97xng8ss8IqH/nEGp/5ss59X/nGd37wk19/HuJ9iJBAIlvYShLbSCaF7ewglTTS2UkGu9hNZvw6B/6H7LNt/ybed9i2I5t4X4FthQH2leiUUkY5FVRSRTU11FJHPQ00coEmmrnIJS7TQitXuBrlfoe3zgD7enR66aOfAQYZYpgRRhljnAkmecAU0zzkEY95wgyzzEW5v+htKcC+ZZ2VGPwOEiP++5G/91J10gL0/nWy3MwOcHePzt4Y7DvgZk6Auwd1DsVg31E3jwW4m6uTx3FOkM9JTlFAIacpopgznOUc5ymhlDLKqaCSKqqpoZY66mmgkSaaA+y7pnOdG9ykjXZu0UEnt7nDXe7RRTf36aGXPvoZYJAhhhlhlDHGmWCSKaZj8L2FCRMtvwGffnW9
+  </data>
+ </layer>
+ <objectgroup name="tower" width="40" height="22">
+  <object x="384" y="224" width="64" height="64"/>
+  <object x="544" y="224" width="64" height="64"/>
+  <object x="704" y="224" width="64" height="64"/>
+  <object x="864" y="224" width="64" height="64"/>
+  <object x="1024" y="224" width="64" height="64"/>
+  <object x="928" y="576" width="64" height="64"/>
+  <object x="1088" y="576" width="64" height="64"/>
+  <object x="768" y="576" width="64" height="64"/>
+  <object x="608" y="576" width="64" height="64"/>
+  <object x="448" y="576" width="64" height="64"/>
+  <object x="288" y="576" width="64" height="64"/>
+  <object x="1024" y="384" width="64" height="64"/>
+  <object x="128" y="576" width="64" height="64"/>
+  <object x="352" y="384" width="64" height="64"/>
+  <object x="512" y="384" width="64" height="64"/>
+  <object x="672" y="384" width="64" height="64"/>
+  <object x="192" y="384" width="64" height="64"/>
+  <object x="832" y="384" width="64" height="64"/>
+ </objectgroup>
+ <objectgroup name="road" width="40" height="22">
+  <object x="288" y="160" width="832" height="64">
+   <properties>
+    <property name="direction" value="right"/>
+   </properties>
+  </object>
+  <object x="1088" y="160" width="64" height="384">
+   <properties>
+    <property name="direction" value="down"/>
+   </properties>
+  </object>
+  <object x="160" y="512" width="992" height="64">
+   <properties>
+    <property name="direction" value="left"/>
+   </properties>
+  </object>
+  <object x="128" y="352" width="64" height="224">
+   <properties>
+    <property name="direction" value="up"/>
+   </properties>
+  </object>
+  <object x="128" y="320" width="768" height="64">
+   <properties>
+    <property name="direction" value="right"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="people" width="40" height="22">
+  <object name="baby" x="896" y="288" width="128" height="128"/>
+  <object name="enemy" x="291" y="178" width="32" height="32"/>
+  <object name="nest" x="160" y="128" width="128" height="128"/>
+ </objectgroup>
+ <objectgroup name="barrier" width="40" height="22">
+  <object x="288" y="128" width="864" height="32"/>
+  <object x="288" y="224" width="800" height="32"/>
+  <object x="1056" y="256" width="32" height="224"/>
+  <object x="1152" y="160" width="32" height="416"/>
+  <object x="192" y="480" width="896" height="32"/>
+  <object x="192" y="384" width="704" height="32"/>
+  <object x="192" y="416" width="32" height="64"/>
+  <object x="128" y="288" width="768" height="32"/>
+  <object x="96" y="320" width="32" height="256"/>
+  <object x="128" y="576" width="1024" height="32"/>
+ </objectgroup>
+</map>
