@@ -1,7 +1,7 @@
 #include "GameScene.h"
 #include "ResourceManager.h"
 #include "MenuItemTower.h"
-#include "HelloWorldScene.h"
+#include "IHomeMenuScene.h"
 #include "Utils.h"
 #include <time.h>
 USING_NS_CC;
@@ -93,7 +93,7 @@ bool Game::init()
 		m_goItem->setVisible(false);
 
 		m_backItem = MenuItemImage::create("back.png", "back.png", [](cocos2d::Ref* pSender){
-			auto scene = HelloWorld::createScene();
+			auto scene = IHomeMenu::createScene();
 			Director::getInstance()->replaceScene(scene);
 			Director::getInstance()->resume();
 		});
