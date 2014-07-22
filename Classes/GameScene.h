@@ -55,6 +55,10 @@ public:
 
 	void onEnter() override;
 	void loadData();
+	void loadMenu();
+	void loadPeople();
+	void loadTower();
+	void loadRoadAndBarriers();
 
 	void menuCloseCallback(cocos2d::Ref* pSender);
 	void menuPhysicsCallback(cocos2d::Ref* pSender);

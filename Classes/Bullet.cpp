@@ -5,61 +5,37 @@ Bullet::Bullet()
 {
 }
 
-bool Bullet::initWithTypeAndLevel(int type, int level)
+bool Bullet::initWithSpriteFrameName(std::string spriteFrameName, int type, int level, int damage, float speed)
 {
 	this->setTag(TAG_BULLET);
 	m_type = type;
 	m_level = level;
-	Sprite* bullet = NULL;
+	m_damage = damage;
+	m_speed = speed;
 	m_isDie = false;
-	switch (type)
-	{
-	case TOWER_TYPE_0:
-		switch (level)
-		{
-		case 1:
-			bullet = Sprite::createWithTexture(ResourceManager::getInstance()->bullet_0_1);
-			m_body = PhysicsBody::createCircle(16.0f, MATERIAL_BULLET_0);
-			this->setPhysicsBody(m_body);
-			m_damage = DAMAGE_BULLET_0_1;
-			m_speed = SPEED_BULLET_0;
-			break;
-		case 2:
-			bullet = Sprite::createWithTexture(ResourceManager::getInstance()->bullet_0_2);
-			bullet->setScale(1.1);
-			m_body = PhysicsBody::createCircle(18.0f);
-			this->setPhysicsBody(m_body);
-			m_damage = DAMAGE_BULLET_0_2;
-			m_speed = SPEED_BULLET_0 * 1.2;
-			break;
-		case 3:
-			bullet = Sprite::createWithTexture(ResourceManager::getInstance()->bullet_0_3);
-			bullet->setScale(1.2);
-			m_body = PhysicsBody::createCircle(20.0f);
-			this->setPhysicsBody(m_body);
-			m_damage = DAMAGE_BULLET_0_3;
-			m_speed = SPEED_BULLET_0 * 1.5;
-			break;
-		}
-	default:
-		break;
-	}
+	m_body = PhysicsBody::createCircle(32.0f, MATERIAL_BULLET_0);
+	this->setPhysicsBody(m_body);
 	m_body->setCategoryBitmask(CategoryBitMask_Bullet);
 	m_body->setCollisionBitmask(CollisionBitMask_Bullet);
 	m_body->setContactTestBitmask(ContactTestBitMask_Bullet);
+	Sprite* bullet = Sprite::createWithSpriteFrameName(spriteFrameName);
 	if(!bullet)
 	{
 		return false;
 	}
+	if (level == 2)
+		bullet->setScale(1.1f);
+	else if (level == 3)
+		bullet->setScale(1.2f);
 	this->addChild(bullet);
 
 	return true;
 }
 
-Bullet* Bullet::create(int type, int level)
+Bullet* Bullet::create(std::string spriteFrameName, int type, int level, int damage, float speed)
 {
 	Bullet* bultemp = new Bullet();
-	if(bultemp && bultemp->initWithTypeAndLevel(type, level))
+	if(bultemp && bultemp->initWithSpriteFrameName(spriteFrameName, type, level, damage, speed))
 	{
 		bultemp->autorelease();
 		return bultemp;
@@ -81,13 +57,8 @@ void Bullet::setType(int type)
 {
 	this->m_type = type;
 }
-int Bullet::getLevel()
-{
-	return m_level;
-}
-void Bullet::setLevel(int level)
-{
-	level++;
+void Bullet::setLevel(int level){
+	this->m_level = level;
 }
 int Bullet::getDamage()
 {

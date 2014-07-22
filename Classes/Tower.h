@@ -8,31 +8,43 @@ USING_NS_CC;
 class Tower : public Node
 {
 private:
-	int m_type;
 	int m_level;
+	int m_id;
+	std::string m_name;	//tower name
+	int m_type;	//physics or magic
+	float m_speed;	//attack frequency
+	int m_attack;
+	int m_deltaAttack;	//when upgrade
 	int m_range;
-	float m_speed;
+	int m_deltaRange;	//when upgrade
+	int m_price;
+	int m_deltaPrice;	//when upgrade
+	float m_moneyReturnRate;
+	std::string m_bulletName;
+	int m_bulletSpeed;
+
 	float m_elapsedTime;
 	Enemy* m_target;
 	Sprite* m_sprite;
 	DrawNode* m_circle;
 public:
 	Tower();
-	static Tower* create(int type);
-	bool initWithType(int type);
+	static Tower* create(int id);
+	bool initWithType(int id);
 
 	Enemy* getCloseTarget();
 	void generateBullet(float dt);//生成子弹并且向target发射
 	void shotBullet(Bullet* bullet,Enemy* target); //子弹向目标enemy发射
 
-	int getType();
-	void setType(int type);
+	int getId();
+	void setId(int id);
 	int getlevel();
 	void upgrade();//升级
 	int getRange();
 	void setRange(int r);
 	void showRange(bool);
 
-	static int getPrice(int type, int level);
+	int getUpgradePrice();
+	int getMoneyWhenDeleted();
 };
 

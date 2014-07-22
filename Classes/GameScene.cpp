@@ -27,13 +27,60 @@ bool Game::init()
 		return false;
 	}
 	loadData();
-	m_elapsedTimeMonster = 0;
-	//	m_elapsedTimeLittleBoss = 0;
-	srand((unsigned)time(NULL));
-	ResourceManager* rm = ResourceManager::getInstance();
+	loadMenu();
+	loadPeople();
+	loadTower();
+	loadRoadAndBarriers();
+	
+	this->scheduleUpdate();
+	this->schedule(schedule_selector(Game::moveEnemy), 0.5f);
+	this->schedule(schedule_selector(Game::deleteObject), 0.5f);
+	return true;	
+}
 
+void Game::update(float dt){
+//	deleteObject(dt);
+	addEnemy(dt);
+//	moveEnemy(dt);
+	findEnemy(dt);
+}
+
+void Game::loadData(){
+	HCSVFile* enemyDesc = ResourceManager::getInstance()->enemyDesc;
+	m_numRound = 5;
+	m_curRound = 1;
+	m_isWaiting = false;
+	m_numPerRound = 30;
+	m_curNumInRound = 0;
+	m_timeBetweenRound = 15;
+	m_elapsedTimeRound = 0;
+	m_elapsedTimeMonster = 0;
+	srand((unsigned)time(NULL));
+
+	m_deltaMonsterDefence = std::atoi(enemyDesc->getData(0, 6));
+	m_deltaMonsterGenerateTime = std::atoi(enemyDesc->getData(0, 2));
+	m_deltaMonsterGenerateRate = std::atof(enemyDesc->getData(0, 3));
+	m_numMonster = std::atoi(enemyDesc->getData(0, 4));
+
+	m_deltaLittleBossDefence = std::atoi(enemyDesc->getData(1, 6));
+	m_numLittleBoss = std::atoi(enemyDesc->getData(1, 4));
+
+	m_bigBossAttack = std::atoi(enemyDesc->getData(2, 4));
+	m_numBigBoss = std::atoi(enemyDesc->getData(2, 4));
+
+	m_map = TMXTiledMap::create(MAP1);
+	this->addChild(m_map);
+	m_money = INIT_PRICE;
+}
+
+void Game::loadMenu(){
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
+	m_labelPrice = LabelPrice::create(ResourceManager::getInstance()->background_price_big, m_money);
+	m_labelPrice->setPosition(origin.x + m_labelPrice->getContentSize().width/2, origin.y + 
+		visibleSize.height - m_labelPrice->getContentSize().height);
+	this->addChild(m_labelPrice, ZORDER_LABELPRICE);
 
 	auto physicsItem = MenuItemImage::create("CloseNormal.png",
 		"CloseSelected.png",
@@ -105,207 +152,149 @@ bool Game::init()
 		menu->setPosition(Vec2::ZERO);
 		this->addChild(menu);
 		this->reorderChild(menu, ZORDER_MENU);
+}
 
-		m_money = INIT_PRICE;
-		m_labelPrice = LabelPrice::create(rm->background_price_big, m_money);
-		m_labelPrice->setPosition(origin.x + m_labelPrice->getContentSize().width/2, origin.y + 
-			visibleSize.height - m_labelPrice->getContentSize().height);
-		this->addChild(m_labelPrice, ZORDER_LABELPRICE);
+void Game::loadPeople(){
+	TMXObjectGroup* peopleObjectGroup = m_map->getObjectGroup("people");	//读取对象层“people”
+	ValueMap babyObject = peopleObjectGroup->getObject("baby");	//获取一个name为“baby”的对象
+	float baby_x = babyObject.at("x").asFloat();
+	float baby_y = babyObject.at("y").asFloat();
+	float baby_width = objWidth(babyObject);
+	float baby_height = objHeight(babyObject);
+	m_baby = Baby::create();	//用图片创建一个baby精灵
+	m_baby->m_position = Rect(baby_x, baby_y, baby_width, baby_height);
+	m_baby->setPosition(objPosX(babyObject), objPosY(babyObject));	//设置精灵的位置
+	this->addChild(m_baby);	//把精灵加到场景里
 
-		m_map = TMXTiledMap::create(MAP1);
-		this->addChild(m_map);
+	ValueMap enemyObject = peopleObjectGroup->getObject("enemy");	//获取一个name为“enemy”的对象
+	m_enemyPosition = Vec2(objPosX(enemyObject),objPosY(enemyObject));	//enemy对象的起始位置
+}
 
-		TMXObjectGroup* peopleObjectGroup = m_map->getObjectGroup("people");	//读取对象层“people”
-		ValueMap babyObject = peopleObjectGroup->getObject("baby");	//获取一个name为“baby”的对象
-		float baby_x = babyObject.at("x").asFloat();
-		float baby_y = babyObject.at("y").asFloat();
-		float baby_width = objWidth(babyObject);
-		float baby_height = objHeight(babyObject);
-		m_baby = Baby::create();	//用图片创建一个baby精灵
-		m_baby->m_position = Rect(baby_x, baby_y, baby_width, baby_height);
-		m_baby->setPosition(objPosX(babyObject), objPosY(babyObject));	//设置精灵的位置
-		this->addChild(m_baby);	//把精灵加到场景里
+void Game::loadTower(){
+	ResourceManager* rm = ResourceManager::getInstance();
+	SpriteBatchNode* towerbase = SpriteBatchNode::create(PATH_TOWERBASE);	//用图片创建一个Batch
+	towerbase->setPosition(Vec2::ZERO);	//设置这个Batch的位置
+	this->addChild(towerbase, ZORDER_TOWER);	//将这个Batch加到场景里
 
-		ValueMap enemyObject = peopleObjectGroup->getObject("enemy");	//获取一个name为“enemy”的对象
-		m_enemyPosition = Vec2(objPosX(enemyObject),objPosY(enemyObject));	//enemy对象的起始位置
+	TMXObjectGroup* towerObjectGroup = m_map->getObjectGroup("tower");	//读取对象层“tower”
+	ValueVector towerObjects = towerObjectGroup->getObjects();	//获得“tower”对象层里面的所有对象
+	int towerId = 0;
+	for (ValueVector::iterator it = towerObjects.begin(); it != towerObjects.end(); it++, towerId++){//对“tower”层里的每一个对象
+		ValueMap towerObject = it->asValueMap();	//得到这个对象的属性
+		int tower_x = objPosX(towerObject);
+		int tower_y = objPosY(towerObject);
+		Sprite* tower = Sprite::createWithTexture(towerbase->getTexture());	//用Batch创建一个精灵来表示可创建Tower的位置
+		tower->setPosition(tower_x, tower_y);	//设置精灵的位置
+		towerbase->addChild(tower);	//把精灵加到场景里
+//		auto actionRepeateFadeOutIn = RepeatForever::create(Sequence::create(FadeOut::create(1), FadeIn::create(1), NULL));	//创建一个淡入淡出特效
+//		tower->runAction(actionRepeateFadeOutIn);	//给精灵赋予特效
 
-		SpriteBatchNode* towerbase = SpriteBatchNode::create(PATH_TOWERBASE);	//用图片创建一个Batch
-		towerbase->setPosition(Vec2::ZERO);	//设置这个Batch的位置
-		this->addChild(towerbase, ZORDER_TOWER);	//将这个Batch加到场景里
+		auto menu = Menu::create();
+		std::string type = towerObject.at("type").asString();	//可建的塔的类型
+		std::vector<std::string> types;
+		split(type, ",", &types);
+		for (int j = 0; j < types.size(); j++)
+		{
+			int temp = std::atoi(types.at(j).c_str());
+			std::string spriteFrameName = rm->towerData->getData(temp, 1);
+			Sprite* towerItemSprite = Sprite::createWithSpriteFrameName(spriteFrameName);
+			if (towerItemSprite){
+				auto towerItem = MenuItemTower::create(std::atoi(rm->towerData->getData(temp, 8)), towerItemSprite, towerItemSprite,
+					CC_CALLBACK_1(Game::towerCreateCallback, this, temp, tower, towerId));
+				towerItem->setPosition(Vec2(j * towerItem->getContentSize().width,0));//
+				menu->addChild(towerItem);
+			}			
+		}
+		menu->setPosition(Vec2(tower->getPositionX(), tower->getPositionY() + tower->getContentSize().height));
+		m_menus.pushBack(menu);
 
-		TMXObjectGroup* towerObjectGroup = m_map->getObjectGroup("tower");	//读取对象层“tower”
-		ValueVector towerObjects = towerObjectGroup->getObjects();	//获得“tower”对象层里面的所有对象
-		int towerId = 0;
-		for (ValueVector::iterator it = towerObjects.begin(); it != towerObjects.end(); it++, towerId++){//对“tower”层里的每一个对象
-			ValueMap towerObject = it->asValueMap();	//得到这个对象的属性
-			int tower_x = objPosX(towerObject);
-			int tower_y = objPosY(towerObject);
-			Sprite* tower = Sprite::createWithTexture(towerbase->getTexture());	//用Batch创建一个精灵来表示可创建Tower的位置
-			tower->setPosition(tower_x, tower_y);	//设置精灵的位置
-			towerbase->addChild(tower);	//把精灵加到场景里
-			//		auto actionRepeateFadeOutIn = RepeatForever::create(Sequence::create(FadeOut::create(1), FadeIn::create(1), NULL));	//创建一个淡入淡出特效
-			//		tower->runAction(actionRepeateFadeOutIn);	//给精灵赋予特效
+		Sprite* updateSprite = Sprite::create("update.png");	//升级按钮
+		auto upgradeItem = MenuItemTower::create(0, updateSprite, updateSprite, CC_CALLBACK_1(Game::towerUpgradeCallback, this, towerId));
+		upgradeItem->setPosition(0, upgradeItem->getContentSize().height);
+		upgradeItem->setTag(TAG_UPGRADE_ITEM);
 
-			auto menu = Menu::create();
-			std::string type = towerObject.at("type").asString();
-			std::vector<std::string> types;
-			split(type, ",", &types);
-			for (int j = 0; j < types.size(); j++)
-			{
-				int temp = std::atoi(types.at(j).c_str());
-				Sprite* towerItemSprite = NULL;
-				switch (temp)
-				{
-				case 0:
-					towerItemSprite = Sprite::createWithTexture(rm->tower0);
-					break;
-				case 1:
-					towerItemSprite = Sprite::createWithTexture(rm->tower1);
-					break;
-				}
-				if (towerItemSprite){
-					auto towerItem = MenuItemTower::create(Tower::getPrice(temp, 1), towerItemSprite, towerItemSprite,
-						CC_CALLBACK_1(Game::towerCreateCallback, this, temp, tower, towerId));
-					towerItem->setPosition(Vec2(j * towerItem->getContentSize().width,0));//
-					menu->addChild(towerItem);
-				}			
-			}
-			menu->setPosition(Vec2(tower->getPositionX(), tower->getPositionY() + tower->getContentSize().height));
-			m_menus.pushBack(menu);
+		auto deleteItem = MenuItemImage::create("sell.png", "sell.png", CC_CALLBACK_1(Game::towerDeleteCallback, this, towerId, tower));
+		deleteItem->setPosition(0, -deleteItem->getContentSize().height);
 
-			Sprite* updateSprite = Sprite::create("update.png");
-			auto upgradeItem = MenuItemTower::create(0, updateSprite, updateSprite, CC_CALLBACK_1(Game::towerUpgradeCallback, this, towerId));
-			//		upgradeItem->setPosition(-upgradeItem->getContentSize().width/2, upgradeItem->getContentSize().height/2);
-			upgradeItem->setPosition(0, upgradeItem->getContentSize().height);
-			upgradeItem->setTag(TAG_UPGRADE_ITEM);
+		auto uMenu = Menu::create(upgradeItem, deleteItem, NULL);
+		uMenu->setPosition(tower->getPosition());
+		m_upgradeMenus.pushBack(uMenu);
 
-			auto deleteItem = MenuItemImage::create("sell.png", "sell.png", CC_CALLBACK_1(Game::towerDeleteCallback, this, towerId, tower));
-			//		deleteItem->setPosition(-deleteItem->getContentSize().width/2, -deleteItem->getContentSize().height/2);
-			deleteItem->setPosition(0, -deleteItem->getContentSize().height);
-
-			auto uMenu = Menu::create(upgradeItem, deleteItem, NULL);
-			uMenu->setPosition(tower->getPosition());
-			m_upgradeMenus.pushBack(uMenu);
-
-			auto listener = EventListenerTouchOneByOne::create();	//触摸监听器
-			listener->setSwallowTouches(true);
-			listener->onTouchBegan = [towerId, tower, this](Touch* touch, Event* event){
-				auto target = event->getCurrentTarget();
-				if (tower->getTextureRect().containsPoint(target->convertTouchToNodeSpace(touch))){
-					//				tower->stopAction(actionRepeateFadeOutIn);
-					Menu* menu = this->m_menus.at(towerId);
-					if (menu->getParent() == NULL){
-						for (Node* node : menu->getChildren())
-						{
-							MenuItemTower* item = dynamic_cast<MenuItemTower*>(node);
-							if (item){
-								if (item->getPrice() > m_money){
-									item->setEnabled(false);
-								}else
-								{
-									item->setEnabled(true);
-								}
+		auto listener = EventListenerTouchOneByOne::create();	//触摸监听器
+		listener->setSwallowTouches(true);
+		listener->onTouchBegan = [towerId, tower, this](Touch* touch, Event* event){
+			auto target = event->getCurrentTarget();
+			if (tower->getTextureRect().containsPoint(target->convertTouchToNodeSpace(touch))){
+				//				tower->stopAction(actionRepeateFadeOutIn);
+				Menu* menu = this->m_menus.at(towerId);
+				if (menu->getParent() == NULL){
+					for (Node* node : menu->getChildren())
+					{
+						MenuItemTower* item = dynamic_cast<MenuItemTower*>(node);
+						if (item){
+							if (item->getPrice() > m_money){
+								item->setEnabled(false);
+							}else
+							{
+								item->setEnabled(true);
 							}
 						}
-						this->addChild(menu);
-						this->reorderChild(menu, ZORDER_MENUITEMTOWER);
 					}
+					this->addChild(menu);
+					this->reorderChild(menu, ZORDER_MENUITEMTOWER);
 				}
-				else
-				{
-					Menu* menu = this->m_menus.at(towerId);
-					this->removeChild(menu, false);
-				}
-				return false;
-			};
-			this->_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, tower);
-		}
-		towerId = 0;
-
-		TMXObjectGroup* roadObjectGroup = m_map->getObjectGroup("road");	//读取对象层“road”
-		ValueVector roadObjects = roadObjectGroup->getObjects();	//获得“road”对象层里面的所有对象
-		for (ValueVector::iterator it = roadObjects.begin(); it != roadObjects.end(); it++)//对“road”层里的每一个对象
-		{
-			ValueMap roadObject = it->asValueMap();	//得到这个对象的属性
-			std::string directionStr = roadObject.at("direction").asString();
-			int direction;
-			if ("left" == directionStr){
-				direction = ROAD_LEFT;
-			} else if ("up" == directionStr) {
-				direction = ROAD_UP;
-			} else if ("right" == directionStr) {
-				direction = ROAD_RIGHT;
-			} else {
-				direction = ROAD_DOWN;
 			}
-			m_roads.push_back(Road(roadObject.at("x").asFloat(), roadObject.at("y").asFloat(),
-				objWidth(roadObject), objHeight(roadObject),
-				direction));	//把这个对象看作长方形储存到数组里
+			else
+			{
+				Menu* menu = this->m_menus.at(towerId);
+				this->removeChild(menu, false);
+			}
+			return false;
+		};
+		this->_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, tower);
+	}
+//	towerId = 0;
+}
+
+void Game::loadRoadAndBarriers(){
+	TMXObjectGroup* roadObjectGroup = m_map->getObjectGroup("road");	//读取对象层“road”
+	ValueVector roadObjects = roadObjectGroup->getObjects();	//获得“road”对象层里面的所有对象
+	for (ValueVector::iterator it = roadObjects.begin(); it != roadObjects.end(); it++)//对“road”层里的每一个对象
+	{
+		ValueMap roadObject = it->asValueMap();	//得到这个对象的属性
+		std::string directionStr = roadObject.at("direction").asString();
+		int direction;
+		if ("left" == directionStr){
+			direction = ROAD_LEFT;
+		} else if ("up" == directionStr) {
+			direction = ROAD_UP;
+		} else if ("right" == directionStr) {
+			direction = ROAD_RIGHT;
+		} else {
+			direction = ROAD_DOWN;
 		}
+		m_roads.push_back(Road(roadObject.at("x").asFloat(), roadObject.at("y").asFloat(),
+			objWidth(roadObject), objHeight(roadObject),
+			direction));	//把这个对象看作长方形储存到数组里
+	}
 
-		PhysicsMaterial staticMaterial(PHYSICS_INFINITY, 0, 0.5f);
-		TMXObjectGroup* barrierObjectGroup = m_map->getObjectGroup("barrier");	//读取对象层“barrier”
-		ValueVector barrierObjects = barrierObjectGroup->getObjects();	//获得“barrier”对象层里面的所有对象
-		for (ValueVector::iterator it = barrierObjects.begin(); it != barrierObjects.end(); it++)//对“barrier”层里的每一个对象
-		{
-			ValueMap barrierObject = it->asValueMap();	//得到这个对象的属性
-			Node* node = Node::create();
-			auto body = PhysicsBody::createBox(Size(objWidth(barrierObject), objHeight(barrierObject)), staticMaterial);
-			body->setDynamic(false);
-			body->setCategoryBitmask(CategoryBitMask_Barrier);
-			body->setContactTestBitmask(ContactTestBitMask_Barrier);
-			body->setCollisionBitmask(CollisionBitMask_Barrier);
-			node->setPhysicsBody(body);
-			node->setPosition(objPosX(barrierObject), objPosY(barrierObject));
-			this->addChild(node);
-		}
-
-		this->scheduleUpdate();
-		// 	this->schedule(schedule_selector(Game::findEnemy), 1.0f);
-		// 	this->schedule(schedule_selector(Game::addEnemy), 2.0f);
-		this->schedule(schedule_selector(Game::moveEnemy), 0.5f);
-		this->schedule(schedule_selector(Game::deleteObject), 0.5f);
-		return true;
+	PhysicsMaterial staticMaterial(PHYSICS_INFINITY, 0, 0.5f);
+	TMXObjectGroup* barrierObjectGroup = m_map->getObjectGroup("barrier");	//读取对象层“barrier”
+	ValueVector barrierObjects = barrierObjectGroup->getObjects();	//获得“barrier”对象层里面的所有对象
+	for (ValueVector::iterator it = barrierObjects.begin(); it != barrierObjects.end(); it++)//对“barrier”层里的每一个对象
+	{
+		ValueMap barrierObject = it->asValueMap();	//得到这个对象的属性
+		Node* node = Node::create();
+		auto body = PhysicsBody::createBox(Size(objWidth(barrierObject), objHeight(barrierObject)), staticMaterial);
+		body->setDynamic(false);
+		body->setCategoryBitmask(CategoryBitMask_Barrier);
+		body->setContactTestBitmask(ContactTestBitMask_Barrier);
+		body->setCollisionBitmask(CollisionBitMask_Barrier);
+		node->setPhysicsBody(body);
+		node->setPosition(objPosX(barrierObject), objPosY(barrierObject));
+		this->addChild(node);
+	}
 }
-
-void Game::update(float dt){
-	//	deleteObject(dt);
-	addEnemy(dt);
-	//	moveEnemy(dt);
-	findEnemy(dt);
-}
-
-void Game::loadData(){
-	HCSVFile* enemyDesc = ResourceManager::getInstance()->enemyDesc;
-	m_numRound = 5;
-	m_curRound = 1;
-	m_numPerRound = 30;
-	m_curNumInRound = 0;
-	m_timeBetweenRound = 15;
-	m_elapsedTimeRound = 0;
-	m_isWaiting = false;
-
-	m_deltaMonsterDefence = std::atoi(enemyDesc->getData(0, 6));
-	m_deltaMonsterGenerateTime = std::atoi(enemyDesc->getData(0, 2));
-	m_deltaMonsterGenerateRate = std::atof(enemyDesc->getData(0, 3));
-	m_numMonster = std::atoi(enemyDesc->getData(0, 4));
-
-	m_deltaLittleBossDefence = std::atoi(enemyDesc->getData(1, 6));
-	m_numLittleBoss = std::atoi(enemyDesc->getData(1, 4));
-
-	m_bigBossAttack = std::atoi(enemyDesc->getData(2, 4));
-	m_numBigBoss = std::atoi(enemyDesc->getData(2, 4));
-}
-
-// void Game::addEnemy(float dt)
-// {	
-// 	Enemy* enemy = Enemy::create("ascarid");
-// 	if (!enemy)
-// 		return;
-// 	enemy->setPosition(m_enemyPosition);
-// 	this->addChild(enemy);
-// 	m_enemies.pushBack(enemy);
-// }
 
 void Game::addEnemy(float dt){
 	if (m_isWaiting){
@@ -508,7 +497,7 @@ void Game::towerCreateCallback(cocos2d::Ref* pSender, int type, Sprite* towerbas
 					menuItemTower->setEnabled(false);
 				} else
 				{
-					int price = tower->getPrice(tower->getType(), level);
+					int price = tower->getUpgradePrice();
 					menuItemTower->setPrice(price);
 					if (price > m_money)
 						menuItemTower->setEnabled(false);
@@ -520,7 +509,6 @@ void Game::towerCreateCallback(cocos2d::Ref* pSender, int type, Sprite* towerbas
 				tower->showRange(true);
 				this->addChild(upgradeMenu);
 				this->reorderChild(upgradeMenu, ZORDER_MENUITEMTOWER);
-				//				tower->addChild(upgradeMenu);
 			}
 		}
 		else
@@ -528,7 +516,6 @@ void Game::towerCreateCallback(cocos2d::Ref* pSender, int type, Sprite* towerbas
 			tower->showRange(false);
 			auto upgradeMenu = m_upgradeMenus.at(menuId);
 			this->removeChild(upgradeMenu, false);
-			//			tower->removeChild(upgradeMenu, false);
 		}
 		return false;
 	};
@@ -541,7 +528,8 @@ void Game::towerUpgradeCallback(cocos2d::Ref* pSender, int towerId)
 	menu->removeFromParentAndCleanup(false);
 	Tower* tower = static_cast<Tower*>(this->getChildByTag(towerId));
 	tower->upgrade();
-	this->addMoney(-tower->getPrice(tower->getType(), tower->getlevel()));
+	MenuItemTower* menuItemTower = static_cast<MenuItemTower*>(pSender);
+	this->addMoney(-menuItemTower->getPrice());
 }
 
 void Game::towerDeleteCallback(cocos2d::Ref* pSender, int towerId, Sprite* towerbase)
@@ -551,7 +539,7 @@ void Game::towerDeleteCallback(cocos2d::Ref* pSender, int towerId, Sprite* tower
 	this->addChild(towerbase);
 	towerbase->release();
 	Tower* tower = static_cast<Tower*>(this->getChildByTag(towerId));
-	this->addMoney(tower->getPrice(tower->getType(), tower->getlevel()) * 0.5f);
+	this->addMoney(tower->getMoneyWhenDeleted());
 	this->removeChild(tower);
 	this->m_towers.eraseObject(tower);
 }

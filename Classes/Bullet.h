@@ -15,12 +15,12 @@ private:
 	bool m_isDie;
 public:
 	Bullet();
-	bool initWithTypeAndLevel(int type, int level);
-	static Bullet* create(int type, int level);
+	bool initWithSpriteFrameName(std::string spriteFrameNam, int type, int level, int damage, float speed);
+	static Bullet* create(std::string spriteFrameNam, int type, int level, int damage, float speed);
 
 	int getType();
 	void setType(int type);
-	int getLevel();
+	inline int getLevel(){return m_level;}
 	void setLevel(int level);
 	int getDamage();
 	void setDamage(int damage);

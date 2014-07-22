@@ -13,7 +13,7 @@ public:
 #define ROAD_DOWN 3
 #define ROAD_NONE 4
 	//----------------Tag------------------------
-#define TAG_UPGRADE_ITEM 90
+#define TAG_UPGRADE_ITEM 96
 #define TAG_LABELPRICE 99
 #define TAG_BULLET 98
 #define TAG_ENEMY 97
@@ -43,40 +43,10 @@ public:
 
 	//----------------Tower----------------------
 #define MAX_RANGE 9999
-#define TOWER_TYPE_0 0
-#define TOWER_TYPE_1 1
-#define TOWER_TYPE_2 2
-#define TOWER_TYPE_3 3
-#define TOWER_TYPE_4 4
-#define TOWER_TYPE_5 5
-	Texture2D* tower0;
-	Texture2D* tower1;
-
+	HCSVFile * towerData;
 	//----------------Bullet---------------------
-#define SPEED_BULLET_0 200
 #define MATERIAL_BULLET_0 cocos2d::PhysicsMaterial(1.0, 0.0, 1.0)
-#define DAMAGE_BULLET_0_1 20
-#define DAMAGE_BULLET_0_2 30
-#define DAMAGE_BULLET_0_3 50
-	Texture2D* bullet_0_1;
-	Texture2D* bullet_0_2;
-	Texture2D* bullet_0_3;
 	//----------------Enemy----------------------
-#define VIRUS_TYPE_0 0
-#define VIRUS_TYPE_1 1 
-#define VIRUS_TYPE_2 2
-#define VIRUS_TYPE_3 3
-#define VIRUS_TYPE_4 4
-#define VIRUS_TYPE_5 5
-#define DAMAGE_ENEMY_0 1
-#define SPEED_ENEMY_0 50
-#define DEFENCE_MAGICAL_0 10
-#define DEFENCE_PHYSICS_0 10
-#define PRICE_ENEMY_0 50
-#define ANIMATION_WALK_RIGHT_0 "walk_right_0"
-#define ANIMATION_WALK_UP_0 "walk_up_0"
-#define ANIMATION_WALK_LEFT_0 "walk_left_0"
-#define ANIMATION_WALK_DOWN_0 "walk_down_0"
 	HCSVFile * enemyData;
 	HCSVFile * enemyDesc;
 	Texture2D* hpBar;

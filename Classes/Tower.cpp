@@ -6,27 +6,28 @@ Tower::Tower()
 {
 }
 
-bool Tower::initWithType(int type)
+bool Tower::initWithType(int id)
 {
+	HCSVFile* towerData = ResourceManager::getInstance()->towerData;
 	m_target = NULL;
-	m_type = type;
 	m_level = 1;
+	m_id = id;
+	m_name = towerData->getData(id, 1);
+	m_type = std::atoi(towerData->getData(id, 2));
+	m_speed = std::atof(towerData->getData(id, 3));
+	m_attack = std::atoi(towerData->getData(id, 4));
+	m_deltaAttack = std::atoi(towerData->getData(id, 5));
+	m_range = std::atoi(towerData->getData(id, 6));
+	m_deltaRange = std::atoi(towerData->getData(id, 7));
+	m_price = std::atoi(towerData->getData(id, 8));
+	m_deltaPrice = std::atoi(towerData->getData(id, 9));
+	m_moneyReturnRate = std::atof(towerData->getData(id, 10));
+	m_bulletName = towerData->getData(id, 11);
+	m_bulletSpeed = std::atoi(towerData->getData(id, 12));
 	m_elapsedTime = 0.0f;
-	switch (m_type)//根据Id从csv读名字，然后从Plist读图片。
-	{
-	case TOWER_TYPE_0:
-		m_sprite = Sprite::createWithTexture(ResourceManager::getInstance()->tower0);
-		this->addChild(m_sprite);
-		m_range = 150;
-		m_speed = 1;
-		break;
-	case TOWER_TYPE_1:
-		m_sprite = Sprite::createWithTexture(ResourceManager::getInstance()->tower1);
-		this->addChild(m_sprite);
-		m_range = 150;
-		m_speed = 1;
-		break;
-	}
+	//根据名字，从Plist读图片。
+	m_sprite = Sprite::createWithSpriteFrameName(m_name);
+	this->addChild(m_sprite);
 	if (m_sprite){
 		this->setContentSize(m_sprite->getContentSize());
 	}
@@ -37,10 +38,10 @@ bool Tower::initWithType(int type)
 	return true;
 }
 
-Tower* Tower::create(int type)
+Tower* Tower::create(int id)
 {
 	Tower* temp = new Tower();
-	if( temp && temp->initWithType(type)) {
+	if( temp && temp->initWithType(id)) {
 		temp->autorelease();
 		return temp;
 	}
@@ -83,18 +84,16 @@ void Tower::generateBullet(float dt)
 		m_target = getCloseTarget();
 		if(!m_target)
 			return ;
-		Bullet* t_bullet = Bullet::create(m_type, m_level);
 
+		Bullet* t_bullet = Bullet::create(m_bulletName, m_type, m_level, m_attack, m_speed);
 		if(!t_bullet)
 			return;
-
 		t_bullet->setPosition(this->getPosition());
-		Game* gamelayer = dynamic_cast<Game*>(this->getParent());
-		gamelayer->addBullet(t_bullet);
-		//把子弹放入vector中
-		gamelayer->addChild(t_bullet);
-		//发射子弹
-		shotBullet(t_bullet,m_target);
+
+		Game* gamelayer = static_cast<Game*>(this->getParent());
+		gamelayer->addBullet(t_bullet); //把子弹放入vector中
+		gamelayer->addChild(t_bullet); 
+		shotBullet(t_bullet, m_target);	//发射子弹
 	}
 }
 
@@ -113,13 +112,13 @@ void Tower::shotBullet(Bullet* bullet, Enemy* target)
 }
 
 //-------------------------get/sets------------------------
-int Tower::getType()
+int Tower::getId()
 {
-	return m_type;
+	return m_id;
 }
-void Tower::setType(int type)
+void Tower::setId(int id)
 {
-	this->m_type = type;
+	this->m_id = id;
 }
 int Tower::getlevel()
 {
@@ -133,8 +132,10 @@ void Tower::upgrade()
 	else if (m_level == 3)
 		m_sprite->setScale(1.2f);
 	m_circle->setVisible(false);
-//	if m_range changes:
-//	m_circle->drawDot(Vec2::ZERO, m_range, Color4F(0.2f, 0.2f, 0.2f, 0.8f));
+	m_attack += m_deltaAttack;
+	m_range += m_deltaRange;
+	m_price += m_deltaPrice;
+	m_circle->drawDot(Vec2::ZERO, m_range, Color4F(0.2f, 0.2f, 0.2f, 0.8f));
 }
 int Tower::getRange()
 {
@@ -147,22 +148,10 @@ void Tower::setRange(int r)
 void Tower::showRange(bool b){
 	m_circle->setVisible(b);
 }
-int Tower::getPrice(int type, int level){
-	switch (type)
-	{
-	case TOWER_TYPE_0:
-		switch (level)
-		{
-		case 1:
-			return 100;
-		case 2:
-			return 200;
-		case 3:
-			return 300;
-		default:
-			return 9999;
-		}
-	default:
-		return 9999;
-	}
+int Tower::getUpgradePrice(){
+	return m_price + m_deltaPrice;
+}
+int Tower::getMoneyWhenDeleted(){
+	float ret = m_price * m_moneyReturnRate;
+	return (int)ret;
 }

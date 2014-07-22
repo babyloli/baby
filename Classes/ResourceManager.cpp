@@ -7,6 +7,8 @@ void ResourceManager::init(){
 	enemyData->openFile("data/monsters.csv");
 	enemyDesc = new HCSVFile();
 	enemyDesc->openFile("data/monsterDesign.csv");
+	towerData = new HCSVFile();
+	towerData->openFile("data/towerDesign.csv");
 
 	auto director = Director::getInstance();
 	auto textureCache = director->getTextureCache();
@@ -14,17 +16,13 @@ void ResourceManager::init(){
 	SpriteFrameCache* spriteFrameCache = SpriteFrameCache::getInstance();
 	spriteFrameCache->addSpriteFramesWithFile("images/enemy/Monsters.plist");
 	spriteFrameCache->addSpriteFramesWithFile("images/baby/baby1.plist");
+	spriteFrameCache->addSpriteFramesWithFile("images/tower/Towers.plist");
 	loadAnimation();
 
 	//---------------------Texture----------------------------
-	tower0 = textureCache->addImage("images/tower/tower0.png");
-	tower1 = textureCache->addImage("images/tower/tower0.png");
 	background_price = textureCache->addImage("images/priceBackground.png");
 	background_price_big = textureCache->addImage("images/priceBackground2.png");
 	hpBar = textureCache->addImage("images/enemy/Maxhpbar.png");
-	bullet_0_1 = textureCache->addImage("images/tower/bullet_0_1.png");
-	bullet_0_2 = textureCache->addImage("images/tower/bullet_0_1.png");
-	bullet_0_3 = textureCache->addImage("images/tower/bullet_0_1.png");
 }
 
 void ResourceManager::loadAnimation(const char* mosterName, const char* direction, int size, float delay, const std::string &name){
@@ -79,11 +77,12 @@ ResourceManager* ResourceManager::getInstance(){
 
 ResourceManager::~ResourceManager()
 {
-	tower0->release();
 	if (enemyData)
 		delete enemyData;
 	if (enemyDesc)
 		delete enemyDesc;
+	if (towerData)
+		delete towerData;
 };
 
 ResourceManager::ResourceManager()
