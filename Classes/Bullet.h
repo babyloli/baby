@@ -11,12 +11,14 @@ private:
 	int m_level;
 	int m_damage;
 	float m_speed;
+	bool m_rotateEnable;
+	bool m_isCollide;
 	PhysicsBody* m_body;
 	bool m_isDie;
 public:
 	Bullet();
-	bool initWithSpriteFrameName(std::string spriteFrameNam, int type, int level, int damage, float speed);
-	static Bullet* create(std::string spriteFrameNam, int type, int level, int damage, float speed);
+	bool initWithSpriteFrameName(std::string spriteFrameNam, int type, int level, int damage, float speed, bool rotateEnable, bool isCollide);
+	static Bullet* create(std::string spriteFrameNam, int type, int level, int damage, float speed, bool rotateEnable, bool isCollide);
 
 	int getType();
 	void setType(int type);

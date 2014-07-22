@@ -24,6 +24,9 @@ bool Tower::initWithType(int id)
 	m_moneyReturnRate = std::atof(towerData->getData(id, 10));
 	m_bulletName = towerData->getData(id, 11);
 	m_bulletSpeed = std::atoi(towerData->getData(id, 12));
+	m_rotateEnable = std::atoi(towerData->getData(id, 13)) ? true : false;
+	m_bulletRotateEnable = std::atoi(towerData->getData(id, 14)) ? true : false;
+	m_bulletCollide = std::atoi(towerData->getData(id, 15)) ? true : false;
 	m_elapsedTime = 0.0f;
 	//根据名字，从Plist读图片。
 	m_sprite = Sprite::createWithSpriteFrameName(m_name);
@@ -85,7 +88,7 @@ void Tower::generateBullet(float dt)
 		if(!m_target)
 			return ;
 
-		Bullet* t_bullet = Bullet::create(m_bulletName, m_type, m_level, m_attack, m_bulletSpeed);
+		Bullet* t_bullet = Bullet::create(m_bulletName, m_type, m_level, m_attack, m_bulletSpeed, m_bulletRotateEnable, m_bulletCollide);
 		if(!t_bullet)
 			return;
 		t_bullet->setPosition(this->getPosition());
@@ -106,8 +109,10 @@ void Tower::shotBullet(Bullet* bullet, Enemy* target)
 	float angle = acos(Vec2::dot(direction, Vec2(0.0f, -1.0f))) * 57.325f;
 	if (direction.x > 0)
 		angle = -angle;
-	this->setRotation(angle);
-	bullet->setRotation(angle);
+	if (m_rotateEnable)
+		this->setRotation(angle);
+	if (!m_bulletRotateEnable)
+		bullet->setRotation(angle);
 	bullet->setBulletVelocity(direction * bullet->getSpeed());
 }
 

@@ -46,7 +46,7 @@ public:
 #define MAX_RANGE 9999
 	HCSVFile * towerData;
 	//----------------Bullet---------------------
-#define MATERIAL_BULLET_0 cocos2d::PhysicsMaterial(0.5, 0.0, 1.0)
+#define MATERIAL_BULLET_0 cocos2d::PhysicsMaterial(0.2, 0.0, 1.0)
 	//----------------Enemy----------------------
 	HCSVFile * enemyData;
 	HCSVFile * enemyDesc;

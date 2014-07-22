@@ -5,7 +5,7 @@ Bullet::Bullet()
 {
 }
 
-bool Bullet::initWithSpriteFrameName(std::string spriteFrameName, int type, int level, int damage, float speed)
+bool Bullet::initWithSpriteFrameName(std::string spriteFrameName, int type, int level, int damage, float speed, bool rotateEnable, bool isCollide)
 {
 	this->setTag(TAG_BULLET);
 	this->setZOrder(ZORDER_TOWER);
@@ -13,11 +13,21 @@ bool Bullet::initWithSpriteFrameName(std::string spriteFrameName, int type, int 
 	m_level = level;
 	m_damage = damage;
 	m_speed = speed;
+	m_rotateEnable = rotateEnable;
+	m_isCollide = isCollide;
 	m_isDie = false;
 	m_body = PhysicsBody::createCircle(16.0f, MATERIAL_BULLET_0);
 	this->setPhysicsBody(m_body);
-	m_body->setCategoryBitmask(CategoryBitMask_Bullet);
-	m_body->setCollisionBitmask(CollisionBitMask_Bullet);
+	if (isCollide)
+	{
+		m_body->setCollisionBitmask(CollisionBitMask_Bullet);
+		m_body->setCategoryBitmask(CategoryBitMask_Bullet);
+	}
+	else
+	{
+		m_body->setCollisionBitmask(CollisionBitMask_Bullet2);
+		m_body->setCategoryBitmask(CategoryBitMask_Bullet2);
+	}
 	m_body->setContactTestBitmask(ContactTestBitMask_Bullet);
 	Sprite* bullet = Sprite::createWithSpriteFrameName(spriteFrameName);
 	if(!bullet)
@@ -29,14 +39,17 @@ bool Bullet::initWithSpriteFrameName(std::string spriteFrameName, int type, int 
 	else if (level == 3)
 		bullet->setScale(1.2f);
 	this->addChild(bullet);
-
+	if (m_rotateEnable){
+		auto action = RepeatForever::create(RotateBy::create(0.5f, 360.0f));
+		bullet->runAction(action);
+	}
 	return true;
 }
 
-Bullet* Bullet::create(std::string spriteFrameName, int type, int level, int damage, float speed)
+Bullet* Bullet::create(std::string spriteFrameName, int type, int level, int damage, float speed, bool rotateEnable, bool isCollide)
 {
 	Bullet* bultemp = new Bullet();
-	if(bultemp && bultemp->initWithSpriteFrameName(spriteFrameName, type, level, damage, speed))
+	if(bultemp && bultemp->initWithSpriteFrameName(spriteFrameName, type, level, damage, speed, rotateEnable, isCollide))
 	{
 		bultemp->autorelease();
 		return bultemp;
