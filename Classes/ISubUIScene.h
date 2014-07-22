@@ -69,4 +69,20 @@ private:
 };
 
 
+
+
+class IShop : public cocos2d::Layer
+{
+public:
+	static Scene* createScene();
+	virtual bool init();
+	CREATE_FUNC(IShop);
+	void onTouchCloseItem(Object* pSender, TouchEventType type);
+	void onTouchBuyButton(Object* pSender, TouchEventType type);
+	int coins;
+private:
+
+};
+
+
 #endif

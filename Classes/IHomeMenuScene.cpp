@@ -36,7 +36,7 @@ bool IHomeMenu::init()
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
 
-	auto bgImage = Sprite::create("bg.png");
+	auto bgImage = Sprite::create("UI/bg.png");
 	bgImage->setPosition(Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2));
 	this->addChild(bgImage, -5);
 
@@ -79,8 +79,27 @@ bool IHomeMenu::init()
 	}
 	auto bgAnimation = Animation::createWithSpriteFrames(oryzaeFrames,1.0f/6.0f);
 	bgOryzae->runAction(RepeatForever::create(Animate::create(bgAnimation)));
-
+	Button *shopButton=Button::create("store_1/shopbutton01.png","store_1/shopbutton02.png");
+	shopButton->setPosition(Vec2(1200,680));
+	shopButton->addTouchEventListener(this,toucheventselector(IHomeMenu::onTouchShopButton));
+	this->addChild(shopButton);
+	auto userdefault=UserDefault::sharedUserDefault();
+	if(!userdefault->getBoolForKey("isExisted")){
+		userdefault->setIntegerForKey("myGold",0);
+	    userdefault->setIntegerForKey("Item1",0);
+     	userdefault->setIntegerForKey("Item2",0);
+	    userdefault->setIntegerForKey("Item3",0);
+     	userdefault->setIntegerForKey("Item4",0);
+	    userdefault->setIntegerForKey("Item5",0);
+	    userdefault->setIntegerForKey("Stage",0);
+    	userdefault->setIntegerForKey("Level",0);
+	}
     return true;
+}
+
+void IHomeMenu::onTouchShopButton(Object* pSender, TouchEventType type){
+	auto shopUI = IShop::create();
+	this->addChild(shopUI);
 }
 
 void IHomeMenu::onTouchButton(Object* pSender, TouchEventType type)

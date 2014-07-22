@@ -12,7 +12,12 @@ const int UI_BUTTON_CLOSESELECTOR = 10;
 const int UI_CHECKBOX_BACKGROUND_MUSIC = 11;
 const int UI_CHECKBOX_SOUND_EFFECT = 12;
 const int UI_BUTTON_CLOSESETTER = 18;
-
+const int UI_BUTTON_CLOSESHOP=29;
+const int UI_BUTTON_BUY_ITEM1=32;
+const int UI_BUTTON_BUY_ITEM2=36;
+const int UI_BUTTON_BUY_ITEM3=44;
+const int UI_BUTTON_BUY_ITEM4=48;
+const int UI_BUTTON_BUY_ITEM5=50;
 
 Scene* IModeSelector::createScene()
 {
@@ -263,4 +268,99 @@ TableViewCell* IGameLevelSelector::tableCellAtIndex(TableView* table, ssize_t id
 ssize_t IGameLevelSelector::numberOfCellsInTableView(TableView* table)
 {
 	return 10;
+}
+
+Scene* IShop::createScene()
+{
+	auto scene = Scene::create();
+	auto layer = IShop::create();
+	scene->addChild(layer);
+	return scene;
+}
+
+bool IShop::init()
+{
+	if (!Layer::init())
+	{
+		return false;
+	}
+
+	auto ShopUI = GUIReader::getInstance()->widgetFromJsonFile("store_1/store_1.ExportJson");
+	this->addChild(ShopUI);
+	
+	
+	auto QuitButton= static_cast<Button*>(Helper::seekWidgetByTag(ShopUI,UI_BUTTON_CLOSESHOP));
+	auto BuyItemButton1=static_cast<Button*>(Helper::seekWidgetByTag(ShopUI,UI_BUTTON_BUY_ITEM1));
+	auto BuyItemButton2=static_cast<Button*>(Helper::seekWidgetByTag(ShopUI,UI_BUTTON_BUY_ITEM2));
+	auto BuyItemButton3=static_cast<Button*>(Helper::seekWidgetByTag(ShopUI,UI_BUTTON_BUY_ITEM3));
+	auto BuyItemButton4=static_cast<Button*>(Helper::seekWidgetByTag(ShopUI,UI_BUTTON_BUY_ITEM4));
+	auto BuyItemButton5=static_cast<Button*>(Helper::seekWidgetByTag(ShopUI,UI_BUTTON_BUY_ITEM5));
+	QuitButton->addTouchEventListener(this,toucheventselector(IShop::onTouchCloseItem));
+	BuyItemButton1->addTouchEventListener(this,toucheventselector(IShop::onTouchBuyButton));
+	BuyItemButton2->addTouchEventListener(this,toucheventselector(IShop::onTouchBuyButton));
+	BuyItemButton3->addTouchEventListener(this,toucheventselector(IShop::onTouchBuyButton));
+	BuyItemButton4->addTouchEventListener(this,toucheventselector(IShop::onTouchBuyButton));
+	BuyItemButton5->addTouchEventListener(this,toucheventselector(IShop::onTouchBuyButton));
+	
+	Text* Money_text=(Text*)(ShopUI->getChildByTag(54));
+	std::string money;
+	int m=UserDefault::sharedUserDefault()->getIntegerForKey("myGold");
+	coins=m;
+	std::stringstream ss;
+	ss<<m;
+	std::string s1=ss.str();
+	Money_text->setString(s1);
+	return true;
+}
+
+void IShop::onTouchCloseItem(Object* pSender, TouchEventType type){
+	this->removeFromParentAndCleanup(true);
+}
+
+void IShop::onTouchBuyButton(Object* pSender, TouchEventType type){
+	int tag = (static_cast<Button*>(pSender))->getTag();
+
+	switch (type)
+	{
+	case  TOUCH_EVENT_ENDED:
+		switch (tag)
+		{
+		case UI_BUTTON_BUY_ITEM1:
+			{
+				int n=UserDefault::sharedUserDefault()->getIntegerForKey("Item1");
+				UserDefault::sharedUserDefault()->setIntegerForKey("Item1",++n);
+			}
+			break;
+		case UI_BUTTON_BUY_ITEM2:
+			{
+				int n=UserDefault::sharedUserDefault()->getIntegerForKey("Item2");
+				UserDefault::sharedUserDefault()->setIntegerForKey("Item2",++n);
+			}
+			break;
+		case UI_BUTTON_BUY_ITEM3:
+			{
+				int n=UserDefault::sharedUserDefault()->getIntegerForKey("Item3");
+				UserDefault::sharedUserDefault()->setIntegerForKey("Item3",++n);
+			}
+			break;
+		case UI_BUTTON_BUY_ITEM4:
+			{
+				int n=UserDefault::sharedUserDefault()->getIntegerForKey("Item4");
+				UserDefault::sharedUserDefault()->setIntegerForKey("Item4",++n);
+			}
+			break;
+		case UI_BUTTON_BUY_ITEM5:
+			{
+				int n=UserDefault::sharedUserDefault()->getIntegerForKey("Item5");
+				UserDefault::sharedUserDefault()->setIntegerForKey("Item5",++n);
+			}
+			break;
+
+		default:
+			break;
+		}
+		break;
+	default:
+		break;
+	}
 }
