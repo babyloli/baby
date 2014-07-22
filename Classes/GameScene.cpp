@@ -1,7 +1,7 @@
 #include "GameScene.h"
 #include "ResourceManager.h"
 #include "MenuItemTower.h"
-#include "HelloWorldScene.h"
+#include "IHomeMenuScene.h"
 #include "Utils.h"
 #include <time.h>
 USING_NS_CC;
@@ -68,6 +68,9 @@ void Game::loadData(){
 	m_bigBossAttack = std::atoi(enemyDesc->getData(2, 4));
 	m_numBigBoss = std::atoi(enemyDesc->getData(2, 4));
 
+	SceneReader* s = SceneReader::getInstance();
+	auto node = s->createNodeWithSceneFile("NewScene.json");
+	if(node)	this -> addChild(node);
 	m_map = TMXTiledMap::create(MAP1);
 	this->addChild(m_map);
 	m_money = INIT_PRICE;
@@ -140,7 +143,7 @@ void Game::loadMenu(){
 		m_goItem->setVisible(false);
 
 		m_backItem = MenuItemImage::create("back.png", "back.png", [](cocos2d::Ref* pSender){
-			auto scene = HelloWorld::createScene();
+			auto scene = IHomeMenu::createScene();
 			Director::getInstance()->replaceScene(scene);
 			Director::getInstance()->resume();
 		});

@@ -85,7 +85,7 @@ void Tower::generateBullet(float dt)
 		if(!m_target)
 			return ;
 
-		Bullet* t_bullet = Bullet::create(m_bulletName, m_type, m_level, m_attack, m_speed);
+		Bullet* t_bullet = Bullet::create(m_bulletName, m_type, m_level, m_attack, m_bulletSpeed);
 		if(!t_bullet)
 			return;
 		t_bullet->setPosition(this->getPosition());

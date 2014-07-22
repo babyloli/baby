@@ -1,6 +1,6 @@
 #include "AppDelegate.h"
 #include "ResourceManager.h"
-#include "HelloWorldScene.h"
+#include "IHomeMenuScene.h"
 
 USING_NS_CC;
 
@@ -30,7 +30,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
 	ResourceManager::getInstance()->init();
     // create a scene. it's an autorelease object
-    auto scene = HelloWorld::createScene();
+    auto scene = IHomeMenu::createScene();
+	CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("music/bgm.mp3");
 	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("music/bgm.mp3");
     // run
     director->runWithScene(scene);
