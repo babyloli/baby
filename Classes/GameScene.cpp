@@ -69,10 +69,14 @@ void Game::loadData(){
 	m_numBigBoss = std::atoi(enemyDesc->getData(2, 4));
 
 	SceneReader* s = SceneReader::getInstance();
-	auto node = s->createNodeWithSceneFile("NewScene.json");
-	if(node)	this -> addChild(node);
-	m_map = TMXTiledMap::create(MAP1);
-	this->addChild(m_map);
+	Node* node = s->createNodeWithSceneFile("publish/section1-1.json");
+	if(node)	
+		this -> addChild(node);
+//	m_map = TMXTiledMap::create(MAP1);
+//	this->addChild(m_map);
+	Node* map = node->getChildByTag(100);
+	auto component = (ComRender*)(map->getComponent("CCTMXTiledMap"));
+	m_map = (TMXTiledMap*)(component->getNode());
 	m_money = INIT_PRICE;
 }
 
@@ -168,6 +172,7 @@ void Game::loadPeople(){
 	m_baby->m_position = Rect(baby_x, baby_y, baby_width, baby_height);
 	m_baby->setPosition(objPosX(babyObject), objPosY(babyObject));	//设置精灵的位置
 	this->addChild(m_baby);	//把精灵加到场景里
+	this->reorderChild(m_baby, ZORDER_ENEMY);
 
 	ValueMap enemyObject = peopleObjectGroup->getObject("enemy");	//获取一个name为“enemy”的对象
 	m_enemyPosition = Vec2(objPosX(enemyObject),objPosY(enemyObject));	//enemy对象的起始位置

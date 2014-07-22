@@ -25,6 +25,7 @@ public:
 #define ZORDER_MODAL 9
 #define ZORDER_MENUITEMTOWER 8
 #define ZORDER_TOWER 5
+#define ZORDER_ENEMY 4
 	//----------------PhysicsMask----------------
 #define CategoryBitMask_Bullet		0x0000000F
 #define CategoryBitMask_Barrier		0x000000F0
@@ -45,7 +46,7 @@ public:
 #define MAX_RANGE 9999
 	HCSVFile * towerData;
 	//----------------Bullet---------------------
-#define MATERIAL_BULLET_0 cocos2d::PhysicsMaterial(1.0, 0.0, 1.0)
+#define MATERIAL_BULLET_0 cocos2d::PhysicsMaterial(0.5, 0.0, 1.0)
 	//----------------Enemy----------------------
 	HCSVFile * enemyData;
 	HCSVFile * enemyDesc;

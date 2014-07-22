@@ -23,6 +23,7 @@ Enemy* Enemy::create(int id, int curRound){
 
 bool Enemy::initWithId(int id, int curRound){
 	this->setTag(TAG_ENEMY);
+	this->setZOrder(ZORDER_ENEMY);
 	m_curRound = curRound;
 	initial(id);
 	m_direction = ROAD_NONE;

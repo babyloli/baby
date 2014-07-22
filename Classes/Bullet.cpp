@@ -8,12 +8,13 @@ Bullet::Bullet()
 bool Bullet::initWithSpriteFrameName(std::string spriteFrameName, int type, int level, int damage, float speed)
 {
 	this->setTag(TAG_BULLET);
+	this->setZOrder(ZORDER_TOWER);
 	m_type = type;
 	m_level = level;
 	m_damage = damage;
 	m_speed = speed;
 	m_isDie = false;
-	m_body = PhysicsBody::createCircle(32.0f, MATERIAL_BULLET_0);
+	m_body = PhysicsBody::createCircle(16.0f, MATERIAL_BULLET_0);
 	this->setPhysicsBody(m_body);
 	m_body->setCategoryBitmask(CategoryBitMask_Bullet);
 	m_body->setCollisionBitmask(CollisionBitMask_Bullet);

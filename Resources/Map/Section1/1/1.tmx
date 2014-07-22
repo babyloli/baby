@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="16" height="9" tilewidth="80" tileheight="80">
  <tileset firstgid="1" name="map1_1" tilewidth="80" tileheight="80">
-  <image source="map1_1.png" width="1280" height="720"/>
+  <image source="1.png" width="1280" height="720"/>
  </tileset>
  <layer name="块层 1" width="16" height="9">
   <data encoding="base64" compression="zlib">
