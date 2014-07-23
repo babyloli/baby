@@ -1,0 +1,7 @@
+id,name,price,maxState,framesNumber
+0,Medicine1,10,0,2
+1,Medicine2,15,0,2
+2,Medicine3,30,0,2
+3,Trap1,5,3,1
+4,Trap2,7,3,1
+5,Trap3,15,3,1

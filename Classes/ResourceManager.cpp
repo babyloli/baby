@@ -9,6 +9,8 @@ void ResourceManager::init(){
 	enemyDesc->openFile("data/monsterDesign.csv");
 	towerData = new HCSVFile();
 	towerData->openFile("data/towerDesign.csv");
+	propsData = new HCSVFile();
+	propsData->openFile("data/Props.csv");
 
 	auto director = Director::getInstance();
 	auto textureCache = director->getTextureCache();
@@ -83,6 +85,8 @@ ResourceManager::~ResourceManager()
 		delete enemyDesc;
 	if (towerData)
 		delete towerData;
+	if (propsData)
+		delete propsData;
 };
 
 ResourceManager::ResourceManager()

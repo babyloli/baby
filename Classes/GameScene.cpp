@@ -1,7 +1,7 @@
 #include "GameScene.h"
 #include "ResourceManager.h"
 #include "MenuItemTower.h"
-#include "IHomeMenuScene.h"
+#include "ISubUIScene.h"
 #include "Utils.h"
 #include <time.h>
 USING_NS_CC;
@@ -147,7 +147,7 @@ void Game::loadMenu(){
 		m_goItem->setVisible(false);
 
 		m_backItem = MenuItemImage::create("back.png", "back.png", [](cocos2d::Ref* pSender){
-			auto scene = IHomeMenu::createScene();
+			auto scene = IGameLevelSelector::createScene();
 			Director::getInstance()->replaceScene(scene);
 			Director::getInstance()->resume();
 		});

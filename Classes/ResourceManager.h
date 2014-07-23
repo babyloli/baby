@@ -51,6 +51,8 @@ public:
 	HCSVFile * enemyData;
 	HCSVFile * enemyDesc;
 	Texture2D* hpBar;
+	//----------------Props----------------------
+	HCSVFile * propsData;
 	//----------------Baby-----------------------
 #define ANIMATION_BABY_LAUGH "baby_laugh"
 #define ANIMATION_BABY_HAPPY "baby_happy"

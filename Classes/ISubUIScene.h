@@ -36,7 +36,7 @@ private:
 
 
 // UI for select the game level
-class IGameLevelSelector : public cocos2d::Layer,  public cocos2d::extension::TableViewDataSource, public cocos2d::extension::TableViewDelegate
+class IGameLevelSelector : public cocos2d::Layer , public cocos2d::extension::TableViewDataSource, public cocos2d::extension::TableViewDelegate
 {
 public:
 	static cocos2d::Scene* createScene();

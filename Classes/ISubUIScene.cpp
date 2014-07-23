@@ -1,7 +1,7 @@
 #include "ISubUIScene.h"
 #include "AppDelegate.h"
 #include "GameScene.h"
-
+#include "ResourceManager.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -61,7 +61,7 @@ void IModeSelector::onTouchSelectButton(Object* pSender, TouchEventType type)
 			{
 				auto gameLevelSelector = IGameLevelSelector::createScene();
 				Director::getInstance()->replaceScene(gameLevelSelector);
-			}
+			}						
 			break;
 		case UI_BUTTON_DOCTOR_MODE:
 			break;
@@ -174,31 +174,26 @@ bool IGameLevelSelector::init()
 	{
 		return false;
 	}
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	Size visibleSize = Director::getInstance()->getVisibleSize();
 
-	Size winSize = Director::sharedDirector()->getWinSize();
-	/*
-	auto returnItem = MenuItemImage::create("CloseNormol.png","CloseSelected.png",CC_CALLBACK_1(IGameLevelSelector::menuReturnCallback,this));
-	//returnItem->setPosition(Vec2(winSize.width - returnItem->getContentSize().width / 2, returnItem->getContentSize().height /2));
+	auto bgimg = Sprite::create("UI/bg.png");
+	bgimg->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2);
+	this->addChild(bgimg, 0);
+
+	auto returnItem = MenuItemImage::create("back.png","back.png",CC_CALLBACK_1(IGameLevelSelector::menuReturnCallback,this));
+	returnItem->setPosition(Vec2(origin.x + visibleSize.width - returnItem->getContentSize().width / 2, origin.y + returnItem->getContentSize().height /2));
 	auto menu = Menu::create(returnItem,NULL);
-	//menu->setPosition(Vec2(0,winSize.height - returnItem->getContentSize().height));
-	//menu->setPosition(Vec2(300,300));
-	this->addChild(menu);
-	*/
-	/*
-	auto bgimg = Sprite::create("bg.png");
-	this->addChild(bgimg);
-	*/
+	menu->setPosition(Vec2::ZERO);
+	this->addChild(menu, ZORDER_MENU);	
 
-	TableView* tableView = TableView::create(this,winSize);      //创建一个tableView
-	//tableView->setDirection(ScrollView::Direction::HORIZONTAL);
-	//tableView->setDirection(HORIZONTAL);
+	TableView* tableView = TableView::create(this,visibleSize);      //创建一个tableView
 	tableView->setDirection(TableView::Direction::HORIZONTAL);   //设置方向
-	//tableView->setPosition(Vec2(20,winSize.height/2 - 200));      //设置位置
-	tableView->setPosition(Vec2(0,0));      //设置位置
+	tableView->setPosition(Vec2::ZERO);      //设置位置
 	tableView->setDelegate(this);  //该步骤非常关键，把tableView和当前类绑定在一起，故后面后面调用的主体是tableView
 	this->addChild(tableView,0);
-	tableView->reloadData();  //
-	
+	tableView->reloadData();  
+
 	return true;
 }
 
@@ -267,9 +262,10 @@ TableViewCell* IGameLevelSelector::tableCellAtIndex(TableView* table, ssize_t id
 
 ssize_t IGameLevelSelector::numberOfCellsInTableView(TableView* table)
 {
-	return 10;
+	return 4;
 }
 
+/////////////////////////////////////////////////////////////////////////////////////
 Scene* IShop::createScene()
 {
 	auto scene = Scene::create();
