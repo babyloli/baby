@@ -39,10 +39,10 @@ private:
 class IGameLevelSelector : public cocos2d::Layer , public cocos2d::extension::TableViewDataSource, public cocos2d::extension::TableViewDelegate
 {
 public:
-	static cocos2d::Scene* createScene();
-	virtual bool init();
+	static cocos2d::Scene* createScene(int section);
+	bool init(int section);
 	void menuReturnCallback(Ref* pSender);  
-	CREATE_FUNC(IGameLevelSelector);
+	static IGameLevelSelector* create(int section);
 
 	// 滚动时调用，空实现，（继承/因为继承了抽象类所以必须重写 ）
 	virtual void scrollViewDidScroll(cocos2d::extension::ScrollView* view);
@@ -65,7 +65,7 @@ public:
 	//void scrollBar(TableView* table);
 
 private:
-
+	int m_section;
 };
 
 

@@ -67,9 +67,9 @@ public:
 #define FONTSIZE_PRICE 20
 #define FONT_PRICE "fonts/cardFont.ttf"
 	//-----------------Game-----------------------
-#define MAP1 "maps/map1.tmx"
 #define PATH_TOWERBASE "images/tower/towerbase.png"
 #define INIT_PRICE 200
+	HCSVFile* sections;
 	Texture2D* background_price;
 	Texture2D* background_price_big;
 public :

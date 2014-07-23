@@ -11,6 +11,12 @@ void ResourceManager::init(){
 	towerData->openFile("data/towerDesign.csv");
 	propsData = new HCSVFile();
 	propsData->openFile("data/Props.csv");
+	sections = new HCSVFile[4];
+	for (int i = 1; i <= 4; i++){
+		char str[20] = {0};
+		sprintf_s(str, "data/gameData%1d.csv", i);
+		sections[i-1].openFile(str);
+	}
 
 	auto director = Director::getInstance();
 	auto textureCache = director->getTextureCache();
@@ -87,6 +93,8 @@ ResourceManager::~ResourceManager()
 		delete towerData;
 	if (propsData)
 		delete propsData;
+	if (sections)
+		delete [] sections;
 };
 
 ResourceManager::ResourceManager()

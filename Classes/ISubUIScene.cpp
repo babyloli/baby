@@ -59,7 +59,7 @@ void IModeSelector::onTouchSelectButton(Object* pSender, TouchEventType type)
 		{
 		case UI_BUTTON_GROWUP_MODE:
 			{
-				auto gameLevelSelector = IGameLevelSelector::createScene();
+				auto gameLevelSelector = IGameLevelSelector::createScene(1);
 				Director::getInstance()->replaceScene(gameLevelSelector);
 			}						
 			break;
@@ -106,7 +106,7 @@ bool IBGMusicSetter::init()
 	effectCheckBox->addEventListenerCheckBox(this,checkboxselectedeventselector(IBGMusicSetter::onSelectedSoundEffects));
 	closeItem->addTouchEventListener(this,toucheventselector(IBGMusicSetter::onTouchCloseItem));
 	
-	musicCheckBox->setSelectedState(CocosDenshion::SimpleAudioEngine::sharedEngine()->isBackgroundMusicPlaying());
+	musicCheckBox->setSelectedState(CocosDenshion::SimpleAudioEngine::getInstance()->isBackgroundMusicPlaying());
 	//if(SimpleAudioEngine::getInstance()->
 	//effectCheckBox->setSelectedState(true);
 	
@@ -118,10 +118,10 @@ void IBGMusicSetter::onSelectedBGMusic(Object* pSender, CheckBoxEventType type)
 	switch (type)
 	{
 	case CHECKBOX_STATE_EVENT_UNSELECTED:
-				CocosDenshion::SimpleAudioEngine::sharedEngine()->stopBackgroundMusic();
+				CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
 				break;
 	case CHECKBOX_STATE_EVENT_SELECTED:
-				CocosDenshion::SimpleAudioEngine::sharedEngine()->rewindBackgroundMusic();
+				CocosDenshion::SimpleAudioEngine::getInstance()->rewindBackgroundMusic();
 				//SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
 				break;
 	default:
@@ -134,10 +134,10 @@ void IBGMusicSetter::onSelectedSoundEffects(Object* pSender, CheckBoxEventType t
 	switch (type)
 	{
 	case CHECKBOX_STATE_EVENT_UNSELECTED:
-			CocosDenshion::SimpleAudioEngine::sharedEngine()->pauseAllEffects();
+			CocosDenshion::SimpleAudioEngine::getInstance()->pauseAllEffects();
 			break;
 	case  CHECKBOX_STATE_EVENT_SELECTED:
-			CocosDenshion::SimpleAudioEngine::sharedEngine()->resumeAllEffects();
+			CocosDenshion::SimpleAudioEngine::getInstance()->resumeAllEffects();
 			break;
 	default:
 			break;
@@ -160,20 +160,36 @@ void IBGMusicSetter::onTouchCloseItem(Object* pSender, TouchEventType type)
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-Scene* IGameLevelSelector::createScene()
+Scene* IGameLevelSelector::createScene(int section)
 {
 	auto scene = Scene::create();
-	auto layer = IGameLevelSelector::create();
+	auto layer = IGameLevelSelector::create(section);
 	scene->addChild(layer);
 	return scene;
 }
 
-bool IGameLevelSelector::init()
+IGameLevelSelector* IGameLevelSelector::create(int section){
+	IGameLevelSelector *pRet = new IGameLevelSelector(); 
+	if (pRet && pRet->init(section)) 
+	{
+		pRet->autorelease();
+		return pRet;
+	} 
+	else 
+	{ 
+		delete pRet; 
+		pRet = NULL; 
+		return NULL; 
+	} 
+}
+
+bool IGameLevelSelector::init(int section)
 {
 	if (!Layer::init())
 	{
 		return false;
 	}
+	m_section = section;
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 
@@ -215,9 +231,9 @@ void IGameLevelSelector::tableCellTouched(cocos2d::extension::TableView* table, 
 {
 	CCLOG("cell touched at index: %ld", cell->getIdx());
 	int i = cell->getIdx();
-	if (i == 1)
+	if (i == 0)
 	{
-		auto gamescene1 = Game::createScene();
+		auto gamescene1 = Game::createScene(m_section, i);
 		Director::getInstance()->replaceScene(gamescene1);
 	}
 }
@@ -262,7 +278,8 @@ TableViewCell* IGameLevelSelector::tableCellAtIndex(TableView* table, ssize_t id
 
 ssize_t IGameLevelSelector::numberOfCellsInTableView(TableView* table)
 {
-	return 4;
+	int ret = ResourceManager::getInstance()->sections[m_section-1].getRows();
+	return ret;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////

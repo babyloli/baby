@@ -10,14 +10,35 @@ USING_NS_CC;
 #define objWidth(obj) obj.at("width").asFloat()
 #define objHeight(obj) obj.at("height").asFloat()
 
-Scene* Game::createScene(){
+Game::Game(int section, int id)
+{
+	m_section = section;
+	m_id = id;
+}
+
+Scene* Game::createScene(int section, int id){
 	auto scene = Scene::createWithPhysics();
 	scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_NONE);
-	auto layer = Game::create();
+	auto layer = Game::create(section, id);
 	scene->getPhysicsWorld()->setGravity(Vect(0.0f, 0.0f));
 	layer->setPhysicsWorld(scene->getPhysicsWorld());
 	scene->addChild(layer);
 	return scene;
+}
+
+Game* Game::create(int section, int id){
+	Game *pRet = new Game(section, id); 
+	if (pRet && pRet->init()) 
+	{
+		pRet->autorelease();
+		return pRet;
+	} 
+	else 
+	{ 
+		delete pRet; 
+		pRet = NULL; 
+		return NULL; 
+	} 
 }
 
 bool Game::init()
@@ -47,12 +68,13 @@ void Game::update(float dt){
 
 void Game::loadData(){
 	HCSVFile* enemyDesc = ResourceManager::getInstance()->enemyDesc;
-	m_numRound = 5;
+	HCSVFile* sectionData = &ResourceManager::getInstance()->sections[m_section-1];
+	m_numRound = std::atoi(sectionData->getData(m_id, 1));
 	m_curRound = 1;
 	m_isWaiting = false;
-	m_numPerRound = 30;
+	m_numPerRound = std::atoi(sectionData->getData(m_id, 2));;
 	m_curNumInRound = 0;
-	m_timeBetweenRound = 15;
+	m_timeBetweenRound = std::atof(sectionData->getData(m_id, 3));
 	m_elapsedTimeRound = 0;
 	m_elapsedTimeMonster = 0;
 	srand((unsigned)time(NULL));
@@ -124,8 +146,8 @@ void Game::loadMenu(){
 		stopItem->setPosition(Vec2(origin.x + visibleSize.width - stopItem->getContentSize().width/2 ,
 			origin.y + stopItem->getContentSize().height*0.6));
 
-		m_restartItem = MenuItemImage::create("restart.png", "restart.png", [](cocos2d::Ref* pSender){
-			auto scene = Game::createScene();
+		m_restartItem = MenuItemImage::create("restart.png", "restart.png", [this](cocos2d::Ref* pSender){
+			auto scene = Game::createScene(m_section, m_id);
 			Director::getInstance()->replaceScene(scene);
 			Director::getInstance()->resume();
 		});
@@ -146,8 +168,8 @@ void Game::loadMenu(){
 			m_goItem->getContentSize().width, origin.y + visibleSize.height/2));
 		m_goItem->setVisible(false);
 
-		m_backItem = MenuItemImage::create("back.png", "back.png", [](cocos2d::Ref* pSender){
-			auto scene = IGameLevelSelector::createScene();
+		m_backItem = MenuItemImage::create("back.png", "back.png", [this](cocos2d::Ref* pSender){
+			auto scene = IGameLevelSelector::createScene(m_section);
 			Director::getInstance()->replaceScene(scene);
 			Director::getInstance()->resume();
 		});

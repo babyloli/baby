@@ -48,10 +48,14 @@ private:
 
 	int m_bigBossAttack;
 	int m_numBigBoss;
+
+	int m_id;
+	int m_section;
 public:
-	static cocos2d::Scene* createScene();
+	static cocos2d::Scene* createScene(int section, int id);
 	virtual bool init();  
-	CREATE_FUNC(Game);
+	static Game* create(int section, int id);
+	Game(int section, int id);
 
 	void onEnter() override;
 	void loadData();
