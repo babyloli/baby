@@ -64,11 +64,35 @@
   <object x="720" y="400" width="240" height="80"/>
  </objectgroup>
  <objectgroup name="tower" width="16" height="9">
-  <object x="240" y="240" width="80" height="80"/>
-  <object x="560" y="240" width="80" height="80"/>
-  <object x="880" y="240" width="80" height="80"/>
-  <object x="1040" y="320" width="80" height="80"/>
-  <object x="320" y="400" width="80" height="80"/>
-  <object x="800" y="560" width="80" height="80"/>
+  <object x="240" y="240" width="80" height="80">
+   <properties>
+    <property name="type" value="3,5"/>
+   </properties>
+  </object>
+  <object x="560" y="240" width="80" height="80">
+   <properties>
+    <property name="type" value="3,5"/>
+   </properties>
+  </object>
+  <object x="880" y="240" width="80" height="80">
+   <properties>
+    <property name="type" value="3,5"/>
+   </properties>
+  </object>
+  <object x="1040" y="320" width="80" height="80">
+   <properties>
+    <property name="type" value="3,5"/>
+   </properties>
+  </object>
+  <object x="320" y="400" width="80" height="80">
+   <properties>
+    <property name="type" value="3,5"/>
+   </properties>
+  </object>
+  <object x="800" y="560" width="80" height="80">
+   <properties>
+    <property name="type" value="3,5"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

@@ -17,8 +17,8 @@ private:
 	bool m_isDie;
 public:
 	Bullet();
-	bool initWithSpriteFrameName(std::string spriteFrameNam, int type, int level, int damage, float speed, bool rotateEnable, bool isCollide);
-	static Bullet* create(std::string spriteFrameNam, int type, int level, int damage, float speed, bool rotateEnable, bool isCollide);
+	bool initWithSpriteFrameName(std::string spriteFrameNam, int type, int level, int damage, float speed, bool rotateEnable, bool isCollide, float density);
+	static Bullet* create(std::string spriteFrameNam, int type, int level, int damage, float speed, bool rotateEnable, bool isCollide, float density);
 
 	int getType();
 	void setType(int type);

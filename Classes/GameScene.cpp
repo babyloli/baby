@@ -57,6 +57,7 @@ bool Game::init()
 	this->scheduleUpdate();
 	this->schedule(schedule_selector(Game::moveEnemy), 0.5f);
 	this->schedule(schedule_selector(Game::deleteObject), 0.5f);
+	this->schedule(schedule_selector(Game::countDown), 1.0f);
 	return true;	
 }
 
@@ -71,8 +72,8 @@ void Game::loadData(){
 	HCSVFile* enemyDesc = ResourceManager::getInstance()->enemyDesc;
 	HCSVFile* sectionData = &ResourceManager::getInstance()->sections[m_section-1];
 	m_numRound = std::atoi(sectionData->getData(m_id, 1));
-	m_curRound = 1;
-	m_isWaiting = false;
+	m_curRound = 0;
+	m_isWaiting = true;
 	m_numPerRound = std::atoi(sectionData->getData(m_id, 2));;
 	m_curNumInRound = 0;
 	m_timeBetweenRound = std::atof(sectionData->getData(m_id, 3));
@@ -101,7 +102,7 @@ void Game::loadData(){
 	Node* map = node->getChildByTag(101);
 	auto component = (ComRender*)(map->getComponent("CCTMXTiledMap"));
 	m_map = (TMXTiledMap*)(component->getNode());
-	m_money = INIT_PRICE;
+	m_money = std::atoi(sectionData->getData(m_id, 4));
 }
 
 void Game::loadMenu(){
@@ -117,6 +118,26 @@ void Game::loadMenu(){
 	auto menu = Menu::create(physicsItem, NULL);
 	menu->setPosition(Vec2::ZERO);
 	this->addChild(menu, ZORDER_MENU);
+
+	m_modalNode = DrawNode::create();
+	Vec2 vecs[4];
+	vecs[0].x = 0; vecs[0].y = 0;
+	vecs[1].x = SCREEN_WIDTH; vecs[1].y = 0;
+	vecs[2].x = SCREEN_WIDTH; vecs[2].y = SCREEN_HEIGHT;
+	vecs[3].x = 0; vecs[3].y = SCREEN_HEIGHT;
+	m_modalNode->drawPolygon(vecs, 4, Color4F(0.2f, 0.2f, 0.2f, 0.5f), 0, Color4F(0.2f, 0.2f, 0.2f, 0.5f));
+	this->addChild(m_modalNode, ZORDER_MODAL);
+
+	auto listener1 = EventListenerTouchOneByOne::create();//创建一个触摸监听    
+	listener1->setSwallowTouches(true);//设置不想向下传递触摸  true是不想 默认为false  
+	listener1->onTouchBegan = [](Touch* touch, Event* event){   
+		return true;   
+	};    
+	listener1->onTouchMoved = [](Touch* touch, Event* event){      
+	};    
+	listener1->onTouchEnded = [](Touch* touch, Event* event){    
+	};
+	this->_eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, m_modalNode);
 }
 
 void Game::loadToolBar(){
@@ -231,6 +252,14 @@ void Game::loadToolBar(){
 	auto labelSection = Label::createWithTTF(config, str->getCString());
 	auto labelsection = node->getChildByTag(306);
 	labelsection->addChild(labelSection);
+
+	TTFConfig config2;
+	config2.fontSize = 60;
+	config2.fontFilePath = FONT_PRICE;
+	m_labelCountDown = Label::createWithTTF(config2, "");
+	m_labelCountDown->setColor(Color3B(255, 0, 0));
+	m_labelCountDown->setPosition(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2);
+	this->addChild(m_labelCountDown, ZORDER_TEXT);
 }
 
 void Game::loadPeople(){
@@ -252,9 +281,9 @@ void Game::loadPeople(){
 
 void Game::loadTower(){
 	ResourceManager* rm = ResourceManager::getInstance();
-	SpriteBatchNode* towerbase = SpriteBatchNode::create(PATH_TOWERBASE);	//用图片创建一个Batch
-	towerbase->setPosition(Vec2::ZERO);	//设置这个Batch的位置
-	this->addChild(towerbase, ZORDER_TOWER);	//将这个Batch加到场景里
+	m_towerbase = SpriteBatchNode::create(PATH_TOWERBASE);	//用图片创建一个Batch
+	m_towerbase->setPosition(Vec2::ZERO);	//设置这个Batch的位置
+	this->addChild(m_towerbase, ZORDER_TOWER);	//将这个Batch加到场景里
 
 	TMXObjectGroup* towerObjectGroup = m_map->getObjectGroup("tower");	//读取对象层“tower”
 	ValueVector towerObjects = towerObjectGroup->getObjects();	//获得“tower”对象层里面的所有对象
@@ -263,9 +292,9 @@ void Game::loadTower(){
 		ValueMap towerObject = it->asValueMap();	//得到这个对象的属性
 		int tower_x = objPosX(towerObject);
 		int tower_y = objPosY(towerObject);
-		Sprite* tower = Sprite::createWithTexture(towerbase->getTexture());	//用Batch创建一个精灵来表示可创建Tower的位置
+		Sprite* tower = Sprite::createWithTexture(m_towerbase->getTexture());	//用Batch创建一个精灵来表示可创建Tower的位置
 		tower->setPosition(tower_x, tower_y);	//设置精灵的位置
-		towerbase->addChild(tower);	//把精灵加到场景里
+		m_towerbase->addChild(tower);	//把精灵加到场景里
 //		auto actionRepeateFadeOutIn = RepeatForever::create(Sequence::create(FadeOut::create(1), FadeIn::create(1), NULL));	//创建一个淡入淡出特效
 //		tower->runAction(actionRepeateFadeOutIn);	//给精灵赋予特效
 
@@ -288,12 +317,13 @@ void Game::loadTower(){
 		menu->setPosition(Vec2(tower->getPositionX(), tower->getPositionY() + tower->getContentSize().height));
 		m_menus.pushBack(menu);
 
-		Sprite* updateSprite = Sprite::create("update.png");	//升级按钮
-		auto upgradeItem = MenuItemTower::create(0, updateSprite, updateSprite, CC_CALLBACK_1(Game::towerUpgradeCallback, this, towerId));
+		Sprite* updateSprite = Sprite::create("images/tower/update.png");	//升级按钮
+		Sprite* updateDisableSprite = Sprite::create("images/tower/UpdateDisable.png");
+		auto upgradeItem = MenuItemTower::create(0, updateSprite, updateSprite, updateDisableSprite, CC_CALLBACK_1(Game::towerUpgradeCallback, this, towerId));
 		upgradeItem->setPosition(0, upgradeItem->getContentSize().height);
 		upgradeItem->setTag(TAG_UPGRADE_ITEM);
 
-		auto deleteItem = MenuItemImage::create("sell.png", "sell.png", CC_CALLBACK_1(Game::towerDeleteCallback, this, towerId, tower));
+		auto deleteItem = MenuItemImage::create("images/tower/sell.png", "images/tower/sell.png", CC_CALLBACK_1(Game::towerDeleteCallback, this, towerId, tower));
 		deleteItem->setPosition(0, -deleteItem->getContentSize().height);
 
 		auto uMenu = Menu::create(upgradeItem, deleteItem, NULL);
@@ -373,6 +403,25 @@ void Game::loadRoadAndBarriers(){
 		node->setPhysicsBody(body);
 		node->setPosition(objPosX(barrierObject), objPosY(barrierObject));
 		this->addChild(node);
+	}
+}
+
+void Game::countDown(float dt){
+	static int count = 3;
+
+	if (count <= 0){
+		this->unschedule(schedule_selector(Game::countDown));
+		this->_eventDispatcher->removeEventListenersForTarget(m_modalNode);
+		m_towerbase->setVisible(false);
+		m_modalNode->removeFromParent();
+		m_isWaiting = false;
+		m_curRound = 1;
+		m_labelCountDown->removeFromParent();
+		count = 3;
+	}
+	else
+	{
+		m_labelCountDown->setString(std::to_string(count--));
 	}
 }
 

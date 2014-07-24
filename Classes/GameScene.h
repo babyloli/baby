@@ -29,6 +29,9 @@ private:
 	std::vector<Road> m_roads;
 	PhysicsWorld* m_physicsWorld;
 	LabelPrice* m_labelPrice;
+	Label* m_labelCountDown;
+	DrawNode* m_modalNode;
+	SpriteBatchNode* m_towerbase;
 	int m_money;
 	int m_numRound;
 	int m_curRound;
@@ -72,6 +75,7 @@ public:
 	void towerUpgradeCallback(cocos2d::Ref* pSender, int towerId);
 	void towerDeleteCallback(cocos2d::Ref* pSender, int towerId, Sprite* towerbase);
 
+	void countDown(float dt);
 	void addEnemy(float dt);
 	void moveEnemy(float dt);
 	void findEnemy(float dt);

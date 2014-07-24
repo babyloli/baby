@@ -40,12 +40,36 @@
   <object name="baby" x="1040" y="160" width="80" height="80"/>
  </objectgroup>
  <objectgroup name="tower" width="16" height="9">
-  <object x="480" y="400" width="80" height="80"/>
-  <object x="720" y="400" width="80" height="80"/>
-  <object x="320" y="560" width="80" height="80"/>
-  <object x="880" y="560" width="80" height="80"/>
-  <object x="480" y="240" width="80" height="80"/>
-  <object x="720" y="240" width="80" height="80"/>
+  <object x="480" y="400" width="80" height="80">
+   <properties>
+    <property name="type" value="3,4,5"/>
+   </properties>
+  </object>
+  <object x="720" y="400" width="80" height="80">
+   <properties>
+    <property name="type" value="3,4,5"/>
+   </properties>
+  </object>
+  <object x="320" y="560" width="80" height="80">
+   <properties>
+    <property name="type" value="3,4,5"/>
+   </properties>
+  </object>
+  <object x="880" y="560" width="80" height="80">
+   <properties>
+    <property name="type" value="3,4,5"/>
+   </properties>
+  </object>
+  <object x="480" y="240" width="80" height="80">
+   <properties>
+    <property name="type" value="3,4,5"/>
+   </properties>
+  </object>
+  <object x="720" y="240" width="80" height="80">
+   <properties>
+    <property name="type" value="3,4,5"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup name="barrier" width="16" height="9">
   <object x="160" y="80" width="400" height="80"/>

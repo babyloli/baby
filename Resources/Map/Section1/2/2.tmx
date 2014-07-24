@@ -32,10 +32,30 @@
   <object x="880" y="240" width="80" height="400"/>
  </objectgroup>
  <objectgroup name="tower" width="16" height="9">
-  <object x="240" y="240" width="80" height="80"/>
-  <object x="880" y="240" width="80" height="80"/>
-  <object x="1040" y="160" width="80" height="80"/>
-  <object x="880" y="400" width="80" height="80"/>
-  <object x="560" y="240" width="80" height="80"/>
+  <object x="240" y="240" width="80" height="80">
+   <properties>
+    <property name="type" value="1,2"/>
+   </properties>
+  </object>
+  <object x="880" y="240" width="80" height="80">
+   <properties>
+    <property name="type" value="1,2"/>
+   </properties>
+  </object>
+  <object x="1040" y="160" width="80" height="80">
+   <properties>
+    <property name="type" value="1,2"/>
+   </properties>
+  </object>
+  <object x="880" y="400" width="80" height="80">
+   <properties>
+    <property name="type" value="1,2"/>
+   </properties>
+  </object>
+  <object x="560" y="240" width="80" height="80">
+   <properties>
+    <property name="type" value="1,2"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

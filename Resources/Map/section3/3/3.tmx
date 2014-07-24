@@ -60,14 +60,46 @@
   <object name="baby" x="80" y="560" width="80" height="80"/>
  </objectgroup>
  <objectgroup name="tower" width="16" height="9">
-  <object x="800" y="480" width="80" height="80"/>
-  <object x="640" y="400" width="80" height="80"/>
-  <object x="560" y="400" width="80" height="80"/>
-  <object x="400" y="480" width="80" height="80"/>
-  <object x="240" y="320" width="80" height="80"/>
-  <object x="960" y="320" width="80" height="80"/>
-  <object x="400" y="160" width="80" height="80"/>
-  <object x="800" y="160" width="80" height="80"/>
+  <object x="800" y="480" width="80" height="80">
+   <properties>
+    <property name="type" value="6,7,8"/>
+   </properties>
+  </object>
+  <object x="640" y="400" width="80" height="80">
+   <properties>
+    <property name="type" value="6,7,8"/>
+   </properties>
+  </object>
+  <object x="560" y="400" width="80" height="80">
+   <properties>
+    <property name="type" value="6,7,8"/>
+   </properties>
+  </object>
+  <object x="400" y="480" width="80" height="80">
+   <properties>
+    <property name="type" value="6,7,8"/>
+   </properties>
+  </object>
+  <object x="240" y="320" width="80" height="80">
+   <properties>
+    <property name="type" value="6,7,8"/>
+   </properties>
+  </object>
+  <object x="960" y="320" width="80" height="80">
+   <properties>
+    <property name="type" value="6,7,8"/>
+   </properties>
+  </object>
+  <object x="400" y="160" width="80" height="80">
+   <properties>
+    <property name="type" value="6,7,8"/>
+   </properties>
+  </object>
+  <object x="800" y="160" width="80" height="80">
+   <properties>
+    <property name="type" value="6,7,8"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup name="barrier" width="16" height="9">
   <object x="800" y="480" width="400" height="80"/>

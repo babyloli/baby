@@ -5,7 +5,7 @@ Bullet::Bullet()
 {
 }
 
-bool Bullet::initWithSpriteFrameName(std::string spriteFrameName, int type, int level, int damage, float speed, bool rotateEnable, bool isCollide)
+bool Bullet::initWithSpriteFrameName(std::string spriteFrameName, int type, int level, int damage, float speed, bool rotateEnable, bool isCollide, float density)
 {
 	this->setTag(TAG_BULLET);
 	this->setZOrder(ZORDER_TOWER);
@@ -16,7 +16,7 @@ bool Bullet::initWithSpriteFrameName(std::string spriteFrameName, int type, int 
 	m_rotateEnable = rotateEnable;
 	m_isCollide = isCollide;
 	m_isDie = false;
-	m_body = PhysicsBody::createCircle(16.0f, MATERIAL_BULLET_0);
+	m_body = PhysicsBody::createCircle(16.0f, cocos2d::PhysicsMaterial(density, 0.0, 1.0));
 	this->setPhysicsBody(m_body);
 	if (isCollide)
 	{
@@ -46,10 +46,10 @@ bool Bullet::initWithSpriteFrameName(std::string spriteFrameName, int type, int 
 	return true;
 }
 
-Bullet* Bullet::create(std::string spriteFrameName, int type, int level, int damage, float speed, bool rotateEnable, bool isCollide)
+Bullet* Bullet::create(std::string spriteFrameName, int type, int level, int damage, float speed, bool rotateEnable, bool isCollide, float density)
 {
 	Bullet* bultemp = new Bullet();
-	if(bultemp && bultemp->initWithSpriteFrameName(spriteFrameName, type, level, damage, speed, rotateEnable, isCollide))
+	if(bultemp && bultemp->initWithSpriteFrameName(spriteFrameName, type, level, damage, speed, rotateEnable, isCollide, density))
 	{
 		bultemp->autorelease();
 		return bultemp;
