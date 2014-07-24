@@ -140,6 +140,7 @@ void Tower::upgrade()
 	m_attack += m_deltaAttack;
 	m_range += m_deltaRange;
 	m_price += m_deltaPrice;
+	m_circle->clear();
 	m_circle->drawDot(Vec2::ZERO, m_range, Color4F(0.2f, 0.2f, 0.2f, 0.8f));
 }
 int Tower::getRange()

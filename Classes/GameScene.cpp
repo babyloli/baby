@@ -48,6 +48,7 @@ bool Game::init()
 		return false;
 	}
 	loadData();
+	loadToolBar();
 	loadMenu();
 	loadPeople();
 	loadTower();
@@ -91,11 +92,12 @@ void Game::loadData(){
 	m_numBigBoss = std::atoi(enemyDesc->getData(2, 4));
 
 	SceneReader* s = SceneReader::getInstance();
-	Node* node = s->createNodeWithSceneFile("publish/section1-1.json");
+	char str[30];
+	sprintf_s(str, "publish/section%d-%d.json", m_section, m_id+1);
+//	Node* node = s->createNodeWithSceneFile("publish/section1-1.json");
+	Node* node = s->createNodeWithSceneFile(str);
 	if(node)	
 		this -> addChild(node);
-//	m_map = TMXTiledMap::create(MAP1);
-//	this->addChild(m_map);
 	Node* map = node->getChildByTag(100);
 	auto component = (ComRender*)(map->getComponent("CCTMXTiledMap"));
 	m_map = (TMXTiledMap*)(component->getNode());
@@ -106,81 +108,129 @@ void Game::loadMenu(){
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-	m_labelPrice = LabelPrice::create(ResourceManager::getInstance()->background_price_big, m_money);
-	m_labelPrice->setPosition(origin.x + m_labelPrice->getContentSize().width/2, origin.y + 
-		visibleSize.height - m_labelPrice->getContentSize().height);
-	this->addChild(m_labelPrice, ZORDER_LABELPRICE);
-
 	auto physicsItem = MenuItemImage::create("CloseNormal.png",
 		"CloseSelected.png",
 		CC_CALLBACK_1(Game::menuPhysicsCallback, this));
 	physicsItem->setPosition(Vec2(origin.x + visibleSize.width - physicsItem->getContentSize().width/2 ,
 		origin.y + visibleSize.height - physicsItem->getContentSize().height));
 
+	auto menu = Menu::create(physicsItem, NULL);
+	menu->setPosition(Vec2::ZERO);
+	this->addChild(menu, ZORDER_MENU);
+}
+
+void Game::loadToolBar(){
+	Size visibleSize = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
+	SceneReader* s = SceneReader::getInstance();
+	Node* node = s->createNodeWithSceneFile("UI/GameMenu/GMenu.json");
+	node->setPosition(Vec2(node->getPositionX(), origin.y + visibleSize.height - 80));
+	this->addChild(node, ZORDER_MENU);
+	Node* toolBar = node->getChildByTag(300);
+	m_pauseBtn = toolBar->getChildByTag(301);
+	m_replayBtn = toolBar->getChildByTag(302);
+	m_backBtn = toolBar->getChildByTag(303);
+	m_playBtn = toolBar->getChildByTag(304);
+	m_playBtn->setVisible(false);
+
+	auto component = (ComRender*)(m_pauseBtn->getComponent("pause"));
+	Sprite* sprite = (Sprite*)(component->getNode());
+	float width = sprite->getContentSize().width;
+	float height = sprite->getContentSize().height;
+	Rect rect = Rect(-width/2, -height/2, width, height);
+
 	auto modalSprite = Sprite::create("images/modalLayer.png");
 	modalSprite->setPosition(Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2));
 	modalSprite->setVisible(false);
 	this->addChild(modalSprite, ZORDER_MODAL);
 
-	auto stopItem = MenuItemImage::create("stop.png", "stop.png", [=](cocos2d::Ref* pSender){
-		if(!Director::getInstance()->isPaused()){
-			Director::getInstance()->pause();
-			MenuItem* menuItem = static_cast<MenuItem*>(pSender);
-			menuItem->setVisible(false);
-			m_goItem->setVisible(true);
-			m_restartItem->setVisible(true);
-			m_backItem->setVisible(true);
-			modalSprite->setVisible(true);
-			auto listener1 = EventListenerTouchOneByOne::create();//创建一个触摸监听    
-			listener1->setSwallowTouches(true);//设置不想向下传递触摸  true是不想 默认为false  
-			listener1->onTouchBegan = [](Touch* touch, Event* event){   
-				return true;   
-			};    
-			listener1->onTouchMoved = [](Touch* touch, Event* event){      
-			};    
+	auto pauseListener = EventListenerTouchOneByOne::create();
+	pauseListener->setSwallowTouches(true);
+	pauseListener->onTouchBegan = [=](Touch* touch, Event* event)->bool{
+		auto target = event->getCurrentTarget();
+		Vec2 point = target->convertTouchToNodeSpace(touch);
+		if (rect.containsPoint(point)){
+			if(!Director::getInstance()->isPaused()){
+				Director::getInstance()->pause();
+				target->setVisible(false);
+				m_playBtn->setVisible(true);
+				modalSprite->setVisible(true);
+				auto listener1 = EventListenerTouchOneByOne::create();//创建一个触摸监听    
+				listener1->setSwallowTouches(true);//设置不想向下传递触摸  true是不想 默认为false  
+				listener1->onTouchBegan = [](Touch* touch, Event* event){   
+					return true;   
+				};    
+				listener1->onTouchMoved = [](Touch* touch, Event* event){      
+				};    
+				listener1->onTouchEnded = [](Touch* touch, Event* event){    
+				};
+				this->_eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, modalSprite);
+				return true;
+			}
+		}
+		return false;
+	};
+	this->_eventDispatcher->addEventListenerWithSceneGraphPriority(pauseListener, m_pauseBtn);
 
-			listener1->onTouchEnded = [](Touch* touch, Event* event){    
-			};
-			this->_eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, modalSprite);
-		}});
-		stopItem->setPosition(Vec2(origin.x + visibleSize.width - stopItem->getContentSize().width/2 ,
-			origin.y + stopItem->getContentSize().height*0.6));
+	auto playListener = EventListenerTouchOneByOne::create();
+	playListener->setSwallowTouches(true);
+	playListener->onTouchBegan = [=](Touch* touch, Event* event)->bool{
+		auto target = event->getCurrentTarget();
+		Vec2 point = target->convertTouchToNodeSpace(touch);
+		if (rect.containsPoint(point)){
+			if (Director::getInstance()->isPaused()){
+				Director::getInstance()->resume();
+				target->setVisible(false);
+				m_pauseBtn->setVisible(true);
+				modalSprite->setVisible(false);
+				this->_eventDispatcher->removeEventListenersForTarget(modalSprite);
+				return true;
+			}		
+		}
+		return false;
+	};
+	this->_eventDispatcher->addEventListenerWithSceneGraphPriority(playListener, m_playBtn);
 
-		m_restartItem = MenuItemImage::create("restart.png", "restart.png", [this](cocos2d::Ref* pSender){
+	auto replayListener = EventListenerTouchOneByOne::create();
+	replayListener->onTouchBegan = [=](Touch* touch, Event* event)->bool{
+		auto target = event->getCurrentTarget();
+		Vec2 point = target->convertTouchToNodeSpace(touch);
+		if (rect.containsPoint(point)){
 			auto scene = Game::createScene(m_section, m_id);
 			Director::getInstance()->replaceScene(scene);
 			Director::getInstance()->resume();
-		});
-		m_restartItem->setPosition(Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2));
-		m_restartItem->setVisible(false);
+			return true;
+		}
+		return false;
+	};
+	this->_eventDispatcher->addEventListenerWithSceneGraphPriority(replayListener, m_replayBtn);
 
-		m_goItem = MenuItemImage::create("go.png", "go.png", [=](cocos2d::Ref* pSender){
-			MenuItem* menuItem = static_cast<MenuItem*>(pSender);
-			menuItem->setVisible(false);
-			m_restartItem->setVisible(false);
-			m_backItem->setVisible(false);
-			stopItem->setVisible(true);
-			modalSprite->setVisible(false);
-			this->_eventDispatcher->removeEventListenersForTarget(modalSprite);
-			Director::getInstance()->resume();
-		});
-		m_goItem->setPosition(Vec2(origin.x + visibleSize.width/2 + m_restartItem->getContentSize().width/2 +
-			m_goItem->getContentSize().width, origin.y + visibleSize.height/2));
-		m_goItem->setVisible(false);
-
-		m_backItem = MenuItemImage::create("back.png", "back.png", [this](cocos2d::Ref* pSender){
+	auto backListener = EventListenerTouchOneByOne::create();
+	backListener->onTouchBegan = [=](Touch* touch, Event* event)->bool{
+		auto target = event->getCurrentTarget();
+		Vec2 point = target->convertTouchToNodeSpace(touch);
+		if (rect.containsPoint(point)){
 			auto scene = IGameLevelSelector::createScene(m_section);
 			Director::getInstance()->replaceScene(scene);
 			Director::getInstance()->resume();
-		});
-		m_backItem->setPosition(Vec2(origin.x + visibleSize.width/2 - m_restartItem->getContentSize().width/2 -
-			m_backItem->getContentSize().width,	origin.y + visibleSize.height/2));
-		m_backItem->setVisible(false);
+			return true;
+		}
+		return false;
+	};
+	this->_eventDispatcher->addEventListenerWithSceneGraphPriority(backListener, m_backBtn);
 
-		auto menu = Menu::create(physicsItem, stopItem, m_goItem, m_restartItem, m_backItem, NULL);
-		menu->setPosition(Vec2::ZERO);
-		this->addChild(menu);
-		this->reorderChild(menu, ZORDER_MENU);
+	auto labelPrice = node->getChildByTag(305);
+	m_labelPrice = LabelPrice::create(m_money);
+	labelPrice->addChild(m_labelPrice);
+
+	TTFConfig config;
+	config.fontSize = FONTSIZE_PRICE;
+	config.fontFilePath = FONT_PRICE;
+	auto str = String::createWithFormat("Section%d-%d", m_section, m_id+1);
+	auto labelSection = Label::createWithTTF(config, str->getCString());
+	auto labelsection = node->getChildByTag(306);
+	labelsection->addChild(labelSection);
 }
 
 void Game::loadPeople(){

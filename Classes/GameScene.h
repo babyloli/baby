@@ -17,9 +17,10 @@ private:
 	TMXTiledMap* m_map;
 	Baby* m_baby;
 	Vec2 m_enemyPosition;
-	MenuItem* m_goItem;
-	MenuItem* m_restartItem;
-	MenuItem* m_backItem;
+	Node* m_pauseBtn;
+	Node* m_backBtn;
+	Node* m_replayBtn;
+	Node* m_playBtn;
 	Vector<Menu*> m_upgradeMenus;
 	Vector<Menu*> m_menus;
 	Vector<Enemy*> m_enemies;
@@ -60,6 +61,7 @@ public:
 	void onEnter() override;
 	void loadData();
 	void loadMenu();
+	void loadToolBar();
 	void loadPeople();
 	void loadTower();
 	void loadRoadAndBarriers();

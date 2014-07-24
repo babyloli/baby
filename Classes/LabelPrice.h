@@ -14,6 +14,8 @@ public:
 	bool initWithFile(const std::string& backgroundSprite, int price);
 	static LabelPrice* create(Texture2D* texture, int price);
 	bool initWithTexture(Texture2D* texture, int price);
+	static LabelPrice* create(int price);
+	bool initWithPrice(int price);
 
 	void setPrice(int price);
 };

@@ -57,6 +57,26 @@ bool LabelPrice::initWithTexture(Texture2D* texture, int price)
 	return true;
 }
 
+LabelPrice* LabelPrice::create(int price){
+	LabelPrice *pRet = new LabelPrice();
+	if (pRet && pRet->initWithPrice(price)) {
+		pRet->autorelease();
+		return pRet;
+	}
+	else {
+		delete pRet;
+		pRet = NULL;
+		return NULL;
+	} 
+}
+
+bool LabelPrice::initWithPrice(int price)
+{
+	m_label = Label::createWithTTF(m_config, std::to_string(price));
+	this->addChild(m_label);
+	return true;
+}
+
 void LabelPrice::setPrice(int price){
 	if (m_label){
 		m_label->setString(std::to_string(price));
