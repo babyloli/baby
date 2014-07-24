@@ -18,7 +18,13 @@ const int UI_BUTTON_BUY_ITEM2=36;
 const int UI_BUTTON_BUY_ITEM3=44;
 const int UI_BUTTON_BUY_ITEM4=48;
 const int UI_BUTTON_BUY_ITEM5=50;
+const int UI_SECTIONSELECT = 60;
+const int UI_BUTTON_SELECT_BABY = 61;
+const int UI_BUTTON_SELECT_KID = 62;
+const int UI_BUTTON_SELECT_CHILD = 63;
+const int UI_BUTTON_SELECT_YOUTH =64;
 
+//////////////////////////////////////////////////////////////////////////////
 Scene* IModeSelector::createScene()
 {
 	auto scene = Scene::create();
@@ -59,8 +65,8 @@ void IModeSelector::onTouchSelectButton(Object* pSender, TouchEventType type)
 		{
 		case UI_BUTTON_GROWUP_MODE:
 			{
-				auto gameLevelSelector = IGameLevelSelector::createScene(1);
-				Director::getInstance()->replaceScene(gameLevelSelector);
+				auto sectionLevelSelector = ISectionSelector::createScene();
+				Director::getInstance()->replaceScene(sectionLevelSelector);
 			}						
 			break;
 		case UI_BUTTON_DOCTOR_MODE:
@@ -76,6 +82,7 @@ void IModeSelector::onTouchSelectButton(Object* pSender, TouchEventType type)
 		break;
 	}
 }
+
 
 
 
@@ -97,7 +104,7 @@ bool IBGMusicSetter::init()
 
 	auto setterUI = GUIReader::getInstance()->widgetFromJsonFile("UI/setup_1/setup_1.ExportJson");
 	this->addChild(setterUI);
-
+	
 	auto musicCheckBox = static_cast<CheckBox*>(Helper::seekWidgetByTag(setterUI,UI_CHECKBOX_BACKGROUND_MUSIC));
 	auto effectCheckBox = static_cast<CheckBox*>(Helper::seekWidgetByTag(setterUI,UI_CHECKBOX_SOUND_EFFECT));
 	auto closeItem = static_cast<Button*>(Helper::seekWidgetByTag(setterUI,UI_BUTTON_CLOSESETTER));
@@ -159,6 +166,74 @@ void IBGMusicSetter::onTouchCloseItem(Object* pSender, TouchEventType type)
 
 
 
+//////////////////////////////////////////////////////////////////////////
+Scene* ISectionSelector::createScene()
+{
+	auto scene = Scene::create();
+	auto layer = ISectionSelector::create();
+	scene->addChild(layer);
+	return scene;
+}
+
+bool ISectionSelector::init()
+{
+	if (!Layer::init())
+	{
+		return false;
+	}
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+	auto origin = Director::getInstance()->getVisibleOrigin();
+
+	
+	auto sectionSelector = GUIReader::getInstance()->widgetFromJsonFile("UI/sectionSelect_1/sectionSelect_1.ExportJson");
+	if (!sectionSelector)
+	{
+		CCLOG("NULL");
+	}
+	this->addChild(sectionSelector);
+
+	auto babyButton = static_cast<Button*>(Helper::seekWidgetByTag(sectionSelector,UI_BUTTON_SELECT_BABY));
+	auto kidButtion = static_cast<Button*>(Helper::seekWidgetByTag(sectionSelector,UI_BUTTON_SELECT_KID));
+	auto childButton = static_cast<Button*>(Helper::seekWidgetByTag(sectionSelector,UI_BUTTON_SELECT_CHILD));
+	auto youthButton = static_cast<Button*>(Helper::seekWidgetByTag(sectionSelector,UI_BUTTON_SELECT_YOUTH));
+	babyButton->addTouchEventListener(this,toucheventselector(ISectionSelector::onTouchSelected));
+	kidButtion->addTouchEventListener(this,toucheventselector(ISectionSelector::onTouchSelected));
+	childButton->addTouchEventListener(this,toucheventselector(ISectionSelector::onTouchSelected));
+	youthButton->addTouchEventListener(this,toucheventselector(ISectionSelector::onTouchSelected));
+
+	auto returnItem = MenuItemImage::create("back.png","back.png",CC_CALLBACK_1(ISectionSelector::onTouchReternItem,this));
+	returnItem->setPosition(Vec2(origin.x + visibleSize.width - returnItem->getContentSize().width / 2, origin.y + returnItem->getContentSize().height /2));
+	auto menu = Menu::create(returnItem,NULL);
+	menu->setPosition(Vec2::ZERO);
+	this->addChild(menu, ZORDER_MENU);
+	
+	return true;
+}
+
+void ISectionSelector::onTouchSelected(Object* pSender, TouchEventType type)
+{
+	int tag = static_cast<Button*>(pSender)->getTag();
+	switch (type)
+	{
+	case TOUCH_EVENT_ENDED:
+		if (tag <= 64 && tag > 60)
+		{
+			auto gs = IGameLevelSelector::createScene(tag - UI_SECTIONSELECT);
+			Director::getInstance()->replaceScene(gs);
+		}
+		break;
+	default:
+		break;
+	}
+}
+
+void ISectionSelector::onTouchReternItem(Ref* pSender)
+{
+	auto homescene = IHomeMenu::createScene();
+	Director::getInstance()->replaceScene(homescene);
+}
+
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Scene* IGameLevelSelector::createScene(int section)
 {
@@ -203,8 +278,8 @@ bool IGameLevelSelector::init(int section)
 	menu->setPosition(Vec2::ZERO);
 	this->addChild(menu, ZORDER_MENU);	
 
-	TableView* tableView = TableView::create(this,visibleSize);      //创建一个tableView
-	tableView->setDirection(TableView::Direction::HORIZONTAL);   //设置方向
+	TableView* tableView = TableView::create(this,visibleSize);      // 创建一个tableView
+	tableView->setDirection(TableView::Direction::HORIZONTAL);   // 设置方向
 	tableView->setPosition(Vec2::ZERO);      //设置位置
 	tableView->setDelegate(this);  //该步骤非常关键，把tableView和当前类绑定在一起，故后面后面调用的主体是tableView
 	this->addChild(tableView,0);
@@ -215,8 +290,8 @@ bool IGameLevelSelector::init(int section)
 
 void IGameLevelSelector::menuReturnCallback(Ref* pSender)
 {
-	auto homeMenu = IHomeMenu::createScene();
-	Director::getInstance()->replaceScene(homeMenu);
+	auto back = ISectionSelector::createScene();
+	Director::getInstance()->replaceScene(back);
 }
 
 void IGameLevelSelector::scrollViewDidScroll(cocos2d::extension::ScrollView* view)
@@ -258,12 +333,10 @@ TableViewCell* IGameLevelSelector::tableCellAtIndex(TableView* table, ssize_t id
 		Sprite* sprite = Sprite::create("HelloWorld.png");
 		auto cellSize = tableCellSizeForIndex(table, idx);
 		sprite->setPosition(Vec2(cellSize.width/2,cellSize.height/2));
-		//sprite->setTag(123);
 		cell->addChild(sprite);
 
 		auto label = LabelTTF::create(string->getCString(),"Helvetica",20.0);
 		label->setPosition(Vec2(cellSize.width/2 -10,200));
-		//label->setAnchorPoint(Vec2::ZERO);
 		label->setTag(456);
 		cell->addChild(label);
 	}
@@ -278,9 +351,13 @@ TableViewCell* IGameLevelSelector::tableCellAtIndex(TableView* table, ssize_t id
 
 ssize_t IGameLevelSelector::numberOfCellsInTableView(TableView* table)
 {
+	//Manager控制个数
 	int ret = ResourceManager::getInstance()->sections[m_section-1].getRows();
 	return ret;
 }
+
+
+
 
 /////////////////////////////////////////////////////////////////////////////////////
 Scene* IShop::createScene()
@@ -317,12 +394,15 @@ bool IShop::init()
 	
 	Text* Money_text=(Text*)(ShopUI->getChildByTag(54));
 	std::string money;
+	//Get gold coins from  user default database
 	int m=UserDefault::sharedUserDefault()->getIntegerForKey("myGold");
-	coins=m;
+	coins = m;
+	//Display the number of coins
 	std::stringstream ss;
-	ss<<m;
+	ss << m;
 	std::string s1=ss.str();
 	Money_text->setString(s1);
+
 	return true;
 }
 
