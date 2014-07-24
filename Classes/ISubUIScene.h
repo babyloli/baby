@@ -33,6 +33,20 @@ private:
 	void onTouchCloseItem(Object* pSender, TouchEventType type);
 };
 
+// UI for select game section
+class ISectionSelector : public Layer
+{
+public:
+	static Scene* createScene();
+	virtual bool init();
+	CREATE_FUNC(ISectionSelector);
+private:
+	int m_section;
+	void onTouchSelected(Object* pSender, TouchEventType type);
+	void onTouchReternItem(Ref* pSender);
+};
+
+
 
 
 // UI for select the game level
@@ -70,7 +84,7 @@ private:
 
 
 
-
+// UI for shop
 class IShop : public cocos2d::Layer
 {
 public:
