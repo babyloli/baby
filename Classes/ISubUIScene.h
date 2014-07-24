@@ -94,6 +94,14 @@ public:
 	void onTouchCloseItem(Object* pSender, TouchEventType type);
 	void onTouchBuyButton(Object* pSender, TouchEventType type);
 	int coins;
+	int price[5];
+	Text* Money_text;
+	Button* item1_num;
+	Button* item2_num;
+	Button* item3_num;
+	Button* item4_num;
+	Button* item5_num;
+
 private:
 
 };
