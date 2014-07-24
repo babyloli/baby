@@ -36,19 +36,11 @@ bool IHomeMenu::init()
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
 
-<<<<<<< HEAD
 	auto bgImage = Sprite::create("UI/bg.png");
 	bgImage->setPosition(Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2));
 	this->addChild(bgImage, -5);
 
 	auto menuUI = GUIReader::getInstance()->widgetFromJsonFile("UI/start_1/start_1.ExportJson");
-=======
-	auto bgImage = Sprite::create("bg.png");
-	bgImage->setPosition(Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2));
-	this->addChild(bgImage, -5);
-
-	auto menuUI = GUIReader::getInstance()->widgetFromJsonFile("start_1/start_1.ExportJson");
->>>>>>> 32d363213ca9727bfc70575e9ab53ededc6d4e4f
 	this->addChild(menuUI);
 
 	auto playGameButton = static_cast<Button*>(Helper::seekWidgetByTag(menuUI,UI_BUTTON_PLAYGAME));
@@ -62,13 +54,8 @@ bool IHomeMenu::init()
 	///////////////////////////////////////////////////////////////////////////////////////
 	// add an oryzae animation as a sprite of background
 	auto cache = SpriteFrameCache::sharedSpriteFrameCache();
-<<<<<<< HEAD
 	cache->addSpriteFramesWithFile("UI/sprite/hpSprite.plist");
 	auto _bgSprite = SpriteBatchNode::create("UI/sprite/hpSprite.png");
-=======
-	cache->addSpriteFramesWithFile("sprite/hpSprite.plist");
-	auto _bgSprite = SpriteBatchNode::create("sprite/hpSprite.png");
->>>>>>> 32d363213ca9727bfc70575e9ab53ededc6d4e4f
 	this->addChild(_bgSprite,-4);
 
 	auto bgOryzae = Sprite::createWithSpriteFrameName("hpsprite1.png");
@@ -92,7 +79,6 @@ bool IHomeMenu::init()
 	}
 	auto bgAnimation = Animation::createWithSpriteFrames(oryzaeFrames,1.0f/6.0f);
 	bgOryzae->runAction(RepeatForever::create(Animate::create(bgAnimation)));
-<<<<<<< HEAD
 	Button *shopButton=Button::create("store_1/shopbutton01.png","store_1/shopbutton02.png");
 	shopButton->setPosition(Vec2(1200,680));
 	shopButton->addTouchEventListener(this,toucheventselector(IHomeMenu::onTouchShopButton));
@@ -114,10 +100,6 @@ bool IHomeMenu::init()
 void IHomeMenu::onTouchShopButton(Object* pSender, TouchEventType type){
 	auto shopUI = IShop::create();
 	this->addChild(shopUI);
-=======
-
-    return true;
->>>>>>> 32d363213ca9727bfc70575e9ab53ededc6d4e4f
 }
 
 void IHomeMenu::onTouchButton(Object* pSender, TouchEventType type)

@@ -33,7 +33,6 @@ private:
 	void onTouchCloseItem(Object* pSender, TouchEventType type);
 };
 
-<<<<<<< HEAD
 // UI for select game section
 class ISectionSelector : public Layer
 {
@@ -58,18 +57,6 @@ public:
 	bool init(int section);
 	void menuReturnCallback(Ref* pSender);  
 	static IGameLevelSelector* create(int section);
-=======
-
-
-// UI for select the game level
-class IGameLevelSelector : public cocos2d::Layer,  public cocos2d::extension::TableViewDataSource, public cocos2d::extension::TableViewDelegate
-{
-public:
-	static cocos2d::Scene* createScene();
-	virtual bool init();
-	void menuReturnCallback(Ref* pSender);  
-	CREATE_FUNC(IGameLevelSelector);
->>>>>>> 32d363213ca9727bfc70575e9ab53ededc6d4e4f
 
 	// 滚动时调用，空实现，（继承/因为继承了抽象类所以必须重写 ）
 	virtual void scrollViewDidScroll(cocos2d::extension::ScrollView* view);
@@ -92,7 +79,6 @@ public:
 	//void scrollBar(TableView* table);
 
 private:
-<<<<<<< HEAD
 	int m_section;
 };
 
@@ -109,8 +95,6 @@ public:
 	void onTouchBuyButton(Object* pSender, TouchEventType type);
 	int coins;
 private:
-=======
->>>>>>> 32d363213ca9727bfc70575e9ab53ededc6d4e4f
 
 };
 
