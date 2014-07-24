@@ -16,23 +16,23 @@
       "classname": "CCNode",
       "name": null,
       "canedit": true,
-      "objecttag": 103,
+      "objecttag": 101,
       "rotation": 0,
       "scalex": 1,
       "scaley": 1,
       "visible": 1,
-      "x": 599.5003662109375,
-      "y": 589.00042724609375,
+      "x": 0,
+      "y": 0,
       "zorder": 1,
       "gameobjects": [],
       "components": [
         {
-          "__type": "ComSpriteSurrogate:#EditorCommon.JsonModel.Component",
-          "classname": "CCSprite",
-          "name": "CCSprite",
+          "__type": "ComGameMapSurrogate:#EditorCommon.JsonModel.Component",
+          "classname": "CCTMXTiledMap",
+          "name": "CCTMXTiledMap",
           "file": null,
           "fileData": {
-            "path": "Mapsource/map1 resource.psd_Psd.Dir/cloud.png",
+            "path": "Map/Section1/2/2.tmx",
             "plistFile": "",
             "resourceType": 0
           }
@@ -44,13 +44,41 @@
       "classname": "CCNode",
       "name": null,
       "canedit": true,
-      "objecttag": 104,
+      "objecttag": 102,
       "rotation": 0,
       "scalex": 1,
       "scaley": 1,
       "visible": 1,
-      "x": 600.00048828125,
-      "y": 350.00030517578125,
+      "x": 120.74971771240234,
+      "y": 518.611083984375,
+      "zorder": 1,
+      "gameobjects": [],
+      "components": [
+        {
+          "__type": "ComSpriteSurrogate:#EditorCommon.JsonModel.Component",
+          "classname": "CCSprite",
+          "name": "CCSprite",
+          "file": null,
+          "fileData": {
+            "path": "Mapsource/map1 resource.psd_Psd.Dir/GO.png",
+            "plistFile": "",
+            "resourceType": 0
+          }
+        }
+      ]
+    },
+    {
+      "__type": "ComGameObjectSurrogate:#EditorCommon.JsonModel",
+      "classname": "CCNode",
+      "name": null,
+      "canedit": true,
+      "objecttag": 103,
+      "rotation": 0,
+      "scalex": 1,
+      "scaley": 1,
+      "visible": 1,
+      "x": 202.749755859375,
+      "y": 194.61091613769531,
       "zorder": 1,
       "gameobjects": [],
       "components": [
@@ -72,23 +100,23 @@
       "classname": "CCNode",
       "name": null,
       "canedit": true,
-      "objecttag": 101,
+      "objecttag": 104,
       "rotation": 0,
       "scalex": 1,
       "scaley": 1,
       "visible": 1,
-      "x": 0,
-      "y": 0,
+      "x": 280.74978637695312,
+      "y": 192.61091613769531,
       "zorder": 1,
       "gameobjects": [],
       "components": [
         {
-          "__type": "ComGameMapSurrogate:#EditorCommon.JsonModel.Component",
-          "classname": "CCTMXTiledMap",
-          "name": "CCTMXTiledMap",
+          "__type": "ComSpriteSurrogate:#EditorCommon.JsonModel.Component",
+          "classname": "CCSprite",
+          "name": "CCSprite",
           "file": null,
           "fileData": {
-            "path": "Map/Section1/1/1.tmx",
+            "path": "Mapsource/map1 resource.psd_Psd.Dir/DoubleTree.png",
             "plistFile": "",
             "resourceType": 0
           }
@@ -105,8 +133,64 @@
       "scalex": 1,
       "scaley": 1,
       "visible": 1,
-      "x": 394.72335815429688,
-      "y": 153.77072143554688,
+      "x": 200.749755859375,
+      "y": 274.6109619140625,
+      "zorder": 1,
+      "gameobjects": [],
+      "components": [
+        {
+          "__type": "ComSpriteSurrogate:#EditorCommon.JsonModel.Component",
+          "classname": "CCSprite",
+          "name": "CCSprite",
+          "file": null,
+          "fileData": {
+            "path": "Mapsource/map1 resource.psd_Psd.Dir/DoubleTree.png",
+            "plistFile": "",
+            "resourceType": 0
+          }
+        }
+      ]
+    },
+    {
+      "__type": "ComGameObjectSurrogate:#EditorCommon.JsonModel",
+      "classname": "CCNode",
+      "name": null,
+      "canedit": true,
+      "objecttag": 106,
+      "rotation": 0,
+      "scalex": 1,
+      "scaley": 1,
+      "visible": 1,
+      "x": 280.74978637695312,
+      "y": 274.6109619140625,
+      "zorder": 1,
+      "gameobjects": [],
+      "components": [
+        {
+          "__type": "ComSpriteSurrogate:#EditorCommon.JsonModel.Component",
+          "classname": "CCSprite",
+          "name": "CCSprite",
+          "file": null,
+          "fileData": {
+            "path": "Mapsource/map1 resource.psd_Psd.Dir/DoubleTree.png",
+            "plistFile": "",
+            "resourceType": 0
+          }
+        }
+      ]
+    },
+    {
+      "__type": "ComGameObjectSurrogate:#EditorCommon.JsonModel",
+      "classname": "CCNode",
+      "name": null,
+      "canedit": true,
+      "objecttag": 107,
+      "rotation": 0,
+      "scalex": 1,
+      "scaley": 1,
+      "visible": 1,
+      "x": 554.7498779296875,
+      "y": 236.61091613769531,
       "zorder": 1,
       "gameobjects": [],
       "components": [
@@ -128,69 +212,13 @@
       "classname": "CCNode",
       "name": null,
       "canedit": true,
-      "objecttag": 106,
-      "rotation": 0,
-      "scalex": 1,
-      "scaley": 1,
-      "visible": 1,
-      "x": 839.72369384765625,
-      "y": 436.27096557617188,
-      "zorder": 1,
-      "gameobjects": [],
-      "components": [
-        {
-          "__type": "ComSpriteSurrogate:#EditorCommon.JsonModel.Component",
-          "classname": "CCSprite",
-          "name": "CCSprite",
-          "file": null,
-          "fileData": {
-            "path": "Mapsource/map1 resource.psd_Psd.Dir/nipple.png",
-            "plistFile": "",
-            "resourceType": 0
-          }
-        }
-      ]
-    },
-    {
-      "__type": "ComGameObjectSurrogate:#EditorCommon.JsonModel",
-      "classname": "CCNode",
-      "name": null,
-      "canedit": true,
-      "objecttag": 107,
-      "rotation": 0,
-      "scalex": 1,
-      "scaley": 1,
-      "visible": 1,
-      "x": 919.7237548828125,
-      "y": 436.27096557617188,
-      "zorder": 1,
-      "gameobjects": [],
-      "components": [
-        {
-          "__type": "ComSpriteSurrogate:#EditorCommon.JsonModel.Component",
-          "classname": "CCSprite",
-          "name": "CCSprite",
-          "file": null,
-          "fileData": {
-            "path": "Mapsource/map1 resource.psd_Psd.Dir/nipple.png",
-            "plistFile": "",
-            "resourceType": 0
-          }
-        }
-      ]
-    },
-    {
-      "__type": "ComGameObjectSurrogate:#EditorCommon.JsonModel",
-      "classname": "CCNode",
-      "name": null,
-      "canedit": true,
       "objecttag": 108,
       "rotation": 0,
       "scalex": 1,
       "scaley": 1,
       "visible": 1,
-      "x": 837.22369384765625,
-      "y": 353.77090454101562,
+      "x": 718.75,
+      "y": 232.61093139648438,
       "zorder": 1,
       "gameobjects": [],
       "components": [
@@ -200,7 +228,7 @@
           "name": "CCSprite",
           "file": null,
           "fileData": {
-            "path": "Mapsource/map1 resource.psd_Psd.Dir/nipple.png",
+            "path": "Mapsource/map1 resource.psd_Psd.Dir/gift.png",
             "plistFile": "",
             "resourceType": 0
           }
@@ -217,8 +245,8 @@
       "scalex": 1,
       "scaley": 1,
       "visible": 1,
-      "x": 917.2237548828125,
-      "y": 353.7708740234375,
+      "x": 1156.7501220703125,
+      "y": 438.61102294921875,
       "zorder": 1,
       "gameobjects": [],
       "components": [
@@ -245,8 +273,8 @@
       "scalex": 1,
       "scaley": 1,
       "visible": 1,
-      "x": 320.1678466796875,
-      "y": 280.3819580078125,
+      "x": 1154.7503662109375,
+      "y": 358.61102294921875,
       "zorder": 1,
       "gameobjects": [],
       "components": [
@@ -256,7 +284,7 @@
           "name": "CCSprite",
           "file": null,
           "fileData": {
-            "path": "Mapsource/map1 resource.psd_Psd.Dir/rainbow.png",
+            "path": "Mapsource/map1 resource.psd_Psd.Dir/nipple.png",
             "plistFile": "",
             "resourceType": 0
           }
@@ -273,8 +301,8 @@
       "scalex": 1,
       "scaley": 1,
       "visible": 1,
-      "x": 320.1678466796875,
-      "y": 594.382080078125,
+      "x": 1152.750244140625,
+      "y": 280.61099243164062,
       "zorder": 1,
       "gameobjects": [],
       "components": [
@@ -284,7 +312,7 @@
           "name": "CCSprite",
           "file": null,
           "fileData": {
-            "path": "Mapsource/map1 resource.psd_Psd.Dir/rainbow.png",
+            "path": "Mapsource/map1 resource.psd_Psd.Dir/nipple.png",
             "plistFile": "",
             "resourceType": 0
           }
@@ -296,13 +324,13 @@
       "classname": "CCNode",
       "name": null,
       "canedit": true,
-      "objecttag": 102,
+      "objecttag": 112,
       "rotation": 0,
       "scalex": 1,
       "scaley": 1,
       "visible": 1,
-      "x": 118.50579833984375,
-      "y": 516.736083984375,
+      "x": 636.7498779296875,
+      "y": 348.61099243164062,
       "zorder": 1,
       "gameobjects": [],
       "components": [
@@ -312,7 +340,7 @@
           "name": "CCSprite",
           "file": null,
           "fileData": {
-            "path": "Mapsource/map1 resource.psd_Psd.Dir/GO.png",
+            "path": "Mapsource/map1 resource.psd_Psd.Dir/rainbow.png",
             "plistFile": "",
             "resourceType": 0
           }
@@ -331,7 +359,7 @@
       "__type": "ComSceneSurrogate:#EditorCommon.JsonModel.Component",
       "classname": "CCScene",
       "name": "CCScene",
-      "scenename": "section1-1"
+      "scenename": "section1-2"
     },
     {
       "__type": "ComSimpleAudioSurrogate:#EditorCommon.JsonModel.Component",

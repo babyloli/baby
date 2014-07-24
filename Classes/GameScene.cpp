@@ -98,7 +98,7 @@ void Game::loadData(){
 	Node* node = s->createNodeWithSceneFile(str);
 	if(node)	
 		this -> addChild(node);
-	Node* map = node->getChildByTag(100);
+	Node* map = node->getChildByTag(101);
 	auto component = (ComRender*)(map->getComponent("CCTMXTiledMap"));
 	m_map = (TMXTiledMap*)(component->getNode());
 	m_money = INIT_PRICE;

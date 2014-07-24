@@ -268,7 +268,8 @@ bool IGameLevelSelector::init(int section)
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 
-	auto bgimg = Sprite::create("UI/bg.png");
+//	auto bgimg = Sprite::create("UI/bg.png");
+	auto bgimg = Sprite::create("UI/sectionSelect_1/sectionSelect0.png", Rect(0, 0, 1280, 720));
 	bgimg->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2);
 	this->addChild(bgimg, 0);
 
@@ -306,17 +307,13 @@ void IGameLevelSelector::tableCellTouched(cocos2d::extension::TableView* table, 
 {
 	CCLOG("cell touched at index: %ld", cell->getIdx());
 	int i = cell->getIdx();
-	if (i == 0)
-	{
-		auto gamescene1 = Game::createScene(m_section, i);
-		Director::getInstance()->replaceScene(gamescene1);
-	}
+	auto gamescene1 = Game::createScene(m_section, i);
+	Director::getInstance()->replaceScene(gamescene1);
 }
 
 Size IGameLevelSelector::tableCellSizeForIndex(TableView* table, ssize_t idx)
 {
-	//return Size(500,400);
-	return Size(600,720);
+	return Size(860,720);
 }
 
 //设置数据源tableCellAtIndex
@@ -330,21 +327,24 @@ TableViewCell* IGameLevelSelector::tableCellAtIndex(TableView* table, ssize_t id
 		//创建单元，如果自定义单元效果，需要继承tableViewCell, 并且重载draw
 		cell = new TableViewCell();
 		cell->autorelease();
-		Sprite* sprite = Sprite::create("HelloWorld.png");
+		idx++;
+		auto str = String::createWithFormat("Map/Section%d/%d/%d.png", m_section, idx, idx);
+		Sprite* sprite = Sprite::create(str->getCString());
 		auto cellSize = tableCellSizeForIndex(table, idx);
+		sprite->setScale(0.5f);
 		sprite->setPosition(Vec2(cellSize.width/2,cellSize.height/2));
 		cell->addChild(sprite);
 
-		auto label = LabelTTF::create(string->getCString(),"Helvetica",20.0);
-		label->setPosition(Vec2(cellSize.width/2 -10,200));
-		label->setTag(456);
-		cell->addChild(label);
+// 		auto label = LabelTTF::create(string->getCString(),"Helvetica",20.0);
+// 		label->setPosition(Vec2(cellSize.width/2 -10,200));
+// 		label->setTag(456);
+// 		cell->addChild(label);
 	}
-	else
-	{
-		auto label = (LabelTTF*)cell->getChildByTag(456);
-		label->setString(string->getCString());
-	}
+// 	else
+// 	{
+// 		auto label = (LabelTTF*)cell->getChildByTag(456);
+// 		label->setString(string->getCString());
+// 	}
 
 	return cell;
 }
