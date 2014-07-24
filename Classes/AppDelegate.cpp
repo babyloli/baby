@@ -1,8 +1,14 @@
 #include "AppDelegate.h"
+<<<<<<< HEAD
 #include "ResourceManager.h"
 #include "IHomeMenuScene.h"
+=======
+#include "IHomeMenuScene.h"
+
+>>>>>>> 32d363213ca9727bfc70575e9ab53ededc6d4e4f
 
 USING_NS_CC;
+
 
 AppDelegate::AppDelegate() {
 
@@ -18,21 +24,27 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto glview = director->getOpenGLView();
     if(!glview) {
         glview = GLView::create("My Game");
+		glview->setFrameSize(1280,720);
         director->setOpenGLView(glview);
     }
-	glview->setDesignResolutionSize(1280,720,ResolutionPolicy::SHOW_ALL);
 
     // turn on display FPS
     director->setDisplayStats(true);
-
-    // set FPS. the default value is 1.0/60 if you don't call this
+	
+	SimpleAudioEngine::sharedEngine()->preloadBackgroundMusic("music/bgm.mp3");
+	SimpleAudioEngine::sharedEngine()->playBackgroundMusic("music/bgm.mp3",true);
+   	
+	// set FPS. the default value is 1.0/60 if you don't call this
     director->setAnimationInterval(1.0 / 60);
 
-	ResourceManager::getInstance()->init();
     // create a scene. it's an autorelease object
     auto scene = IHomeMenu::createScene();
+<<<<<<< HEAD
 	CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("music/bgm.mp3");
 	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("music/bgm.mp3");
+=======
+
+>>>>>>> 32d363213ca9727bfc70575e9ab53ededc6d4e4f
     // run
     director->runWithScene(scene);
 

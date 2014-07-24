@@ -6,6 +6,10 @@
 #include "ui/CocosGUI.h"
 #include "cocostudio/CocoStudio.h"
 #include "editor-support/cocostudio/CCSGUIReader.h"
+<<<<<<< HEAD
+=======
+
+>>>>>>> 32d363213ca9727bfc70575e9ab53ededc6d4e4f
 using namespace cocostudio;
 using namespace cocos2d::ui;
 
@@ -23,8 +27,13 @@ public:
     
 	// a selector callback
 	void onTouchButton(Object* pSender, TouchEventType type);
+<<<<<<< HEAD
 	void onTouchShopButton(Object* pSender, TouchEventType type);
 	//void menuCloseCallback(cocos2d::Ref* pSender);
+=======
+	//void menuCloseCallback(cocos2d::Ref* pSender);
+
+>>>>>>> 32d363213ca9727bfc70575e9ab53ededc6d4e4f
     // implement the "static create()" method manually
     CREATE_FUNC(IHomeMenu);
 };
