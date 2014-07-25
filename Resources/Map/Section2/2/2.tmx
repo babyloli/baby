@@ -8,7 +8,7 @@
    eJwNwwc3FgAAAMDPzJY9yqiskGzJLIpQVraQTRkNSkgpMuMnu3vvggKBQLAhhhpmuLeMMNIoo40x1jjjvW2CiSaZbIqpppluhpne8a5ZZptjrve87wPzzLfAQot8aLEllvrIMh9bboWVVlltjbXW+cR6n9pgo00222Krz3xum+2+8KUddvrKLrvt8bVv7LXPfgcc9K1DDjviqGOOO+Gk75xy2hnfO+uc8y646JLLrrjqBz+65robbvrJz37xq1tu+83v7vjDXffc96cH/vK3h/7xr0ce+88TTz3z3Asv/e+V194ABtEoyQ==
   </data>
  </layer>
- <objectgroup name="road" width="16" height="9">
+ <objectgroup name="road" width="16" height="9" visible="0">
   <object x="240" y="160" width="204" height="76">
    <properties>
     <property name="direction" value="right"/>
@@ -35,11 +35,11 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="people" width="16" height="9">
+ <objectgroup name="people" width="16" height="9" visible="0">
   <object name="enemy" x="256" y="186" width="22" height="22"/>
   <object name="baby" x="1040" y="160" width="80" height="80"/>
  </objectgroup>
- <objectgroup name="tower" width="16" height="9">
+ <objectgroup name="tower" width="16" height="9" visible="0">
   <object x="480" y="400" width="80" height="80">
    <properties>
     <property name="type" value="3,4,5"/>
@@ -72,16 +72,16 @@
   </object>
  </objectgroup>
  <objectgroup name="barrier" width="16" height="9">
-  <object x="160" y="80" width="400" height="80"/>
-  <object x="480" y="80" width="80" height="480"/>
-  <object x="480" y="480" width="320" height="80"/>
-  <object x="720" y="80" width="80" height="400"/>
-  <object x="720" y="80" width="400" height="80"/>
-  <object x="880" y="240" width="240" height="80"/>
-  <object x="880" y="240" width="80" height="480"/>
-  <object x="320" y="640" width="640" height="80"/>
-  <object x="320" y="240" width="80" height="480"/>
-  <object x="160" y="240" width="240" height="80"/>
-  <object x="160" y="80" width="80" height="240"/>
+  <object x="240" y="160" width="240"/>
+  <object x="480" y="160" height="400"/>
+  <object x="480" y="560" width="320"/>
+  <object x="800" y="160" height="400"/>
+  <object x="800" y="160" width="320"/>
+  <object x="880" y="240" width="240"/>
+  <object x="880" y="240" height="400"/>
+  <object x="240" y="160" height="80"/>
+  <object x="240" y="240" width="160"/>
+  <object x="400" y="240" height="400"/>
+  <object x="400" y="640" width="480"/>
  </objectgroup>
 </map>

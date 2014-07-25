@@ -24,14 +24,14 @@
   <object name="enemy" x="174" y="182" width="26" height="26"/>
   <object name="baby" x="960" y="560" width="80" height="80"/>
  </objectgroup>
- <objectgroup name="barrier" width="16" height="9" visible="0">
-  <object x="80" y="80" width="1040" height="80"/>
-  <object x="1040" y="80" width="80" height="560"/>
-  <object x="80" y="80" width="80" height="240"/>
-  <object x="80" y="240" width="880" height="80"/>
-  <object x="880" y="240" width="80" height="400"/>
+ <objectgroup name="barrier" width="16" height="9">
+  <object x="160" y="160" height="80"/>
+  <object x="160" y="160" width="880"/>
+  <object x="1040" y="160" height="480"/>
+  <object x="160" y="240" width="800"/>
+  <object x="960" y="240" height="400"/>
  </objectgroup>
- <objectgroup name="tower" width="16" height="9">
+ <objectgroup name="tower" width="16" height="9" visible="0">
   <object x="240" y="240" width="80" height="80">
    <properties>
     <property name="type" value="1,2"/>

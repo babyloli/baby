@@ -248,10 +248,10 @@ void Game::loadToolBar(){
 	TTFConfig config;
 	config.fontSize = FONTSIZE_PRICE;
 	config.fontFilePath = FONT_PRICE;
-	auto str = String::createWithFormat("Section%d-%d", m_section, m_id+1);
-	auto labelSection = Label::createWithTTF(config, str->getCString());
+	auto str = String::createWithFormat("Section%d-%d    %d/%d", m_section, m_id+1, 1, m_numRound);
+	m_labelSection = Label::createWithTTF(config, str->getCString());
 	auto labelsection = node->getChildByTag(306);
-	labelsection->addChild(labelSection);
+	labelsection->addChild(m_labelSection);
 
 	TTFConfig config2;
 	config2.fontSize = 60;
@@ -434,6 +434,8 @@ void Game::addEnemy(float dt){
 				if (m_curRound != m_numRound){
 					m_curRound++;
 					m_isWaiting = false;
+					auto str = String::createWithFormat("Section%d-%d    %d/%d", m_section, m_id+1, m_curRound, m_numRound);
+					m_labelSection->setString(str->getCString());
 				}
 			}
 		}

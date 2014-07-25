@@ -29,7 +29,7 @@
   <object name="enemy" x="178" y="188" width="28" height="24"/>
   <object name="baby" x="1114" y="478" width="80" height="80"/>
  </objectgroup>
- <objectgroup name="tower" width="16" height="9">
+ <objectgroup name="tower" width="16" height="9" visible="0">
   <object x="560" y="400" width="80" height="80">
    <properties>
     <property name="type" value="1"/>
@@ -56,13 +56,13 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="barrier" width="16" height="9" visible="0">
-  <object x="80" y="80" width="560" height="80"/>
-  <object x="560" y="80" width="80" height="400"/>
-  <object x="560" y="400" width="640" height="80"/>
-  <object x="80" y="80" width="80" height="240"/>
-  <object x="80" y="240" width="400" height="80"/>
-  <object x="400" y="240" width="80" height="400"/>
-  <object x="400" y="560" width="800" height="80"/>
+ <objectgroup name="barrier" width="16" height="9">
+  <object x="160" y="160" width="400"/>
+  <object x="560" y="160" height="320"/>
+  <object x="560" y="480" width="640"/>
+  <object x="160" y="160" height="80"/>
+  <object x="160" y="240" width="320"/>
+  <object x="480" y="240" height="320"/>
+  <object x="480" y="560" width="720"/>
  </objectgroup>
 </map>

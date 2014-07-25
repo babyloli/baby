@@ -319,14 +319,14 @@ Size IGameLevelSelector::tableCellSizeForIndex(TableView* table, ssize_t idx)
 //设置数据源tableCellAtIndex
 TableViewCell* IGameLevelSelector::tableCellAtIndex(TableView* table, ssize_t idx)
 {
-	String* string = String::createWithFormat("%d", idx);
+//	String* string = String::createWithFormat("%d", idx);
 	TableViewCell* cell = table->dequeueCell();
 
 	if (!cell)
 	{
 		//创建单元，如果自定义单元效果，需要继承tableViewCell, 并且重载draw
-		cell = new TableViewCell();
-		cell->autorelease();
+		cell = TableViewCell::create();
+//		cell->autorelease();
 		idx++;
 		auto str = String::createWithFormat("Map/Section%d/%d/%d.png", m_section, idx, idx);
 		Sprite* sprite = Sprite::create(str->getCString());

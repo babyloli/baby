@@ -50,18 +50,21 @@
   <object name="baby" x="560" y="560" width="80" height="80"/>
  </objectgroup>
  <objectgroup name="barrier" width="16" height="9">
-  <object x="160" y="80" width="960" height="80"/>
-  <object x="1040" y="80" width="80" height="560"/>
-  <object x="606" y="558" width="514" height="80"/>
-  <object x="560" y="400" width="80" height="240"/>
-  <object x="320" y="400" width="320" height="80"/>
-  <object x="320" y="480" width="320" height="80"/>
-  <object x="160" y="80" width="80" height="640"/>
-  <object x="160" y="640" width="400" height="80"/>
-  <object x="240" y="240" width="720" height="80"/>
-  <object x="880" y="240" width="80" height="240"/>
-  <object x="720" y="240" width="80" height="240"/>
-  <object x="720" y="400" width="240" height="80"/>
+  <object x="240" y="160" width="800"/>
+  <object x="1040" y="160" height="400"/>
+  <object x="640" y="560" width="400"/>
+  <object x="240" y="160" height="80"/>
+  <object x="240" y="240" width="720"/>
+  <object x="960" y="240" height="240"/>
+  <object x="720" y="480" width="240"/>
+  <object x="720" y="320" height="160"/>
+  <object x="240" y="320" width="480"/>
+  <object x="240" y="320" height="320"/>
+  <object x="240" y="640" width="400"/>
+  <object x="320" y="400" height="160"/>
+  <object x="320" y="400" width="320"/>
+  <object x="640" y="400" height="160"/>
+  <object x="320" y="560" width="320"/>
  </objectgroup>
  <objectgroup name="tower" width="16" height="9">
   <object x="240" y="240" width="80" height="80">
