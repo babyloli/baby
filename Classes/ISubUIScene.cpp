@@ -113,7 +113,9 @@ bool IBGMusicSetter::init()
 	effectCheckBox->addEventListenerCheckBox(this,checkboxselectedeventselector(IBGMusicSetter::onSelectedSoundEffects));
 	closeItem->addTouchEventListener(this,toucheventselector(IBGMusicSetter::onTouchCloseItem));
 	
-	musicCheckBox->setSelectedState(CocosDenshion::SimpleAudioEngine::getInstance()->isBackgroundMusicPlaying());
+	//musicCheckBox->setSelectedState(CocosDenshion::SimpleAudioEngine::getInstance()->isBackgroundMusicPlaying());
+	musicCheckBox->setSelectedState(ResourceManager::getInstance()->isBackgroundMusicAllow());
+	effectCheckBox->setSelectedState(ResourceManager::getInstance()->isEffectMusicAllow());
 	//if(SimpleAudioEngine::getInstance()->
 	//effectCheckBox->setSelectedState(true);
 	
@@ -126,9 +128,12 @@ void IBGMusicSetter::onSelectedBGMusic(Object* pSender, CheckBoxEventType type)
 	{
 	case CHECKBOX_STATE_EVENT_UNSELECTED:
 				CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+				ResourceManager::getInstance()->setBackgroundMusic(false);
 				break;
 	case CHECKBOX_STATE_EVENT_SELECTED:
-				CocosDenshion::SimpleAudioEngine::getInstance()->rewindBackgroundMusic();
+				CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("music/MenuBackgroundMusic.mp3",true);
+				//CocosDenshion::SimpleAudioEngine::getInstance()->rewindBackgroundMusic();
+				ResourceManager::getInstance()->setBackgroundMusic(true);
 				//SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
 				break;
 	default:
@@ -141,10 +146,12 @@ void IBGMusicSetter::onSelectedSoundEffects(Object* pSender, CheckBoxEventType t
 	switch (type)
 	{
 	case CHECKBOX_STATE_EVENT_UNSELECTED:
-			CocosDenshion::SimpleAudioEngine::getInstance()->pauseAllEffects();
+			//CocosDenshion::SimpleAudioEngine::getInstance()->pauseAllEffects();
+			ResourceManager::getInstance()->setEffectMusic(false);
 			break;
 	case  CHECKBOX_STATE_EVENT_SELECTED:
-			CocosDenshion::SimpleAudioEngine::getInstance()->resumeAllEffects();
+			//CocosDenshion::SimpleAudioEngine::getInstance()->resumeAllEffects();
+			ResourceManager::getInstance()->setEffectMusic(true);
 			break;
 	default:
 			break;

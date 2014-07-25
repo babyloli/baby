@@ -54,6 +54,10 @@ bool Game::init()
 	loadTower();
 	loadRoadAndBarriers();
 
+	if(ResourceManager::getInstance()->isBackgroundMusicAllow()){
+		CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+	}
+
 	this->scheduleUpdate();
 	this->schedule(schedule_selector(Game::moveEnemy), 0.5f);
 	this->schedule(schedule_selector(Game::deleteObject), 0.5f);
@@ -69,6 +73,7 @@ void Game::update(float dt){
 }
 
 void Game::loadData(){
+	m_countdown = 3;
 	m_isGameOver = false;
 	HCSVFile* enemyDesc = ResourceManager::getInstance()->enemyDesc;
 	HCSVFile* sectionData = &ResourceManager::getInstance()->sections[m_section-1];
@@ -178,6 +183,11 @@ void Game::loadToolBar(){
 				target->setVisible(false);
 				m_playBtn->setVisible(true);
 				modalSprite->setVisible(true);
+
+				if(ResourceManager::getInstance()->isBackgroundMusicAllow()){
+					CocosDenshion::SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
+				}
+
 				auto listener1 = EventListenerTouchOneByOne::create();//创建一个触摸监听    
 				listener1->setSwallowTouches(true);//设置不想向下传递触摸  true是不想 默认为false  
 				listener1->onTouchBegan = [](Touch* touch, Event* event){   
@@ -207,6 +217,10 @@ void Game::loadToolBar(){
 				m_pauseBtn->setVisible(true);
 				modalSprite->setVisible(false);
 				this->_eventDispatcher->removeEventListenersForTarget(modalSprite);
+
+				if(ResourceManager::getInstance()->isBackgroundMusicAllow()){
+					CocosDenshion::SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
+				}
 				return true;
 			}		
 		}
@@ -233,6 +247,12 @@ void Game::loadToolBar(){
 		auto target = event->getCurrentTarget();
 		Vec2 point = target->convertTouchToNodeSpace(touch);
 		if (rect.containsPoint(point)){
+
+			if(ResourceManager::getInstance()->isBackgroundMusicAllow()){
+				CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+				CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("music/MenuBackgroundMusic.mp3",true);
+			}
+
 			auto scene = IGameLevelSelector::createScene(m_section);
 			Director::getInstance()->replaceScene(scene);
 			Director::getInstance()->resume();
@@ -408,9 +428,8 @@ void Game::loadRoadAndBarriers(){
 }
 
 void Game::countDown(float dt){
-	static int count = 3;
 
-	if (count <= 0){
+	if (m_countdown <= 0){
 		this->unschedule(schedule_selector(Game::countDown));
 		this->_eventDispatcher->removeEventListenersForTarget(m_modalNode);
 		m_towerbase->setVisible(false);
@@ -418,11 +437,16 @@ void Game::countDown(float dt){
 		m_isWaiting = false;
 		m_curRound = 1;
 		m_labelCountDown->removeFromParent();
-		count = 3;
+//		m_countdown = 3;
+
+		if(ResourceManager::getInstance()->isBackgroundMusicAllow()){		
+			CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("music/GameSceneMusic0.mp3");
+			CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("music/GameSceneMusic0.mp3",true);
+		}
 	}
 	else
 	{
-		m_labelCountDown->setString(std::to_string(count--));
+		m_labelCountDown->setString(std::to_string(m_countdown--));
 	}
 }
 

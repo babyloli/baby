@@ -76,8 +76,19 @@ public:
 public :
 	static ResourceManager* getInstance();
 	void init();
+
+	void setBackgroundMusic(const bool isAllow);
+	bool isBackgroundMusicAllow();
+
+	void setEffectMusic(const bool isAllow);
+	bool isEffectMusicAllow();
+
 private:
 	static ResourceManager* m_instance;
+
+	bool m_backgroundMusicAllow;
+	bool m_effectMusicAllow;
+
 	ResourceManager();
 	virtual ~ResourceManager();
 	ResourceManager(const ResourceManager&);

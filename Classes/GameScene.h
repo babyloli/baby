@@ -57,12 +57,13 @@ private:
 
 	int m_id;
 	int m_section;
+	int m_countdown;
 public:
 	static cocos2d::Scene* createScene(int section, int id);
 	virtual bool init();  
 	static Game* create(int section, int id);
 	Game(int section, int id);
-
+	/*~Game();*/
 	void onEnter() override;
 	void loadData();
 	void loadMenu();
