@@ -53,7 +53,7 @@ bool Game::init()
 	loadPeople();
 	loadTower();
 	loadRoadAndBarriers();
-	
+
 	this->scheduleUpdate();
 	this->schedule(schedule_selector(Game::moveEnemy), 0.5f);
 	this->schedule(schedule_selector(Game::deleteObject), 0.5f);
@@ -69,6 +69,7 @@ void Game::update(float dt){
 }
 
 void Game::loadData(){
+	m_isGameOver = false;
 	HCSVFile* enemyDesc = ResourceManager::getInstance()->enemyDesc;
 	HCSVFile* sectionData = &ResourceManager::getInstance()->sections[m_section-1];
 	m_numRound = std::atoi(sectionData->getData(m_id, 1));
@@ -426,94 +427,109 @@ void Game::countDown(float dt){
 }
 
 void Game::addEnemy(float dt){
-	if (m_isWaiting){
-		if (m_curRound != 0){
-			m_elapsedTimeRound += dt;
-			if (m_elapsedTimeRound > m_timeBetweenRound){
-				m_elapsedTimeRound = 0;
-				if (m_curRound != m_numRound){
-					m_curRound++;
-					m_isWaiting = false;
-					auto str = String::createWithFormat("Section%d-%d    %d/%d", m_section, m_id+1, m_curRound, m_numRound);
-					m_labelSection->setString(str->getCString());
-				}
-			}
-		}
-	}
-	else {
-		if (m_curNumInRound < m_numPerRound){
-			m_elapsedTimeMonster += dt;
-			if (m_elapsedTimeMonster > m_deltaMonsterGenerateTime){
-				m_elapsedTimeMonster -= m_deltaMonsterGenerateTime;
-				//generate monster
-				Enemy* enemy = NULL;
-				double rate = rand() / (double)RAND_MAX;
-				if (rate < m_deltaMonsterGenerateRate)
-				{
-					int row = rand() % (m_numMonster);	
-					enemy = Enemy::create(row, m_curRound);
-				}else
-				{
-					int row = rand() % (m_numLittleBoss) + m_numMonster;
-					enemy = Enemy::create(row, m_curRound);
-				}
-				if (!enemy)
-					return;
-				enemy->setPosition(m_enemyPosition);
-				this->addChild(enemy);
-				m_enemies.pushBack(enemy);
-				m_curNumInRound++;
-			}
-		}
-		else
-		{
-			if (m_curRound != m_numRound)
-				m_curNumInRound = 0;
-			m_isWaiting = true;
-		}
-	}
-}
-
-void Game::moveEnemy(float dt){
-	for (int i = 0; i < m_enemies.size(); i++){		//对每个enemy
-		Enemy* enemy = m_enemies.at(i);
-		if (enemy->isDie()){	//如果它死了
-			this->addMoney(enemy->getPrice());	//那么它会掉金钱
-			enemy->removeFromParent();	//然后就把它消除掉
-			m_enemies.eraseObject(enemy);	//容器里也要释放哦
-		}else{	//如果它没死
-			Vec2 enemy_position = enemy->getPosition();	//看看它的位置
-			if (m_baby->m_position.containsPoint(enemy_position)){	//如果碰到Baby了
-				bool gameover = m_baby->setDamage(enemy->getDamage());	//扣Baby的血看她死不死
-				enemy->removeFromParent();	//把enemy消除掉
-				m_enemies.eraseObject(enemy);	//容器里也要释放哦
-				m_baby->hurt();	//Baby痛了一下
-				if (gameover)
-				{
-					//TODO-------------------------------------------------------------------------------------
-				}
-			} 
-			else
-			{	//根据所在的road调整速度（方向）
-				for (std::vector<Road>::iterator it = m_roads.begin(); it != m_roads.end(); it++){
-					if (it->containsPoint(enemy_position)){
-						enemy->setDirection(it->getDirection());
-						enemy->setVelocity(it->getDirectionVec2() * enemy->getSpeed());
-						break;
+	if (!m_isGameOver){
+		if (m_isWaiting){
+			if (m_curRound != 0){
+				m_elapsedTimeRound += dt;
+				if (m_elapsedTimeRound > m_timeBetweenRound){
+					m_elapsedTimeRound = 0;
+					if (m_curRound != m_numRound){
+						m_curRound++;
+						m_isWaiting = false;
+						auto str = String::createWithFormat("Section%d-%d    %d/%d", m_section, m_id+1, m_curRound, m_numRound);
+						m_labelSection->setString(str->getCString());
 					}
 				}
 			}
 		}
-	}
-	if (m_enemies.empty() && m_curRound == m_numRound && m_curNumInRound == m_numPerRound){
-		//win
+		else {
+			if (m_curNumInRound < m_numPerRound){
+				m_elapsedTimeMonster += dt;
+				if (m_elapsedTimeMonster > m_deltaMonsterGenerateTime){
+					m_elapsedTimeMonster -= m_deltaMonsterGenerateTime;
+					//generate monster
+					Enemy* enemy = NULL;
+					double rate = rand() / (double)RAND_MAX;
+					if (rate < m_deltaMonsterGenerateRate)
+					{
+						int row = rand() % (m_numMonster);	
+						enemy = Enemy::create(row, m_curRound);
+					}else
+					{
+						int row = rand() % (m_numLittleBoss) + m_numMonster;
+						enemy = Enemy::create(row, m_curRound);
+					}
+					if (!enemy)
+						return;
+					enemy->setPosition(m_enemyPosition);
+					this->addChild(enemy);
+					m_enemies.pushBack(enemy);
+					m_curNumInRound++;
+				}
+			}
+			else
+			{
+				if (m_curRound != m_numRound)
+					m_curNumInRound = 0;
+				m_isWaiting = true;
+			}
+		}
+	}	
+}
+
+void Game::moveEnemy(float dt){
+	if (!m_isGameOver){
+		for (int i = 0; i < m_enemies.size(); i++){		//对每个enemy
+			Enemy* enemy = m_enemies.at(i);
+			if (enemy->isDie()){	//如果它死了
+				this->addMoney(enemy->getPrice());	//那么它会掉金钱
+				enemy->removeFromParent();	//然后就把它消除掉
+				m_enemies.eraseObject(enemy);	//容器里也要释放哦
+			}else{	//如果它没死
+				Vec2 enemy_position = enemy->getPosition();	//看看它的位置
+				if (m_baby->m_position.containsPoint(enemy_position)){	//如果碰到Baby了
+					bool gameover = m_baby->setDamage(enemy->getDamage());	//扣Baby的血看她死不死
+					enemy->removeFromParent();	//把enemy消除掉
+					m_enemies.eraseObject(enemy);	//容器里也要释放哦
+					m_baby->hurt();	//Baby痛了一下
+					if (gameover)
+					{
+						//TODO-------------------------------------------------------------------------------------
+					}
+				} 
+				else
+				{	//根据所在的road调整速度（方向）
+					for (std::vector<Road>::iterator it = m_roads.begin(); it != m_roads.end(); it++){
+						if (it->containsPoint(enemy_position)){
+							enemy->setDirection(it->getDirection());
+							enemy->setVelocity(it->getDirectionVec2() * enemy->getSpeed());
+							break;
+						}
+					}
+				}
+			}
+		}
+		if (m_enemies.empty() && m_curRound == m_numRound && m_curNumInRound == m_numPerRound){
+			//win
+			Size visibleSize = Director::getInstance()->getVisibleSize();
+			Vec2 origin = Director::getInstance()->getVisibleOrigin();
+			auto action = EaseBounceOut::create(MoveTo::create(0.3f, Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2)));
+			auto sprite = Sprite::create("youWin.png");
+			sprite->setScale(0.5f);
+			sprite->setPosition(Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height));
+			this->addChild(sprite, ZORDER_TEXT);
+			sprite->runAction(action);
+			m_isGameOver = true;
+		}
 	}
 }
 
 void Game::findEnemy(float dt){
-	for (int i = 0; i < m_towers.size(); i++){
-		Tower* tower = m_towers.at(i);
-		tower->generateBullet(dt);
+	if (!m_isGameOver){
+		for (int i = 0; i < m_towers.size(); i++){
+			Tower* tower = m_towers.at(i);
+			tower->generateBullet(dt);
+		}
 	}
 }
 

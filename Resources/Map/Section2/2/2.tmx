@@ -42,32 +42,32 @@
  <objectgroup name="tower" width="16" height="9" visible="0">
   <object x="480" y="400" width="80" height="80">
    <properties>
-    <property name="type" value="3,4,5"/>
+    <property name="type" value="2,3,4"/>
    </properties>
   </object>
   <object x="720" y="400" width="80" height="80">
    <properties>
-    <property name="type" value="3,4,5"/>
+    <property name="type" value="2,3,4"/>
    </properties>
   </object>
   <object x="320" y="560" width="80" height="80">
    <properties>
-    <property name="type" value="3,4,5"/>
+    <property name="type" value="2,3,4"/>
    </properties>
   </object>
   <object x="880" y="560" width="80" height="80">
    <properties>
-    <property name="type" value="3,4,5"/>
+    <property name="type" value="2,3,4"/>
    </properties>
   </object>
   <object x="480" y="240" width="80" height="80">
    <properties>
-    <property name="type" value="3,4,5"/>
+    <property name="type" value="2,3,4"/>
    </properties>
   </object>
   <object x="720" y="240" width="80" height="80">
    <properties>
-    <property name="type" value="3,4,5"/>
+    <property name="type" value="2,3,4"/>
    </properties>
   </object>
  </objectgroup>

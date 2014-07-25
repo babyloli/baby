@@ -41,6 +41,7 @@ private:
 	float m_timeBetweenRound;
 	float m_elapsedTimeRound;
 	bool m_isWaiting;
+	bool m_isGameOver;
 
 	int m_deltaMonsterDefence;
 	int m_deltaMonsterGenerateTime;
