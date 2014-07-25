@@ -4,8 +4,6 @@
 #include "cocos2d.h"
 #include "LabelPrice.h"
 USING_NS_CC;
-#define ZORDER_LABELPRICE 4
-#define TAG_LABELPRICE 9
 
 class MenuItemTower : public MenuItemSprite{
 public:

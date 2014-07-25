@@ -1,46 +1,54 @@
 #pragma once
 
-#include"cocos2d.h"
-#include"Enemy.h"
-#include"Bullet.h"
-#include"GameScene.h"
-
+#include "cocos2d.h"
+#include "Enemy.h"
+#include "Bullet.h"
 USING_NS_CC;
 
-#define TOWER_TYPE_0 0
-#define TOWER_TYPE_1 1
-#define TOWER_TYPE_2 2
-#define TOWER_TYPE_3 3
-#define TOWER_TYPE_4 4
-#define TOWER_TYPE_5 5
-
-class Tower:public Sprite
+class Tower : public Node
 {
 private:
-	int type;
-	int level;
-	int range;
-	Enemy* target;
-	Sprite* tower;
-	Vector<Bullet*> bullets;
+	int m_level;
+	int m_id;
+	std::string m_name;	//tower name
+	int m_type;	//physics or magic
+	float m_speed;	//attack frequency
+	int m_attack;
+	int m_deltaAttack;	//when upgrade
+	int m_range;
+	int m_deltaRange;	//when upgrade
+	int m_price;
+	int m_deltaPrice;	//when upgrade
+	float m_moneyReturnRate;
+	std::string m_bulletName;
+	int m_bulletSpeed;
+	bool m_rotateEnable;
+	bool m_bulletRotateEnable;
+	bool m_bulletCollide;
+	float m_bulletDensity;
 
+	float m_elapsedTime;
+	Enemy* m_target;
+	Sprite* m_sprite;
+	DrawNode* m_circle;
 public:
-	CREATE_FUNC(Tower);
 	Tower();
-	Tower(int type);
-	~Tower(void);
-	virtual bool init();
-	static Tower* create(int type);
+	static Tower* create(int id);
+	bool initWithType(int id);
+
 	Enemy* getCloseTarget();
-	void generateBullet();//生成子弹并且向target发射
+	void generateBullet(float dt);//生成子弹并且向target发射
 	void shotBullet(Bullet* bullet,Enemy* target); //子弹向目标enemy发射
 
-	int getType();
-	void setType(int type);
+	int getId();
+	void setId(int id);
 	int getlevel();
 	void upgrade();//升级
 	int getRange();
 	void setRange(int r);
+	void showRange(bool);
 
+	int getUpgradePrice();
+	int getMoneyWhenDeleted();
 };
 

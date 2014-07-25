@@ -3,32 +3,31 @@
 
 #include "cocos2d.h"
 USING_NS_CC;
-#define VIRUS_TYPE_0 0
-#define VIRUS_TYPE_1 1 
-#define VIRUS_TYPE_2 2
-#define VIRUS_TYPE_3 3
-#define VIRUS_TYPE_4 4
-#define VIRUS_TYPE_5 5
 
 class Enemy : public Node{
 private:
+	int m_curRound;
 	int m_damage;
 	int m_originSpeed;
 	int m_curSpeed;
 	int m_magicalDefence;
-	int m_physicalDefebce;
-	int m_type;
+	int m_physicalDefence;
+	int m_price;
+	int m_type; //monster littleBoss bigBoss
+	int m_id;
+	std::string m_name;
+	int m_direction;
+	bool m_isDie;
 	ProgressTimer* m_pProTimer;
-	PhysicsBody* m_body;
+	Sprite* m_enemy;
 public:
-	CREATE_FUNC(Enemy);
+	static Enemy* create(int id, int curRound);
 	Enemy();
-	static Enemy* create(int type);
-	Enemy(int type);
-	virtual bool init() override;
+	bool initWithId(int id, int curRound);
+	void initial(int id);
 
-	int getType();
-	bool setType(int type);
+	std::string getName();
+	bool setName(std::string name);
 	int getMaxHp();
 	bool setMaxHp(int hp);
 	int getOriginSpeed();
@@ -37,9 +36,20 @@ public:
 	bool setSpeed(int rspeed);
 	Vec2 getVelocity();
 	void setVelocity(Vec2 v);
-	
+	bool isDie();
+	void setDie(bool d);
 	float getHp();
 	bool setHp(float hp);
-	
+	int getDamage();
+	void setDamage(int damage);
+	int getPhysicalDefence();
+	void setPhysicalDefence(int d);
+	int getMagicalDefence();
+	void setMagicalDefence(int d);
+	int getDirection();
+	void setDirection(int direction);
+	int getPrice();
+	void setPrice(int price);
+	Sprite* getEnemy();
 };
 #endif

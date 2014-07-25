@@ -1,32 +1,16 @@
 #include "Enemy.h"
+#include "ResourceManager.h"
 #include <math.h>
 USING_NS_CC;
 
 Enemy::Enemy()
-	:m_damage(1)
-	,m_originSpeed(3)
-	,m_curSpeed(3)
-	,m_magicalDefence(0)
-	,m_physicalDefebce(0)
-	,m_type(0)
-	,m_pProTimer(NULL)
+	:m_pProTimer(NULL)
 {
 }
 
-Enemy::Enemy(int type)
-	:m_damage(1)
-	,m_originSpeed(3)
-	,m_curSpeed(3)
-	,m_magicalDefence(0)
-	,m_physicalDefebce(0)
-	,m_type(type)
-	,m_pProTimer(NULL)
-{
-}
-
-Enemy* Enemy::create(int type){
-	Enemy *pRet = new Enemy(type);
-	if (pRet && pRet->init()) {
+Enemy* Enemy::create(int id, int curRound){
+	Enemy *pRet = new Enemy();
+	if (pRet && pRet->initWithId(id, curRound)) {
 		pRet->autorelease();
 		return pRet;
 	}
@@ -37,31 +21,35 @@ Enemy* Enemy::create(int type){
 	} 
 }
 
-bool Enemy::init(){
-	Sprite* enemy = NULL;
-	switch (m_type)
-	{
-	case VIRUS_TYPE_0:
-		enemy = Sprite::create("s1.png");
-//		this->setPhysicsBody(PhysicsBody::createCircle(32.0f, PhysicsMaterial(1.0f, 0.0f, 0.1f)));
-		m_body = PhysicsBody::createCircle(16.0f);
-		this->setPhysicsBody(m_body);
-		m_curSpeed = m_originSpeed = 50;
-	default:
-		break;
-	}
-	if (!enemy)
+bool Enemy::initWithId(int id, int curRound){
+	this->setTag(TAG_ENEMY);
+	this->setZOrder(ZORDER_ENEMY);
+	m_curRound = curRound;
+	initial(id);
+	m_direction = ROAD_NONE;
+	m_isDie = false;
+	m_enemy = Sprite::create();
+	if (!m_enemy)
 		return false;
-	this->addChild(enemy);
-	
-	auto hpBar = Sprite::create("Maxhpbar.png");
+	this->addChild(m_enemy);
+
+	//attach physics body
+	auto body = PhysicsBody::createBox(Size(50, 50), PhysicsMaterial(0.5f, 0.0f, 0.5f));
+	body->setCategoryBitmask(CategoryBitMask_Enemy);
+	body->setContactTestBitmask(ContactTestBitMask_Enemy);
+	body->setCollisionBitmask(CollisionBitMask_Enemy);
+	body->setRotationEnable(false);
+	this->setPhysicsBody(body);
+
+	//创建血条
+	auto hpBar = Sprite::createWithTexture(ResourceManager::getInstance()->hpBar);
 	if (!hpBar)
 		return false;
 	m_pProTimer = ProgressTimer::create(hpBar);
 	m_pProTimer->setType(ProgressTimer::Type::BAR);
 	m_pProTimer->setMidpoint(Vec2(0, 0.5f));
 	m_pProTimer->setBarChangeRate(Vec2(1, 0));
-	m_pProTimer->setPercentage(30);
+	m_pProTimer->setPercentage(100);
 	m_pProTimer->setScale(0.06f);
 	m_pProTimer->setPosition(0,25);
 	this->addChild(m_pProTimer);
@@ -69,13 +57,26 @@ bool Enemy::init(){
 	return true;
 }
 
+void Enemy::initial(int id){
+	HCSVFile* enemyData = ResourceManager::getInstance()->enemyData;	
+	m_damage = std::atoi(enemyData->getData(id, 7));
+	m_curSpeed = m_originSpeed = std::atoi(enemyData->getData(id, 6));
+	int defenceUp = std::atoi(enemyData->getData(id, 9)) * (m_curRound - 1);
+	m_physicalDefence = std::atoi(enemyData->getData(id, 4)) + defenceUp;
+	m_magicalDefence = std::atoi(enemyData->getData(id, 5)) + defenceUp;
+	m_price = std::atoi(enemyData->getData(id, 8));
+	m_type = std::atoi(enemyData->getData(id, 1));
+	m_id = id;
+	m_name = enemyData->getData(id, 2);
+}
+
 //----------------get/set-----------------------
 
-int Enemy::getType(){
-	return this->m_type;
+std::string Enemy::getName(){
+	return this->m_name;
 }
-bool Enemy::setType(int type){
-	this->m_type=type;
+bool Enemy::setName(std::string name){
+	this->m_name=name;
 	return true;
 }
 
@@ -88,7 +89,13 @@ float Enemy::getHp(){
 
 bool Enemy::setHp(float hp){
 	if (m_pProTimer){
-		m_pProTimer->setPercentage(hp);
+		if (hp > 0)
+			m_pProTimer->setPercentage(hp);
+		else
+		{
+			m_pProTimer->setPercentage(0);
+			m_isDie = true;
+		}
 		return true;
 	}
 	return false;
@@ -109,9 +116,90 @@ bool Enemy::setSpeed(int rspeed){
 }
 
 Vec2 Enemy::getVelocity(){
-	return this->m_body->getVelocity();
+	return this->getPhysicsBody()->getVelocity();
 }
 
 void Enemy::setVelocity(Vec2 v){
-	return this->m_body->setVelocity(v);
+	return this->getPhysicsBody()->setVelocity(v);
+}
+
+bool Enemy::isDie(){
+	return m_isDie;
+}
+
+void Enemy::setDie(bool d){
+	m_isDie = d;
+}
+
+int Enemy::getDamage(){
+	return m_damage;
+}
+
+void Enemy::setDamage(int damage){
+	m_damage = damage;
+}
+
+int Enemy::getPhysicalDefence(){
+	return m_physicalDefence;
+}
+
+void Enemy::setPhysicalDefence(int d){
+	m_physicalDefence = d;
+}
+
+int Enemy::getMagicalDefence(){
+	return m_magicalDefence;
+}
+
+void Enemy::setMagicalDefence(int d){
+	m_magicalDefence = d;
+}
+
+int Enemy::getDirection(){
+	return m_direction;
+}
+
+void Enemy::setDirection(int direction){
+	if (direction != m_direction){
+		m_enemy->stopAllActions();
+		//抽搐模式
+		if (m_type == 0){
+			HCSVFile* enemyData = ResourceManager::getInstance()->enemyData;
+			int num = std::atoi(ResourceManager::getInstance()->enemyDesc->getData(0, 4));
+			int row = rand() % num;
+			this->initial(row);
+		}	
+
+		std::string dir_cur = "";
+		switch (direction)
+		{
+		case ROAD_RIGHT:
+			dir_cur = "right";
+			break;
+		case ROAD_UP:
+			dir_cur = "up";
+			break;
+		case ROAD_LEFT:
+			dir_cur = "left";
+			break;
+		case ROAD_DOWN:
+			dir_cur = "down";
+			break;
+		}
+		m_enemy->runAction( RepeatForever::create(Animate::create(
+			AnimationCache::getInstance()->getAnimation(m_name + dir_cur))));
+		m_direction = direction;
+	}
+}
+
+int Enemy::getPrice(){
+	return m_price;
+}
+
+void Enemy::setPrice(int price){
+	m_price = price;
+}
+
+Sprite* Enemy::getEnemy(){
+	return m_enemy;	
 }
