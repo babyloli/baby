@@ -488,11 +488,11 @@ void Game::moveEnemy(float dt){
 			}else{	//如果它没死
 				Vec2 enemy_position = enemy->getPosition();	//看看它的位置
 				if (m_baby->m_position.containsPoint(enemy_position)){	//如果碰到Baby了
-					bool gameover = m_baby->setDamage(enemy->getDamage());	//扣Baby的血看她死不死
+					m_isGameOver = m_baby->setDamage(enemy->getDamage());	//扣Baby的血看她死不死
 					enemy->removeFromParent();	//把enemy消除掉
 					m_enemies.eraseObject(enemy);	//容器里也要释放哦
 					m_baby->hurt();	//Baby痛了一下
-					if (gameover)
+					if (m_isGameOver)
 					{
 						//TODO-------------------------------------------------------------------------------------
 					}
