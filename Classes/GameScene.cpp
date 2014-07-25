@@ -432,12 +432,11 @@ void Game::countDown(float dt){
 	if (m_countdown <= 0){
 		this->unschedule(schedule_selector(Game::countDown));
 		this->_eventDispatcher->removeEventListenersForTarget(m_modalNode);
+		m_modalNode->setVisible(false);
 		m_towerbase->setVisible(false);
-		m_modalNode->removeFromParent();
 		m_isWaiting = false;
 		m_curRound = 1;
 		m_labelCountDown->removeFromParent();
-//		m_countdown = 3;
 
 		if(ResourceManager::getInstance()->isBackgroundMusicAllow()){		
 			CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("music/GameSceneMusic0.mp3");
@@ -498,7 +497,7 @@ void Game::addEnemy(float dt){
 				m_isWaiting = true;
 			}
 		}
-	}	
+	}
 }
 
 void Game::moveEnemy(float dt){
@@ -518,7 +517,25 @@ void Game::moveEnemy(float dt){
 					m_baby->hurt();	//Baby痛了一下
 					if (m_isGameOver)
 					{
-						//TODO-------------------------------------------------------------------------------------
+						auto listener1 = EventListenerTouchOneByOne::create();//创建一个触摸监听    
+						listener1->setSwallowTouches(true);//设置不想向下传递触摸  true是不想 默认为false  
+						listener1->onTouchBegan = [](Touch* touch, Event* event){   
+							return true;   
+						};    
+						listener1->onTouchMoved = [](Touch* touch, Event* event){      
+						};    
+						listener1->onTouchEnded = [](Touch* touch, Event* event){    
+						};
+						this->_eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, m_modalNode);
+						m_modalNode->setVisible(true);
+
+						Size visibleSize = Director::getInstance()->getVisibleSize();
+						Vec2 origin = Director::getInstance()->getVisibleOrigin();
+						auto action = EaseBounceOut::create(MoveTo::create(0.3f, Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2)));
+						auto sprite = Sprite::create("youFail.png");
+						sprite->setPosition(Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height));
+						this->addChild(sprite, ZORDER_TEXT);
+						sprite->runAction(action);
 					}
 				} 
 				else
@@ -535,16 +552,94 @@ void Game::moveEnemy(float dt){
 		}
 		if (m_enemies.empty() && m_curRound == m_numRound && m_curNumInRound == m_numPerRound){
 			//win
+			auto listener1 = EventListenerTouchOneByOne::create();//创建一个触摸监听    
+			listener1->setSwallowTouches(true);//设置不想向下传递触摸  true是不想 默认为false  
+			listener1->onTouchBegan = [](Touch* touch, Event* event){   
+				return true;   
+			};    
+			listener1->onTouchMoved = [](Touch* touch, Event* event){      
+			};    
+			listener1->onTouchEnded = [](Touch* touch, Event* event){    
+			};
+			this->_eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, m_modalNode);
+			m_modalNode->setVisible(true);
+
 			Size visibleSize = Director::getInstance()->getVisibleSize();
 			Vec2 origin = Director::getInstance()->getVisibleOrigin();
 			auto action = EaseBounceOut::create(MoveTo::create(0.3f, Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2)));
 			auto sprite = Sprite::create("youWin.png");
-			sprite->setScale(0.5f);
 			sprite->setPosition(Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height));
 			this->addChild(sprite, ZORDER_TEXT);
 			sprite->runAction(action);
 			m_isGameOver = true;
+
+			auto toolbar = this->getChildByTag(10004)->getChildByTag(300);
+			this->_eventDispatcher->removeEventListenersForTarget(m_pauseBtn);
+			this->_eventDispatcher->removeEventListenersForTarget(m_playBtn);
+			auto next = Sprite::create("UI/GameMune.psd_Psd.Dir/next.png");
+			next->setPosition(toolbar->getChildByTag(301)->getPosition());
+			toolbar->addChild(next, 2);
+			auto listener2 = EventListenerTouchOneByOne::create();//创建一个触摸监听    
+			listener2->setSwallowTouches(true);//设置不想向下传递触摸  true是不想 默认为false  
+			listener2->onTouchBegan = [next, this](Touch* touch, Event* event){
+				Rect rect = next->getTextureRect();
+				auto target = event->getCurrentTarget();
+				Vec2 point = target->convertTouchToNodeSpace(touch);
+				if (rect.containsPoint(point)){
+					//TODO 跳到下一关
+					int rows = ResourceManager::getInstance()->sections[m_section-1].getRows();
+					m_id++;
+					if (m_id >= rows)//这个section清完了
+					{
+						m_section++;
+						if (m_section >= NUM_SECTIONS) //整个游戏通关了
+						{
+							if(ResourceManager::getInstance()->isBackgroundMusicAllow()){
+								CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+								CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("music/MenuBackgroundMusic.mp3",true);
+							}
+
+							auto scene = ISectionSelector::createScene();
+							Director::getInstance()->replaceScene(scene);
+						}
+						else	//下一个section的第一关(if any)
+						{
+							if (ResourceManager::getInstance()->sections[m_section-1].getRows() > 0){
+								auto scene = Game::createScene(m_section, 0);
+								Director::getInstance()->replaceScene(scene);
+							}
+							else
+							{
+								if(ResourceManager::getInstance()->isBackgroundMusicAllow()){
+									CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+									CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("music/MenuBackgroundMusic.mp3",true);
+								}
+
+								auto scene = ISectionSelector::createScene();
+								Director::getInstance()->replaceScene(scene);
+							}
+						}
+					}
+					else //跳到这个section的下一关
+					{
+						auto scene = Game::createScene(m_section, m_id);
+						Director::getInstance()->replaceScene(scene);
+					}
+					
+					return true;
+				}
+				return false;   
+			};
+			this->_eventDispatcher->addEventListenerWithSceneGraphPriority(listener2, next);
 		}
+	}
+	else	//game over
+	{
+		for (int i = 0; i < m_enemies.size(); i++){		//对每个enemy
+			Enemy* enemy = m_enemies.at(i);
+			enemy->removeFromParent();	//然后就把它消除掉
+		}
+		m_enemies.clear();
 	}
 }
 
@@ -599,8 +694,6 @@ void Game::onEnter(){
 			if (damage > 0)
 				enemy->setHp(enemy->getHp() - damage);
 			bullet->setDie();
-			//			bullet->getPhysicsBody()->setCategoryBitmask(CategoryBitMask_Bullet2);
-			//			bullet->getPhysicsBody()->setCollisionBitmask(CollisionBitMask_Bullet2);
 			return true;
 		}
 		return false;

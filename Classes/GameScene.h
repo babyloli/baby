@@ -30,8 +30,8 @@ private:
 	PhysicsWorld* m_physicsWorld;
 	LabelPrice* m_labelPrice;
 	Label* m_labelCountDown;
-	Label* m_labelSection;
-	DrawNode* m_modalNode;
+	Label* m_labelSection; //1 ~ NUM_SECTIONS
+	DrawNode* m_modalNode; //0 ~ NUM_STAGES
 	SpriteBatchNode* m_towerbase;
 	int m_money;
 	int m_numRound;

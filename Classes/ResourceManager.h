@@ -69,7 +69,7 @@ public:
 #define FONT_PRICE "fonts/cardFont.ttf"
 	//-----------------Game-----------------------
 #define PATH_TOWERBASE "images/tower/towerbase.png"
-#define INIT_PRICE 200
+#define NUM_SECTIONS 4
 	HCSVFile* sections;
 	Texture2D* background_price;
 	Texture2D* background_price_big;

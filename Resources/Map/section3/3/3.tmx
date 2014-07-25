@@ -21,12 +21,12 @@
   </object>
   <object x="720" y="240" width="358" height="82">
    <properties>
-    <property name=" direction" value="right"/>
+    <property name="direction" value="right"/>
    </properties>
   </object>
   <object x="1040" y="122" width="78" height="200">
    <properties>
-    <property name=" direction" value="up"/>
+    <property name="direction" value="up"/>
    </properties>
   </object>
   <object x="202" y="80" width="916" height="78">

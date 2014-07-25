@@ -14,8 +14,8 @@ void ResourceManager::init(){
 	towerData->openFile("data/towerDesign.csv");
 	propsData = new HCSVFile();
 	propsData->openFile("data/Props.csv");
-	sections = new HCSVFile[4];
-	for (int i = 1; i <= 4; i++){
+	sections = new HCSVFile[NUM_SECTIONS];
+	for (int i = 1; i <= NUM_SECTIONS; i++){
 		char str[20] = {0};
 		sprintf_s(str, "data/gameData%1d.csv", i);
 		sections[i-1].openFile(str);
