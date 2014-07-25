@@ -116,7 +116,6 @@ bool IBGMusicSetter::init()
 	//musicCheckBox->setSelectedState(CocosDenshion::SimpleAudioEngine::getInstance()->isBackgroundMusicPlaying());
 	musicCheckBox->setSelectedState(ResourceManager::getInstance()->isBackgroundMusicAllow());
 	effectCheckBox->setSelectedState(ResourceManager::getInstance()->isEffectMusicAllow());
-
 	//if(SimpleAudioEngine::getInstance()->
 	//effectCheckBox->setSelectedState(true);
 	
@@ -135,7 +134,6 @@ void IBGMusicSetter::onSelectedBGMusic(Object* pSender, CheckBoxEventType type)
 				CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("music/MenuBackgroundMusic.mp3",true);
 				//CocosDenshion::SimpleAudioEngine::getInstance()->rewindBackgroundMusic();
 				ResourceManager::getInstance()->setBackgroundMusic(true);
-
 				//SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
 				break;
 	default:

@@ -57,6 +57,7 @@ private:
 
 	int m_id;
 	int m_section;
+	int m_countdown;
 public:
 	static cocos2d::Scene* createScene(int section, int id);
 	virtual bool init();  

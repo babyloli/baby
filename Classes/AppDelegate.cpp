@@ -33,6 +33,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto scene = IHomeMenu::createScene();
 	CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("music/MenuBackgroundMusic.mp3");
 	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("music/MenuBackgroundMusic.mp3",true);
+
     // run
     director->runWithScene(scene);
 

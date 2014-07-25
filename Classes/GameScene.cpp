@@ -53,6 +53,7 @@ bool Game::init()
 	loadPeople();
 	loadTower();
 	loadRoadAndBarriers();
+
 	if(ResourceManager::getInstance()->isBackgroundMusicAllow()){
 		CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
 	}
@@ -72,6 +73,7 @@ void Game::update(float dt){
 }
 
 void Game::loadData(){
+	m_countdown = 3;
 	m_isGameOver = false;
 	HCSVFile* enemyDesc = ResourceManager::getInstance()->enemyDesc;
 	HCSVFile* sectionData = &ResourceManager::getInstance()->sections[m_section-1];
@@ -426,9 +428,8 @@ void Game::loadRoadAndBarriers(){
 }
 
 void Game::countDown(float dt){
-	static int count = 3;
 
-	if (count <= 0){
+	if (m_countdown <= 0){
 		this->unschedule(schedule_selector(Game::countDown));
 		this->_eventDispatcher->removeEventListenersForTarget(m_modalNode);
 		m_towerbase->setVisible(false);
@@ -436,7 +437,7 @@ void Game::countDown(float dt){
 		m_isWaiting = false;
 		m_curRound = 1;
 		m_labelCountDown->removeFromParent();
-		count = 3;
+//		m_countdown = 3;
 
 		if(ResourceManager::getInstance()->isBackgroundMusicAllow()){		
 			CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("music/GameSceneMusic0.mp3");
@@ -445,7 +446,7 @@ void Game::countDown(float dt){
 	}
 	else
 	{
-		m_labelCountDown->setString(std::to_string(count--));
+		m_labelCountDown->setString(std::to_string(m_countdown--));
 	}
 }
 

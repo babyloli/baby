@@ -89,7 +89,6 @@ private:
 	bool m_backgroundMusicAllow;
 	bool m_effectMusicAllow;
 
-
 	ResourceManager();
 	virtual ~ResourceManager();
 	ResourceManager(const ResourceManager&);

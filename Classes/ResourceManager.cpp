@@ -104,9 +104,6 @@ ResourceManager::ResourceManager()
 {
 }
 
-
-
-
 void ResourceManager::setBackgroundMusic(const bool isAllow)
 {
 	m_backgroundMusicAllow = isAllow;
