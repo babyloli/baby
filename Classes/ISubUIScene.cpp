@@ -24,6 +24,8 @@ const int UI_BUTTON_SELECT_KID = 62;
 const int UI_BUTTON_SELECT_CHILD = 63;
 const int UI_BUTTON_SELECT_YOUTH =64;
 
+TTFConfig configShop("fonts/cardFont.ttf",18);
+
 //////////////////////////////////////////////////////////////////////////////
 Scene* IModeSelector::createScene()
 {
@@ -342,22 +344,10 @@ TableViewCell* IGameLevelSelector::tableCellAtIndex(TableView* table, ssize_t id
 		sprite->setPosition(Vec2(cellSize.width/2,cellSize.height/2));
 		cell->addChild(sprite);
 
-<<<<<<< HEAD
-		auto label = LabelTTF::create(string->getCString(),"Helvetica",20.0);
-		label->setPosition(Vec2(cellSize.width/2 -10,200));
-		label->setTag(456);
-		cell->addChild(label);
-	}
-	else
-	{
-		auto label = (LabelTTF*)cell->getChildByTag(456);
-		label->setString(string->getCString());
-=======
 // 		auto label = LabelTTF::create(string->getCString(),"Helvetica",20.0);
 // 		label->setPosition(Vec2(cellSize.width/2 -10,200));
 // 		label->setTag(456);
 // 		cell->addChild(label);
->>>>>>> c9b02fba2d3c67530a1e4c479a21e2b704f6f0c7
 	}
 // 	else
 // 	{
@@ -414,6 +404,7 @@ bool IShop::init()
 	item4_num=static_cast<Button*>(Helper::seekWidgetByTag(ShopUI,81));
 	item5_num=static_cast<Button*>(Helper::seekWidgetByTag(ShopUI,82));
 	Money_text=(Text*)(ShopUI->getChildByTag(54));
+	////////////////////////////////////////////////////////////////////////////
 	Text* Item1_price=(Text*)(ShopUI->getChildByTag(32)->getChildByTag(57));
 	Text* Item2_price=(Text*)(ShopUI->getChildByTag(36)->getChildByTag(59));
 	Text* Item3_price=(Text*)(ShopUI->getChildByTag(44)->getChildByTag(60));
@@ -421,15 +412,19 @@ bool IShop::init()
 	Text* Item5_price=(Text*)(ShopUI->getChildByTag(50)->getChildByTag(62));
 	ResourceManager* instance=ResourceManager::getInstance();
 	HCSVFile* data = instance->propsData;
+
 	Item1_price->setText(data->getData(0,2));
 	Item2_price->setText(data->getData(1,2));
 	Item3_price->setText(data->getData(2,2));
 	Item4_price->setText(data->getData(3,2));
 	Item5_price->setText(data->getData(4,2));
+	auto priceLabel1 = Label::createWithTTF(configShop,std::to_string(1));
+
 	for(int i = 0 ;i<5;i++){
 		price[i]=atoi(data->getData(i,2));
 	}
-	int num=UserDefault::sharedUserDefault()->getIntegerForKey("Item1");
+
+	int num=UserDefault::sharedUserDefault()->getIntegerForKey(data->getData(0,1));
 	if(num<=0){
 		item1_num->setVisible(false);
 	}
@@ -439,7 +434,7 @@ bool IShop::init()
 		std::string s1=ss.str();
 		item1_num->setTitleText(s1);
 	}
-	num=UserDefault::sharedUserDefault()->getIntegerForKey("Item2");
+	num=UserDefault::sharedUserDefault()->getIntegerForKey(data->getData(1,1));
 	if(num<=0){
 		item2_num->setVisible(false);
 	}
@@ -449,7 +444,7 @@ bool IShop::init()
 		std::string s1=ss.str();
 		item2_num->setTitleText(s1);
 	}
-	num=UserDefault::sharedUserDefault()->getIntegerForKey("Item3");
+	num=UserDefault::sharedUserDefault()->getIntegerForKey(data->getData(2,1));
 	if(num<=0){
 		item3_num->setVisible(false);
 	}
@@ -459,7 +454,7 @@ bool IShop::init()
 		std::string s1=ss.str();
 		item3_num->setTitleText(s1);
 	}
-	num=UserDefault::sharedUserDefault()->getIntegerForKey("Item4");
+	num=UserDefault::sharedUserDefault()->getIntegerForKey(data->getData(3,1));
 	if(num<=0){
 		item4_num->setVisible(false);
 	}
@@ -469,7 +464,7 @@ bool IShop::init()
 		std::string s1=ss.str();
 		item4_num->setTitleText(s1);
 	}
-	num=UserDefault::sharedUserDefault()->getIntegerForKey("Item5");
+	num=UserDefault::sharedUserDefault()->getIntegerForKey(data->getData(4,1));
 	if(num<=0){
 		item5_num->setVisible(false);
 	}
@@ -480,15 +475,12 @@ bool IShop::init()
 		item5_num->setTitleText(s1);
 	}
 	std::string money;
-	//Get gold coins from  user default database
 	int m=UserDefault::sharedUserDefault()->getIntegerForKey("myGold");
-	coins = m;
-	//Display the number of coins
+	coins=m;
 	std::stringstream ss;
-	ss << m;
+	ss<<m;
 	std::string s1=ss.str();
-	Money_text->setString(s1);
-
+	Money_text->setString(s1); 
 	return true;
 }
 
@@ -498,7 +490,7 @@ void IShop::onTouchCloseItem(Object* pSender, TouchEventType type){
 
 void IShop::onTouchBuyButton(Object* pSender, TouchEventType type){
 	int tag = (static_cast<Button*>(pSender))->getTag();
-
+	HCSVFile* data = ResourceManager::getInstance()->propsData;
 	switch (type)
 	{
 	case  TOUCH_EVENT_ENDED:
@@ -507,8 +499,8 @@ void IShop::onTouchBuyButton(Object* pSender, TouchEventType type){
 		case UI_BUTTON_BUY_ITEM1:
 			{
 				if(coins>=price[0]){
-					int n=UserDefault::sharedUserDefault()->getIntegerForKey("Item1");
-					UserDefault::sharedUserDefault()->setIntegerForKey("Item1",++n);
+					int n=UserDefault::sharedUserDefault()->getIntegerForKey(data->getData(0,1));
+					UserDefault::sharedUserDefault()->setIntegerForKey(data->getData(0,1),++n);
 					coins=coins-price[0];
 					UserDefault::sharedUserDefault()->setIntegerForKey("myGold",coins);
 					std::stringstream ss;
@@ -530,8 +522,8 @@ void IShop::onTouchBuyButton(Object* pSender, TouchEventType type){
 		case UI_BUTTON_BUY_ITEM2:
 			{
 				if(coins>=price[1]){
-					int n=UserDefault::sharedUserDefault()->getIntegerForKey("Item2");
-					UserDefault::sharedUserDefault()->setIntegerForKey("Item2",++n);
+					int n=UserDefault::sharedUserDefault()->getIntegerForKey(data->getData(1,1));
+					UserDefault::sharedUserDefault()->setIntegerForKey(data->getData(1,1),++n);
 					coins=coins-price[1];
 					UserDefault::sharedUserDefault()->setIntegerForKey("myGold",coins);
 					std::stringstream ss;
@@ -553,8 +545,8 @@ void IShop::onTouchBuyButton(Object* pSender, TouchEventType type){
 		case UI_BUTTON_BUY_ITEM3:
 			{
 				if(coins>=price[2]){
-					int n=UserDefault::sharedUserDefault()->getIntegerForKey("Item3");
-					UserDefault::sharedUserDefault()->setIntegerForKey("Item3",++n);
+					int n=UserDefault::sharedUserDefault()->getIntegerForKey(data->getData(2,1));
+					UserDefault::sharedUserDefault()->setIntegerForKey(data->getData(2,1),++n);
 					coins=coins-price[2];
 					UserDefault::sharedUserDefault()->setIntegerForKey("myGold",coins);
 					std::stringstream ss;
@@ -576,8 +568,8 @@ void IShop::onTouchBuyButton(Object* pSender, TouchEventType type){
 		case UI_BUTTON_BUY_ITEM4:
 			{
 				if(coins>=price[3]){
-					int n=UserDefault::sharedUserDefault()->getIntegerForKey("Item4");
-					UserDefault::sharedUserDefault()->setIntegerForKey("Item4",++n);
+					int n=UserDefault::sharedUserDefault()->getIntegerForKey(data->getData(3,1));
+					UserDefault::sharedUserDefault()->setIntegerForKey(data->getData(3,1),++n);
 					coins=coins-price[3];
 					UserDefault::sharedUserDefault()->setIntegerForKey("myGold",coins);
 					std::stringstream ss;
@@ -599,8 +591,8 @@ void IShop::onTouchBuyButton(Object* pSender, TouchEventType type){
 		case UI_BUTTON_BUY_ITEM5:
 			{
 				if(coins>=price[4]){
-					int n=UserDefault::sharedUserDefault()->getIntegerForKey("Item5");
-					UserDefault::sharedUserDefault()->setIntegerForKey("Item5",++n);
+					int n=UserDefault::sharedUserDefault()->getIntegerForKey(data->getData(4,1));
+					UserDefault::sharedUserDefault()->setIntegerForKey(data->getData(4,1),++n);
 					coins=coins-price[4];
 					UserDefault::sharedUserDefault()->setIntegerForKey("myGold",coins);
 					std::stringstream ss;

@@ -53,6 +53,12 @@ public:
 	HCSVFile * enemyDesc;
 	Texture2D* hpBar;
 	//----------------Props----------------------
+#define TYPE_PROP_RESTOREHP 201
+#define TYPE_PROP_SLOWDOWN 202
+#define TYPE_PROP_SAFETYGUARD 203
+#define TYPE_PROP_LANDMIND 204
+#define TYPE_PROP_TRAP 205
+#define TYPE_PROP_ASSISTGUARD 206
 	HCSVFile * propsData;
 	//----------------Baby-----------------------
 #define ANIMATION_BABY_LAUGH "baby_laugh"

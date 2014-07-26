@@ -53,15 +53,26 @@ bool Game::init()
 	loadPeople();
 	loadTower();
 	loadRoadAndBarriers();
+	loadEquipmentSlot();
 
 	if(ResourceManager::getInstance()->isBackgroundMusicAllow()){
 		CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
 	}
 
-	this->scheduleUpdate();
+	this->scheduleUpdate(); //实现主循环调度
 	this->schedule(schedule_selector(Game::moveEnemy), 0.5f);
 	this->schedule(schedule_selector(Game::deleteObject), 0.5f);
-	this->schedule(schedule_selector(Game::countDown), 1.0f);
+	//this->schedule(schedule_selector(Game::countDown), 1.0f);
+	//////////////////////////////////////////////////////////////////////////
+	this->_eventDispatcher->removeEventListenersForTarget(m_modalNode);
+	m_modalNode->setVisible(false);
+	m_towerbase->setVisible(false);
+	m_isWaiting = false;
+	m_curRound = 1;
+	m_labelCountDown->removeFromParent();
+	//////////////////////////////////////////////////////////////////////////
+
+	
 	return true;	
 }
 
@@ -70,6 +81,14 @@ void Game::update(float dt){
 	addEnemy(dt);
 //	moveEnemy(dt);
 	findEnemy(dt);
+
+	//减速道具在可用的情况下， 更新减速道具的目标怪兽
+	auto sd = this->getChildByTag(TYPE_PROP_SLOWDOWN);
+	auto slowdown = (PropsSlowdown*)sd;
+	if(slowdown->isAvailable() && slowdown->getTargetsNumber() != m_enemies.size()){
+		slowdown->setSlowdownTargets(m_enemies);
+	}
+
 }
 
 void Game::loadData(){
@@ -427,6 +446,39 @@ void Game::loadRoadAndBarriers(){
 	}
 }
 
+void Game::loadEquipmentSlot()
+{
+	Size visibleSize = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
+	auto rhp = PropsRestoreHp::createWithBaby(m_baby);
+	rhp->setPosition(Vec2(1200,400));
+	rhp->m_position = Rect(1160,360,80,80);
+	this->addChild(rhp,10);
+
+	auto sd = PropsSlowdown::createWithTargets(m_enemies);
+	sd->setPosition(Vec2(1100,400));
+	sd->m_position = Rect(1060,360,80,80);
+	sd->setTag(TYPE_PROP_SLOWDOWN);
+	this->addChild(sd,10);
+
+	auto sg = PropsSafetyGuard::createWithBaby(m_baby);
+	sg->setPosition(Vec2(1000,400));
+	sg->m_position = Rect(960,360,80,80);
+	sg->setTag(TYPE_PROP_SAFETYGUARD);
+	
+	sg->m_safeGRect = Rect(m_baby->getPositionX() - sg->getSafeGuradSize().width /2 ,
+		m_baby->getPositionY() - sg->getSafeGuradSize().height / 2,
+		sg->getSafeGuradSize().width  ,
+		sg->getSafeGuradSize().height );
+	this->addChild(sg,10);
+
+
+}
+
+
+/*
+
 void Game::countDown(float dt){
 
 	if (m_countdown <= 0){
@@ -448,6 +500,7 @@ void Game::countDown(float dt){
 		m_labelCountDown->setString(std::to_string(m_countdown--));
 	}
 }
+*/
 
 void Game::addEnemy(float dt){
 	if (!m_isGameOver){
@@ -501,7 +554,7 @@ void Game::addEnemy(float dt){
 }
 
 void Game::moveEnemy(float dt){
-	if (!m_isGameOver){
+//	if (!m_isGameOver){
 		for (int i = 0; i < m_enemies.size(); i++){		//对每个enemy
 			Enemy* enemy = m_enemies.at(i);
 			if (enemy->isDie()){	//如果它死了
@@ -510,12 +563,21 @@ void Game::moveEnemy(float dt){
 				m_enemies.eraseObject(enemy);	//容器里也要释放哦
 			}else{	//如果它没死
 				Vec2 enemy_position = enemy->getPosition();	//看看它的位置
-				if (m_baby->m_position.containsPoint(enemy_position)){	//如果碰到Baby了
+
+				auto safeguard = (PropsSafetyGuard*)this->getChildByTag(TYPE_PROP_SAFETYGUARD);
+				if(safeguard->isGuarding() && safeguard->m_safeGRect.containsPoint(enemy_position)){  
+					//检测是否有保护罩，有保护罩就保护宝贝
+					m_isGameOver = m_baby->setDamage(safeguard->setCurState(enemy->getDamage()));
+					enemy->removeFromParent();	//把enemy消除掉
+					m_enemies.eraseObject(enemy);	//容器里也要释放哦
+				}
+				// 木有保护罩
+				else if (m_baby->m_position.containsPoint(enemy_position)){	//如果碰到Baby了
 					m_isGameOver = m_baby->setDamage(enemy->getDamage());	//扣Baby的血看她死不死
 					enemy->removeFromParent();	//把enemy消除掉
 					m_enemies.eraseObject(enemy);	//容器里也要释放哦
 					m_baby->hurt();	//Baby痛了一下
-					if (m_isGameOver)
+					/*if (m_isGameOver)
 					{
 						auto listener1 = EventListenerTouchOneByOne::create();//创建一个触摸监听    
 						listener1->setSwallowTouches(true);//设置不想向下传递触摸  true是不想 默认为false  
@@ -536,7 +598,7 @@ void Game::moveEnemy(float dt){
 						sprite->setPosition(Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height));
 						this->addChild(sprite, ZORDER_TEXT);
 						sprite->runAction(action);
-					}
+					}*/
 				} 
 				else
 				{	//根据所在的road调整速度（方向）
@@ -632,7 +694,7 @@ void Game::moveEnemy(float dt){
 			};
 			this->_eventDispatcher->addEventListenerWithSceneGraphPriority(listener2, next);
 		}
-	}
+	/*}
 	else	//game over
 	{
 		for (int i = 0; i < m_enemies.size(); i++){		//对每个enemy
@@ -640,7 +702,7 @@ void Game::moveEnemy(float dt){
 			enemy->removeFromParent();	//然后就把它消除掉
 		}
 		m_enemies.clear();
-	}
+	}*/
 }
 
 void Game::findEnemy(float dt){
@@ -807,6 +869,8 @@ void Game::towerDeleteCallback(cocos2d::Ref* pSender, int towerId, Sprite* tower
 	this->removeChild(tower);
 	this->m_towers.eraseObject(tower);
 }
+
+
 
 //------------------get/sets-----------------------------
 

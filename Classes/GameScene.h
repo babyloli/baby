@@ -9,6 +9,7 @@
 #include "Tower.h"
 #include "Baby.h"
 #include "LabelPrice.h"
+#include "Medicine.h"
 
 USING_NS_CC;
 class Game : public cocos2d::Layer
@@ -71,6 +72,7 @@ public:
 	void loadPeople();
 	void loadTower();
 	void loadRoadAndBarriers();
+	void loadEquipmentSlot();
 
 	void menuCloseCallback(cocos2d::Ref* pSender);
 	void menuPhysicsCallback(cocos2d::Ref* pSender);
@@ -78,7 +80,7 @@ public:
 	void towerUpgradeCallback(cocos2d::Ref* pSender, int towerId);
 	void towerDeleteCallback(cocos2d::Ref* pSender, int towerId, Sprite* towerbase);
 
-	void countDown(float dt);
+/*	void countDown(float dt);*/
 	void addEnemy(float dt);
 	void moveEnemy(float dt);
 	void findEnemy(float dt);

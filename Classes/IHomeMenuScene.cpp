@@ -1,7 +1,7 @@
 #include "IHomeMenuScene.h"
 #include "ISubUIScene.h"
+#include "GameScene.h"
 
-//const int UI_HOMEMENU = 3;
 const int UI_BUTTON_PLAYGAME = 6;
 const int UI_BUTTON_SETUP = 7;
 const int UI_BUTTON_QUIT = 8; 
@@ -87,13 +87,18 @@ bool IHomeMenu::init()
 	if(!userdefault->getBoolForKey("isExisted")){
 		userdefault->setBoolForKey("isExisted",true);
 		userdefault->setIntegerForKey("myGold",0);
-	    userdefault->setIntegerForKey("Item1",0);
+	    /*userdefault->setIntegerForKey("Item1",0);
      	userdefault->setIntegerForKey("Item2",0);
 	    userdefault->setIntegerForKey("Item3",0);
      	userdefault->setIntegerForKey("Item4",0);
-	    userdefault->setIntegerForKey("Item5",0);
-	    userdefault->setIntegerForKey("Stage",0);
-    	userdefault->setIntegerForKey("Level",0);
+	    userdefault->setIntegerForKey("Item5",0);*/
+		HCSVFile* data = ResourceManager::getInstance()->propsData;
+		for (int i = 0; i < 6; i++)
+		{
+			userdefault->setIntegerForKey(data->getData(i,1),0);
+		}
+		userdefault->setIntegerForKey("Stage",0);
+		userdefault->setIntegerForKey("Level",0);
 	}
     return true;
 }
@@ -114,14 +119,12 @@ void IHomeMenu::onTouchButton(Object* pSender, TouchEventType type)
 		case UI_BUTTON_PLAYGAME:
 			{
 				/*
-			Scene* runscene = Director::sharedDirector()->getRunningScene();
-			Director::sharedDirector()->pushScene(runscene);
-			auto modeSelector = IModeSelector::createScene();
-			Director::sharedDirector()->replaceScene(modeSelector);
-			*/
 				auto modeSelector = IModeSelector::create();
 				//modeSelector->registerWithTouchDispatcher();
 				this->addChild(modeSelector);
+				*/
+				auto s = Game::createScene(1,1);
+				Director::getInstance()->replaceScene(s);
 				break;
 			}
 		case UI_BUTTON_SETUP:
