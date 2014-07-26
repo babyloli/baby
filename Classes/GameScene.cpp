@@ -48,14 +48,20 @@ bool Game::init()
 		return false;
 	}
 	loadData();
+	loadToolBar();
 	loadMenu();
 	loadPeople();
 	loadTower();
 	loadRoadAndBarriers();
-	
+
+	if(ResourceManager::getInstance()->isBackgroundMusicAllow()){
+		CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+	}
+
 	this->scheduleUpdate();
 	this->schedule(schedule_selector(Game::moveEnemy), 0.5f);
 	this->schedule(schedule_selector(Game::deleteObject), 0.5f);
+	this->schedule(schedule_selector(Game::countDown), 1.0f);
 	return true;	
 }
 
@@ -67,11 +73,13 @@ void Game::update(float dt){
 }
 
 void Game::loadData(){
+	m_countdown = 3;
+	m_isGameOver = false;
 	HCSVFile* enemyDesc = ResourceManager::getInstance()->enemyDesc;
 	HCSVFile* sectionData = &ResourceManager::getInstance()->sections[m_section-1];
 	m_numRound = std::atoi(sectionData->getData(m_id, 1));
-	m_curRound = 1;
-	m_isWaiting = false;
+	m_curRound = 0;
+	m_isWaiting = true;
 	m_numPerRound = std::atoi(sectionData->getData(m_id, 2));;
 	m_curNumInRound = 0;
 	m_timeBetweenRound = std::atof(sectionData->getData(m_id, 3));
@@ -91,25 +99,21 @@ void Game::loadData(){
 	m_numBigBoss = std::atoi(enemyDesc->getData(2, 4));
 
 	SceneReader* s = SceneReader::getInstance();
-	Node* node = s->createNodeWithSceneFile("publish/section1-1.json");
+	char str[30];
+	sprintf_s(str, "publish/section%d-%d.json", m_section, m_id+1);
+//	Node* node = s->createNodeWithSceneFile("publish/section1-1.json");
+	Node* node = s->createNodeWithSceneFile(str);
 	if(node)	
 		this -> addChild(node);
-//	m_map = TMXTiledMap::create(MAP1);
-//	this->addChild(m_map);
-	Node* map = node->getChildByTag(100);
+	Node* map = node->getChildByTag(101);
 	auto component = (ComRender*)(map->getComponent("CCTMXTiledMap"));
 	m_map = (TMXTiledMap*)(component->getNode());
-	m_money = INIT_PRICE;
+	m_money = std::atoi(sectionData->getData(m_id, 4));
 }
 
 void Game::loadMenu(){
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
-
-	m_labelPrice = LabelPrice::create(ResourceManager::getInstance()->background_price_big, m_money);
-	m_labelPrice->setPosition(origin.x + m_labelPrice->getContentSize().width/2, origin.y + 
-		visibleSize.height - m_labelPrice->getContentSize().height);
-	this->addChild(m_labelPrice, ZORDER_LABELPRICE);
 
 	auto physicsItem = MenuItemImage::create("CloseNormal.png",
 		"CloseSelected.png",
@@ -117,70 +121,166 @@ void Game::loadMenu(){
 	physicsItem->setPosition(Vec2(origin.x + visibleSize.width - physicsItem->getContentSize().width/2 ,
 		origin.y + visibleSize.height - physicsItem->getContentSize().height));
 
+	auto menu = Menu::create(physicsItem, NULL);
+	menu->setPosition(Vec2::ZERO);
+	this->addChild(menu, ZORDER_MENU);
+
+	m_modalNode = DrawNode::create();
+	Vec2 vecs[4];
+	vecs[0].x = 0; vecs[0].y = 0;
+	vecs[1].x = SCREEN_WIDTH; vecs[1].y = 0;
+	vecs[2].x = SCREEN_WIDTH; vecs[2].y = SCREEN_HEIGHT;
+	vecs[3].x = 0; vecs[3].y = SCREEN_HEIGHT;
+	m_modalNode->drawPolygon(vecs, 4, Color4F(0.2f, 0.2f, 0.2f, 0.5f), 0, Color4F(0.2f, 0.2f, 0.2f, 0.5f));
+	this->addChild(m_modalNode, ZORDER_MODAL);
+
+	auto listener1 = EventListenerTouchOneByOne::create();//创建一个触摸监听    
+	listener1->setSwallowTouches(true);//设置不想向下传递触摸  true是不想 默认为false  
+	listener1->onTouchBegan = [](Touch* touch, Event* event){   
+		return true;   
+	};    
+	listener1->onTouchMoved = [](Touch* touch, Event* event){      
+	};    
+	listener1->onTouchEnded = [](Touch* touch, Event* event){    
+	};
+	this->_eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, m_modalNode);
+}
+
+void Game::loadToolBar(){
+	Size visibleSize = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
+	SceneReader* s = SceneReader::getInstance();
+	Node* node = s->createNodeWithSceneFile("UI/GameMenu/GMenu.json");
+	node->setPosition(Vec2(node->getPositionX(), origin.y + visibleSize.height - 80));
+	this->addChild(node, ZORDER_MENU);
+	Node* toolBar = node->getChildByTag(300);
+	m_pauseBtn = toolBar->getChildByTag(301);
+	m_replayBtn = toolBar->getChildByTag(302);
+	m_backBtn = toolBar->getChildByTag(303);
+	m_playBtn = toolBar->getChildByTag(304);
+	m_playBtn->setVisible(false);
+
+	auto component = (ComRender*)(m_pauseBtn->getComponent("pause"));
+	Sprite* sprite = (Sprite*)(component->getNode());
+	float width = sprite->getContentSize().width;
+	float height = sprite->getContentSize().height;
+	Rect rect = Rect(-width/2, -height/2, width, height);
+
 	auto modalSprite = Sprite::create("images/modalLayer.png");
 	modalSprite->setPosition(Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2));
 	modalSprite->setVisible(false);
 	this->addChild(modalSprite, ZORDER_MODAL);
 
-	auto stopItem = MenuItemImage::create("stop.png", "stop.png", [=](cocos2d::Ref* pSender){
-		if(!Director::getInstance()->isPaused()){
-			Director::getInstance()->pause();
-			MenuItem* menuItem = static_cast<MenuItem*>(pSender);
-			menuItem->setVisible(false);
-			m_goItem->setVisible(true);
-			m_restartItem->setVisible(true);
-			m_backItem->setVisible(true);
-			modalSprite->setVisible(true);
-			auto listener1 = EventListenerTouchOneByOne::create();//创建一个触摸监听    
-			listener1->setSwallowTouches(true);//设置不想向下传递触摸  true是不想 默认为false  
-			listener1->onTouchBegan = [](Touch* touch, Event* event){   
-				return true;   
-			};    
-			listener1->onTouchMoved = [](Touch* touch, Event* event){      
-			};    
+	auto pauseListener = EventListenerTouchOneByOne::create();
+	pauseListener->setSwallowTouches(true);
+	pauseListener->onTouchBegan = [=](Touch* touch, Event* event)->bool{
+		auto target = event->getCurrentTarget();
+		Vec2 point = target->convertTouchToNodeSpace(touch);
+		if (rect.containsPoint(point)){
+			if(!Director::getInstance()->isPaused()){
+				Director::getInstance()->pause();
+				target->setVisible(false);
+				m_playBtn->setVisible(true);
+				modalSprite->setVisible(true);
 
-			listener1->onTouchEnded = [](Touch* touch, Event* event){    
-			};
-			this->_eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, modalSprite);
-		}});
-		stopItem->setPosition(Vec2(origin.x + visibleSize.width - stopItem->getContentSize().width/2 ,
-			origin.y + stopItem->getContentSize().height*0.6));
+				if(ResourceManager::getInstance()->isBackgroundMusicAllow()){
+					CocosDenshion::SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
+				}
 
-		m_restartItem = MenuItemImage::create("restart.png", "restart.png", [this](cocos2d::Ref* pSender){
+				auto listener1 = EventListenerTouchOneByOne::create();//创建一个触摸监听    
+				listener1->setSwallowTouches(true);//设置不想向下传递触摸  true是不想 默认为false  
+				listener1->onTouchBegan = [](Touch* touch, Event* event){   
+					return true;   
+				};    
+				listener1->onTouchMoved = [](Touch* touch, Event* event){      
+				};    
+				listener1->onTouchEnded = [](Touch* touch, Event* event){    
+				};
+				this->_eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, modalSprite);
+				return true;
+			}
+		}
+		return false;
+	};
+	this->_eventDispatcher->addEventListenerWithSceneGraphPriority(pauseListener, m_pauseBtn);
+
+	auto playListener = EventListenerTouchOneByOne::create();
+	playListener->setSwallowTouches(true);
+	playListener->onTouchBegan = [=](Touch* touch, Event* event)->bool{
+		auto target = event->getCurrentTarget();
+		Vec2 point = target->convertTouchToNodeSpace(touch);
+		if (rect.containsPoint(point)){
+			if (Director::getInstance()->isPaused()){
+				Director::getInstance()->resume();
+				target->setVisible(false);
+				m_pauseBtn->setVisible(true);
+				modalSprite->setVisible(false);
+				this->_eventDispatcher->removeEventListenersForTarget(modalSprite);
+
+				if(ResourceManager::getInstance()->isBackgroundMusicAllow()){
+					CocosDenshion::SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
+				}
+				return true;
+			}		
+		}
+		return false;
+	};
+	this->_eventDispatcher->addEventListenerWithSceneGraphPriority(playListener, m_playBtn);
+
+	auto replayListener = EventListenerTouchOneByOne::create();
+	replayListener->onTouchBegan = [=](Touch* touch, Event* event)->bool{
+		auto target = event->getCurrentTarget();
+		Vec2 point = target->convertTouchToNodeSpace(touch);
+		if (rect.containsPoint(point)){
 			auto scene = Game::createScene(m_section, m_id);
 			Director::getInstance()->replaceScene(scene);
 			Director::getInstance()->resume();
-		});
-		m_restartItem->setPosition(Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2));
-		m_restartItem->setVisible(false);
+			return true;
+		}
+		return false;
+	};
+	this->_eventDispatcher->addEventListenerWithSceneGraphPriority(replayListener, m_replayBtn);
 
-		m_goItem = MenuItemImage::create("go.png", "go.png", [=](cocos2d::Ref* pSender){
-			MenuItem* menuItem = static_cast<MenuItem*>(pSender);
-			menuItem->setVisible(false);
-			m_restartItem->setVisible(false);
-			m_backItem->setVisible(false);
-			stopItem->setVisible(true);
-			modalSprite->setVisible(false);
-			this->_eventDispatcher->removeEventListenersForTarget(modalSprite);
-			Director::getInstance()->resume();
-		});
-		m_goItem->setPosition(Vec2(origin.x + visibleSize.width/2 + m_restartItem->getContentSize().width/2 +
-			m_goItem->getContentSize().width, origin.y + visibleSize.height/2));
-		m_goItem->setVisible(false);
+	auto backListener = EventListenerTouchOneByOne::create();
+	backListener->onTouchBegan = [=](Touch* touch, Event* event)->bool{
+		auto target = event->getCurrentTarget();
+		Vec2 point = target->convertTouchToNodeSpace(touch);
+		if (rect.containsPoint(point)){
 
-		m_backItem = MenuItemImage::create("back.png", "back.png", [this](cocos2d::Ref* pSender){
+			if(ResourceManager::getInstance()->isBackgroundMusicAllow()){
+				CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+				CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("music/MenuBackgroundMusic.mp3",true);
+			}
+
 			auto scene = IGameLevelSelector::createScene(m_section);
 			Director::getInstance()->replaceScene(scene);
 			Director::getInstance()->resume();
-		});
-		m_backItem->setPosition(Vec2(origin.x + visibleSize.width/2 - m_restartItem->getContentSize().width/2 -
-			m_backItem->getContentSize().width,	origin.y + visibleSize.height/2));
-		m_backItem->setVisible(false);
+			return true;
+		}
+		return false;
+	};
+	this->_eventDispatcher->addEventListenerWithSceneGraphPriority(backListener, m_backBtn);
 
-		auto menu = Menu::create(physicsItem, stopItem, m_goItem, m_restartItem, m_backItem, NULL);
-		menu->setPosition(Vec2::ZERO);
-		this->addChild(menu);
-		this->reorderChild(menu, ZORDER_MENU);
+	auto labelPrice = node->getChildByTag(305);
+	m_labelPrice = LabelPrice::create(m_money);
+	labelPrice->addChild(m_labelPrice);
+
+	TTFConfig config;
+	config.fontSize = FONTSIZE_PRICE;
+	config.fontFilePath = FONT_PRICE;
+	auto str = String::createWithFormat("Section%d-%d    %d/%d", m_section, m_id+1, 1, m_numRound);
+	m_labelSection = Label::createWithTTF(config, str->getCString());
+	auto labelsection = node->getChildByTag(306);
+	labelsection->addChild(m_labelSection);
+
+	TTFConfig config2;
+	config2.fontSize = 60;
+	config2.fontFilePath = FONT_PRICE;
+	m_labelCountDown = Label::createWithTTF(config2, "");
+	m_labelCountDown->setColor(Color3B(255, 0, 0));
+	m_labelCountDown->setPosition(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2);
+	this->addChild(m_labelCountDown, ZORDER_TEXT);
 }
 
 void Game::loadPeople(){
@@ -202,9 +302,9 @@ void Game::loadPeople(){
 
 void Game::loadTower(){
 	ResourceManager* rm = ResourceManager::getInstance();
-	SpriteBatchNode* towerbase = SpriteBatchNode::create(PATH_TOWERBASE);	//用图片创建一个Batch
-	towerbase->setPosition(Vec2::ZERO);	//设置这个Batch的位置
-	this->addChild(towerbase, ZORDER_TOWER);	//将这个Batch加到场景里
+	m_towerbase = SpriteBatchNode::create(PATH_TOWERBASE);	//用图片创建一个Batch
+	m_towerbase->setPosition(Vec2::ZERO);	//设置这个Batch的位置
+	this->addChild(m_towerbase, ZORDER_TOWER);	//将这个Batch加到场景里
 
 	TMXObjectGroup* towerObjectGroup = m_map->getObjectGroup("tower");	//读取对象层“tower”
 	ValueVector towerObjects = towerObjectGroup->getObjects();	//获得“tower”对象层里面的所有对象
@@ -213,9 +313,9 @@ void Game::loadTower(){
 		ValueMap towerObject = it->asValueMap();	//得到这个对象的属性
 		int tower_x = objPosX(towerObject);
 		int tower_y = objPosY(towerObject);
-		Sprite* tower = Sprite::createWithTexture(towerbase->getTexture());	//用Batch创建一个精灵来表示可创建Tower的位置
+		Sprite* tower = Sprite::createWithTexture(m_towerbase->getTexture());	//用Batch创建一个精灵来表示可创建Tower的位置
 		tower->setPosition(tower_x, tower_y);	//设置精灵的位置
-		towerbase->addChild(tower);	//把精灵加到场景里
+		m_towerbase->addChild(tower);	//把精灵加到场景里
 //		auto actionRepeateFadeOutIn = RepeatForever::create(Sequence::create(FadeOut::create(1), FadeIn::create(1), NULL));	//创建一个淡入淡出特效
 //		tower->runAction(actionRepeateFadeOutIn);	//给精灵赋予特效
 
@@ -238,12 +338,13 @@ void Game::loadTower(){
 		menu->setPosition(Vec2(tower->getPositionX(), tower->getPositionY() + tower->getContentSize().height));
 		m_menus.pushBack(menu);
 
-		Sprite* updateSprite = Sprite::create("update.png");	//升级按钮
-		auto upgradeItem = MenuItemTower::create(0, updateSprite, updateSprite, CC_CALLBACK_1(Game::towerUpgradeCallback, this, towerId));
+		Sprite* updateSprite = Sprite::create("images/tower/update.png");	//升级按钮
+		Sprite* updateDisableSprite = Sprite::create("images/tower/UpdateDisable.png");
+		auto upgradeItem = MenuItemTower::create(0, updateSprite, updateSprite, updateDisableSprite, CC_CALLBACK_1(Game::towerUpgradeCallback, this, towerId));
 		upgradeItem->setPosition(0, upgradeItem->getContentSize().height);
 		upgradeItem->setTag(TAG_UPGRADE_ITEM);
 
-		auto deleteItem = MenuItemImage::create("sell.png", "sell.png", CC_CALLBACK_1(Game::towerDeleteCallback, this, towerId, tower));
+		auto deleteItem = MenuItemImage::create("images/tower/sell.png", "images/tower/sell.png", CC_CALLBACK_1(Game::towerDeleteCallback, this, towerId, tower));
 		deleteItem->setPosition(0, -deleteItem->getContentSize().height);
 
 		auto uMenu = Menu::create(upgradeItem, deleteItem, NULL);
@@ -326,93 +427,228 @@ void Game::loadRoadAndBarriers(){
 	}
 }
 
-void Game::addEnemy(float dt){
-	if (m_isWaiting){
-		if (m_curRound != 0){
-			m_elapsedTimeRound += dt;
-			if (m_elapsedTimeRound > m_timeBetweenRound){
-				m_elapsedTimeRound = 0;
-				if (m_curRound != m_numRound){
-					m_curRound++;
-					m_isWaiting = false;
-				}
-			}
+void Game::countDown(float dt){
+
+	if (m_countdown <= 0){
+		this->unschedule(schedule_selector(Game::countDown));
+		this->_eventDispatcher->removeEventListenersForTarget(m_modalNode);
+		m_modalNode->setVisible(false);
+		m_towerbase->setVisible(false);
+		m_isWaiting = false;
+		m_curRound = 1;
+		m_labelCountDown->removeFromParent();
+
+		if(ResourceManager::getInstance()->isBackgroundMusicAllow()){		
+			CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("music/GameSceneMusic0.mp3");
+			CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("music/GameSceneMusic0.mp3",true);
 		}
 	}
-	else {
-		if (m_curNumInRound < m_numPerRound){
-			m_elapsedTimeMonster += dt;
-			if (m_elapsedTimeMonster > m_deltaMonsterGenerateTime){
-				m_elapsedTimeMonster -= m_deltaMonsterGenerateTime;
-				//generate monster
-				Enemy* enemy = NULL;
-				double rate = rand() / (double)RAND_MAX;
-				if (rate < m_deltaMonsterGenerateRate)
-				{
-					int row = rand() % (m_numMonster);	
-					enemy = Enemy::create(row, m_curRound);
-				}else
-				{
-					int row = rand() % (m_numLittleBoss) + m_numMonster;
-					enemy = Enemy::create(row, m_curRound);
+	else
+	{
+		m_labelCountDown->setString(std::to_string(m_countdown--));
+	}
+}
+
+void Game::addEnemy(float dt){
+	if (!m_isGameOver){
+		if (m_isWaiting){
+			if (m_curRound != 0){
+				m_elapsedTimeRound += dt;
+				if (m_elapsedTimeRound > m_timeBetweenRound){
+					m_elapsedTimeRound = 0;
+					if (m_curRound != m_numRound){
+						m_curRound++;
+						m_isWaiting = false;
+						auto str = String::createWithFormat("Section%d-%d    %d/%d", m_section, m_id+1, m_curRound, m_numRound);
+						m_labelSection->setString(str->getCString());
+					}
 				}
-				if (!enemy)
-					return;
-				enemy->setPosition(m_enemyPosition);
-				this->addChild(enemy);
-				m_enemies.pushBack(enemy);
-				m_curNumInRound++;
 			}
 		}
-		else
-		{
-			if (m_curRound != m_numRound)
-				m_curNumInRound = 0;
-			m_isWaiting = true;
+		else {
+			if (m_curNumInRound < m_numPerRound){
+				m_elapsedTimeMonster += dt;
+				if (m_elapsedTimeMonster > m_deltaMonsterGenerateTime){
+					m_elapsedTimeMonster -= m_deltaMonsterGenerateTime;
+					//generate monster
+					Enemy* enemy = NULL;
+					double rate = rand() / (double)RAND_MAX;
+					if (rate < m_deltaMonsterGenerateRate)
+					{
+						int row = rand() % (m_numMonster);	
+						enemy = Enemy::create(row, m_curRound);
+					}else
+					{
+						int row = rand() % (m_numLittleBoss) + m_numMonster;
+						enemy = Enemy::create(row, m_curRound);
+					}
+					if (!enemy)
+						return;
+					enemy->setPosition(m_enemyPosition);
+					this->addChild(enemy);
+					m_enemies.pushBack(enemy);
+					m_curNumInRound++;
+				}
+			}
+			else
+			{
+				if (m_curRound != m_numRound)
+					m_curNumInRound = 0;
+				m_isWaiting = true;
+			}
 		}
 	}
 }
 
 void Game::moveEnemy(float dt){
-	for (int i = 0; i < m_enemies.size(); i++){		//对每个enemy
-		Enemy* enemy = m_enemies.at(i);
-		if (enemy->isDie()){	//如果它死了
-			this->addMoney(enemy->getPrice());	//那么它会掉金钱
-			enemy->removeFromParent();	//然后就把它消除掉
-			m_enemies.eraseObject(enemy);	//容器里也要释放哦
-		}else{	//如果它没死
-			Vec2 enemy_position = enemy->getPosition();	//看看它的位置
-			if (m_baby->m_position.containsPoint(enemy_position)){	//如果碰到Baby了
-				bool gameover = m_baby->setDamage(enemy->getDamage());	//扣Baby的血看她死不死
-				enemy->removeFromParent();	//把enemy消除掉
+	if (!m_isGameOver){
+		for (int i = 0; i < m_enemies.size(); i++){		//对每个enemy
+			Enemy* enemy = m_enemies.at(i);
+			if (enemy->isDie()){	//如果它死了
+				this->addMoney(enemy->getPrice());	//那么它会掉金钱
+				enemy->removeFromParent();	//然后就把它消除掉
 				m_enemies.eraseObject(enemy);	//容器里也要释放哦
-				m_baby->hurt();	//Baby痛了一下
-				if (gameover)
-				{
-					//TODO-------------------------------------------------------------------------------------
-				}
-			} 
-			else
-			{	//根据所在的road调整速度（方向）
-				for (std::vector<Road>::iterator it = m_roads.begin(); it != m_roads.end(); it++){
-					if (it->containsPoint(enemy_position)){
-						enemy->setDirection(it->getDirection());
-						enemy->setVelocity(it->getDirectionVec2() * enemy->getSpeed());
-						break;
+			}else{	//如果它没死
+				Vec2 enemy_position = enemy->getPosition();	//看看它的位置
+				if (m_baby->m_position.containsPoint(enemy_position)){	//如果碰到Baby了
+					m_isGameOver = m_baby->setDamage(enemy->getDamage());	//扣Baby的血看她死不死
+					enemy->removeFromParent();	//把enemy消除掉
+					m_enemies.eraseObject(enemy);	//容器里也要释放哦
+					m_baby->hurt();	//Baby痛了一下
+					if (m_isGameOver)
+					{
+						auto listener1 = EventListenerTouchOneByOne::create();//创建一个触摸监听    
+						listener1->setSwallowTouches(true);//设置不想向下传递触摸  true是不想 默认为false  
+						listener1->onTouchBegan = [](Touch* touch, Event* event){   
+							return true;   
+						};    
+						listener1->onTouchMoved = [](Touch* touch, Event* event){      
+						};    
+						listener1->onTouchEnded = [](Touch* touch, Event* event){    
+						};
+						this->_eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, m_modalNode);
+						m_modalNode->setVisible(true);
+
+						Size visibleSize = Director::getInstance()->getVisibleSize();
+						Vec2 origin = Director::getInstance()->getVisibleOrigin();
+						auto action = EaseBounceOut::create(MoveTo::create(0.3f, Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2)));
+						auto sprite = Sprite::create("youFail.png");
+						sprite->setPosition(Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height));
+						this->addChild(sprite, ZORDER_TEXT);
+						sprite->runAction(action);
+					}
+				} 
+				else
+				{	//根据所在的road调整速度（方向）
+					for (std::vector<Road>::iterator it = m_roads.begin(); it != m_roads.end(); it++){
+						if (it->containsPoint(enemy_position)){
+							enemy->setDirection(it->getDirection());
+							enemy->setVelocity(it->getDirectionVec2() * enemy->getSpeed());
+							break;
+						}
 					}
 				}
 			}
 		}
+		if (m_enemies.empty() && m_curRound == m_numRound && m_curNumInRound == m_numPerRound){
+			//win
+			auto listener1 = EventListenerTouchOneByOne::create();//创建一个触摸监听    
+			listener1->setSwallowTouches(true);//设置不想向下传递触摸  true是不想 默认为false  
+			listener1->onTouchBegan = [](Touch* touch, Event* event){   
+				return true;   
+			};    
+			listener1->onTouchMoved = [](Touch* touch, Event* event){      
+			};    
+			listener1->onTouchEnded = [](Touch* touch, Event* event){    
+			};
+			this->_eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, m_modalNode);
+			m_modalNode->setVisible(true);
+
+			Size visibleSize = Director::getInstance()->getVisibleSize();
+			Vec2 origin = Director::getInstance()->getVisibleOrigin();
+			auto action = EaseBounceOut::create(MoveTo::create(0.3f, Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2)));
+			auto sprite = Sprite::create("youWin.png");
+			sprite->setPosition(Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height));
+			this->addChild(sprite, ZORDER_TEXT);
+			sprite->runAction(action);
+			m_isGameOver = true;
+
+			auto toolbar = this->getChildByTag(10004)->getChildByTag(300);
+			this->_eventDispatcher->removeEventListenersForTarget(m_pauseBtn);
+			this->_eventDispatcher->removeEventListenersForTarget(m_playBtn);
+			auto next = Sprite::create("UI/GameMune.psd_Psd.Dir/next.png");
+			next->setPosition(toolbar->getChildByTag(301)->getPosition());
+			toolbar->addChild(next, 2);
+			auto listener2 = EventListenerTouchOneByOne::create();//创建一个触摸监听    
+			listener2->setSwallowTouches(true);//设置不想向下传递触摸  true是不想 默认为false  
+			listener2->onTouchBegan = [next, this](Touch* touch, Event* event){
+				Rect rect = next->getTextureRect();
+				auto target = event->getCurrentTarget();
+				Vec2 point = target->convertTouchToNodeSpace(touch);
+				if (rect.containsPoint(point)){
+					//TODO 跳到下一关
+					int rows = ResourceManager::getInstance()->sections[m_section-1].getRows();
+					m_id++;
+					if (m_id >= rows)//这个section清完了
+					{
+						m_section++;
+						if (m_section >= NUM_SECTIONS) //整个游戏通关了
+						{
+							if(ResourceManager::getInstance()->isBackgroundMusicAllow()){
+								CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+								CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("music/MenuBackgroundMusic.mp3",true);
+							}
+
+							auto scene = ISectionSelector::createScene();
+							Director::getInstance()->replaceScene(scene);
+						}
+						else	//下一个section的第一关(if any)
+						{
+							if (ResourceManager::getInstance()->sections[m_section-1].getRows() > 0){
+								auto scene = Game::createScene(m_section, 0);
+								Director::getInstance()->replaceScene(scene);
+							}
+							else
+							{
+								if(ResourceManager::getInstance()->isBackgroundMusicAllow()){
+									CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+									CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("music/MenuBackgroundMusic.mp3",true);
+								}
+
+								auto scene = ISectionSelector::createScene();
+								Director::getInstance()->replaceScene(scene);
+							}
+						}
+					}
+					else //跳到这个section的下一关
+					{
+						auto scene = Game::createScene(m_section, m_id);
+						Director::getInstance()->replaceScene(scene);
+					}
+					
+					return true;
+				}
+				return false;   
+			};
+			this->_eventDispatcher->addEventListenerWithSceneGraphPriority(listener2, next);
+		}
 	}
-	if (m_enemies.empty() && m_curRound == m_numRound && m_curNumInRound == m_numPerRound){
-		//win
+	else	//game over
+	{
+		for (int i = 0; i < m_enemies.size(); i++){		//对每个enemy
+			Enemy* enemy = m_enemies.at(i);
+			enemy->removeFromParent();	//然后就把它消除掉
+		}
+		m_enemies.clear();
 	}
 }
 
 void Game::findEnemy(float dt){
-	for (int i = 0; i < m_towers.size(); i++){
-		Tower* tower = m_towers.at(i);
-		tower->generateBullet(dt);
+	if (!m_isGameOver){
+		for (int i = 0; i < m_towers.size(); i++){
+			Tower* tower = m_towers.at(i);
+			tower->generateBullet(dt);
+		}
 	}
 }
 
@@ -458,8 +694,6 @@ void Game::onEnter(){
 			if (damage > 0)
 				enemy->setHp(enemy->getHp() - damage);
 			bullet->setDie();
-			//			bullet->getPhysicsBody()->setCategoryBitmask(CategoryBitMask_Bullet2);
-			//			bullet->getPhysicsBody()->setCollisionBitmask(CollisionBitMask_Bullet2);
 			return true;
 		}
 		return false;

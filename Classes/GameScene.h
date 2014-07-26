@@ -17,9 +17,10 @@ private:
 	TMXTiledMap* m_map;
 	Baby* m_baby;
 	Vec2 m_enemyPosition;
-	MenuItem* m_goItem;
-	MenuItem* m_restartItem;
-	MenuItem* m_backItem;
+	Node* m_pauseBtn;
+	Node* m_backBtn;
+	Node* m_replayBtn;
+	Node* m_playBtn;
 	Vector<Menu*> m_upgradeMenus;
 	Vector<Menu*> m_menus;
 	Vector<Enemy*> m_enemies;
@@ -28,6 +29,10 @@ private:
 	std::vector<Road> m_roads;
 	PhysicsWorld* m_physicsWorld;
 	LabelPrice* m_labelPrice;
+	Label* m_labelCountDown;
+	Label* m_labelSection; //1 ~ NUM_SECTIONS
+	DrawNode* m_modalNode; //0 ~ NUM_STAGES
+	SpriteBatchNode* m_towerbase;
 	int m_money;
 	int m_numRound;
 	int m_curRound;
@@ -36,6 +41,7 @@ private:
 	float m_timeBetweenRound;
 	float m_elapsedTimeRound;
 	bool m_isWaiting;
+	bool m_isGameOver;
 
 	int m_deltaMonsterDefence;
 	int m_deltaMonsterGenerateTime;
@@ -51,15 +57,17 @@ private:
 
 	int m_id;
 	int m_section;
+	int m_countdown;
 public:
 	static cocos2d::Scene* createScene(int section, int id);
 	virtual bool init();  
 	static Game* create(int section, int id);
 	Game(int section, int id);
-
+	/*~Game();*/
 	void onEnter() override;
 	void loadData();
 	void loadMenu();
+	void loadToolBar();
 	void loadPeople();
 	void loadTower();
 	void loadRoadAndBarriers();
@@ -70,6 +78,7 @@ public:
 	void towerUpgradeCallback(cocos2d::Ref* pSender, int towerId);
 	void towerDeleteCallback(cocos2d::Ref* pSender, int towerId, Sprite* towerbase);
 
+	void countDown(float dt);
 	void addEnemy(float dt);
 	void moveEnemy(float dt);
 	void findEnemy(float dt);

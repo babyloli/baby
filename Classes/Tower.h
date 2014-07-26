@@ -25,6 +25,7 @@ private:
 	bool m_rotateEnable;
 	bool m_bulletRotateEnable;
 	bool m_bulletCollide;
+	float m_bulletDensity;
 
 	float m_elapsedTime;
 	Enemy* m_target;

@@ -7,6 +7,8 @@ USING_NS_CC;
 
 class ResourceManager {
 public:
+#define SCREEN_WIDTH 1280
+#define SCREEN_HEIGHT 720
 #define ROAD_LEFT 0
 #define ROAD_UP 1
 #define ROAD_RIGHT 2
@@ -21,6 +23,7 @@ public:
 #define Priority_EventListenerPhysicsContact 10
 	//----------------Z-Order--------------------
 #define ZORDER_LABELPRICE 4
+#define ZORDER_TEXT 11
 #define ZORDER_MENU 10
 #define ZORDER_MODAL 9
 #define ZORDER_MENUITEMTOWER 8
@@ -45,8 +48,6 @@ public:
 	//----------------Tower----------------------
 #define MAX_RANGE 9999
 	HCSVFile * towerData;
-	//----------------Bullet---------------------
-#define MATERIAL_BULLET_0 cocos2d::PhysicsMaterial(0.2, 0.0, 1.0)
 	//----------------Enemy----------------------
 	HCSVFile * enemyData;
 	HCSVFile * enemyDesc;
@@ -68,15 +69,26 @@ public:
 #define FONT_PRICE "fonts/cardFont.ttf"
 	//-----------------Game-----------------------
 #define PATH_TOWERBASE "images/tower/towerbase.png"
-#define INIT_PRICE 200
+#define NUM_SECTIONS 4
 	HCSVFile* sections;
 	Texture2D* background_price;
 	Texture2D* background_price_big;
 public :
 	static ResourceManager* getInstance();
 	void init();
+
+	void setBackgroundMusic(const bool isAllow);
+	bool isBackgroundMusicAllow();
+
+	void setEffectMusic(const bool isAllow);
+	bool isEffectMusicAllow();
+
 private:
 	static ResourceManager* m_instance;
+
+	bool m_backgroundMusicAllow;
+	bool m_effectMusicAllow;
+
 	ResourceManager();
 	virtual ~ResourceManager();
 	ResourceManager(const ResourceManager&);

@@ -20,7 +20,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
         glview = GLView::create("My Game");
         director->setOpenGLView(glview);
     }
-	glview->setDesignResolutionSize(1280,720,ResolutionPolicy::SHOW_ALL);
+	glview->setDesignResolutionSize(SCREEN_WIDTH,SCREEN_HEIGHT,ResolutionPolicy::SHOW_ALL);
 
     // turn on display FPS
     director->setDisplayStats(true);
@@ -31,8 +31,9 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	ResourceManager::getInstance()->init();
     // create a scene. it's an autorelease object
     auto scene = IHomeMenu::createScene();
-	CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("music/bgm.mp3");
-	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("music/bgm.mp3");
+	CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("music/MenuBackgroundMusic.mp3");
+	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("music/MenuBackgroundMusic.mp3",true);
+
     // run
     director->runWithScene(scene);
 

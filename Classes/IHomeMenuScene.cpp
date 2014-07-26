@@ -85,6 +85,7 @@ bool IHomeMenu::init()
 	this->addChild(shopButton);
 	auto userdefault=UserDefault::sharedUserDefault();
 	if(!userdefault->getBoolForKey("isExisted")){
+		userdefault->setBoolForKey("isExisted",true);
 		userdefault->setIntegerForKey("myGold",0);
 	    userdefault->setIntegerForKey("Item1",0);
      	userdefault->setIntegerForKey("Item2",0);

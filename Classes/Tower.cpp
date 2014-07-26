@@ -27,6 +27,7 @@ bool Tower::initWithType(int id)
 	m_rotateEnable = std::atoi(towerData->getData(id, 13)) ? true : false;
 	m_bulletRotateEnable = std::atoi(towerData->getData(id, 14)) ? true : false;
 	m_bulletCollide = std::atoi(towerData->getData(id, 15)) ? true : false;
+	m_bulletDensity = std::atof(towerData->getData(id, 16));
 	m_elapsedTime = 0.0f;
 	//根据名字，从Plist读图片。
 	m_sprite = Sprite::createWithSpriteFrameName(m_name);
@@ -88,7 +89,7 @@ void Tower::generateBullet(float dt)
 		if(!m_target)
 			return ;
 
-		Bullet* t_bullet = Bullet::create(m_bulletName, m_type, m_level, m_attack, m_bulletSpeed, m_bulletRotateEnable, m_bulletCollide);
+		Bullet* t_bullet = Bullet::create(m_bulletName, m_type, m_level, m_attack, m_bulletSpeed, m_bulletRotateEnable, m_bulletCollide, m_bulletDensity);
 		if(!t_bullet)
 			return;
 		t_bullet->setPosition(this->getPosition());
@@ -140,6 +141,7 @@ void Tower::upgrade()
 	m_attack += m_deltaAttack;
 	m_range += m_deltaRange;
 	m_price += m_deltaPrice;
+	m_circle->clear();
 	m_circle->drawDot(Vec2::ZERO, m_range, Color4F(0.2f, 0.2f, 0.2f, 0.8f));
 }
 int Tower::getRange()
