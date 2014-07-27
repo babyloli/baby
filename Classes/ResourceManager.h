@@ -59,6 +59,16 @@ public:
 #define TYPE_PROP_LANDMIND 204
 #define TYPE_PROP_TRAP 205
 #define TYPE_PROP_ASSISTGUARD 206
+#define ANIMATION_SAFETYGUARD_STATE_1 "safeguard_state_1"
+#define ANIMATION_SAFETYGUARD_STATE_2 "safeguard_state_2"
+#define ANIMATION_SAFETYGUARD_STATE_3 "safeguard_state_3"
+#define ANIMATION_LANDMINE_CREATE "landmine_create"
+#define ANIMATION_LANDMINE_INVALIDABLESET "landmine_invalidableset"
+#define ANIMATION_LANDMINE_WAIT "landmine_wait"
+#define ANIMATION_LANDMINE_BOMB "landmine_bomb"
+#define ANIMATION_TRAP_STATE_1 "trap_state_1"
+#define ANIMATION_TRAP_STATE_2 "trap_state_2"
+#define ANIMATION_TRAP_STATE_3 "trap_state_3"
 	HCSVFile * propsData;
 	//----------------Baby-----------------------
 #define ANIMATION_BABY_LAUGH "baby_laugh"

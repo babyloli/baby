@@ -10,6 +10,7 @@
 #include "Baby.h"
 #include "LabelPrice.h"
 #include "Medicine.h"
+#include "Trap.h"
 
 USING_NS_CC;
 class Game : public cocos2d::Layer
@@ -34,6 +35,7 @@ private:
 	Label* m_labelSection; //1 ~ NUM_SECTIONS
 	DrawNode* m_modalNode; //0 ~ NUM_STAGES
 	SpriteBatchNode* m_towerbase;
+
 	int m_money;
 	int m_numRound;
 	int m_curRound;
@@ -85,7 +87,9 @@ public:
 	void moveEnemy(float dt);
 	void findEnemy(float dt);
 	void deleteObject(float dt);
+	void meetTraps(float dt);
 	void update(float dt);
+	//bool meetProps(Enemy* enemy);
 
 	void setPhysicsWorld(PhysicsWorld* world);
 	void addMoney(int money);

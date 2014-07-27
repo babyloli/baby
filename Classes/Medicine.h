@@ -1,7 +1,12 @@
 #pragma once
+/************************************************************************/
+/* There  are 6 props provide in game scene.                            */
+/************************************************************************/
+
+
 #include "Props.h"
-#include "Baby.h"
 #include "GameScene.h"
+#include "Trap.h"
 
 //////////////////////////////////////////////////////////////////////////
 // A prop to improve Baby's Hp
@@ -9,8 +14,7 @@ class PropsRestoreHp : public Props
 {
 private:
 	Baby* m_bb;
-	//¾«Áé
-	//¶¯»­
+
 public:
 	 PropsRestoreHp(Baby* bb);
 	~PropsRestoreHp();
@@ -46,6 +50,8 @@ public:
 	int getTargetsNumber()  {return m_targets.size();};
 };
 
+
+
 //////////////////////////////////////////////////////////////////////////
 // A prop to provide a guard to protect baby
 class PropsSafetyGuard : public Props
@@ -53,7 +59,11 @@ class PropsSafetyGuard : public Props
 private:
 	Baby* m_bb;
 	Sprite* m_safetyG;
+	Sprite* m_visiableG;
 	int m_curState;
+	int m_lastState;
+	Action* m_state;
+
 public:
 	Rect m_safeGRect;
 
@@ -70,3 +80,66 @@ public:
 	int setCurState(int damage);
 	Size getSafeGuradSize() {return m_safetyG->getContentSize();};
 };
+
+
+
+//////////////////////////////////////////////////////////////////////////
+// A prop to place land mine
+// When emenies step on land mine, the land mine would bomb. 
+class PropsLandmine : public Props
+{
+private:
+	Sprite* m_landmindcreate;
+	Action* m_landmineAnimation;
+	Vector<LandMine*> m_landmines;
+	std::vector<Road> m_roads;
+
+public:
+	PropsLandmine();
+	PropsLandmine(const std::vector<Road>& roads);
+	static PropsLandmine* create();
+	static PropsLandmine* createWithRoads(const std::vector<Road>& roads);
+
+	void onEnter() override;
+	bool touchBeginCallback(Touch* touch, Event* event);
+	void touchMovedCallback(Touch* touch, Event* event);
+	void touchEndenCallback(Touch* touch, Event* event);
+	
+	void update(float dt);
+
+	Vector<LandMine*>& getLandmines();
+	int getNumofLandmines();
+};
+
+
+
+
+//////////////////////////////////////////////////////////////////////////
+// A prop to place trap
+// A trap can make enemy stop in place.
+// When the number of enemies stuck in the trap arrive at max number, the
+// trap would be destroyed and enemies would be killed at the same time.
+class PropsTrap : public Props
+{
+private:
+	Sprite* m_trapcreate;
+	//Action* m_trapAnimation;
+	Vector<Trap*> m_traps;
+	std::vector<Road> m_roads;
+
+public:
+	PropsTrap(const std::vector<Road>& roads);
+	static PropsTrap* createWithRoads(const std::vector<Road>& roads);
+
+	void onEnter() override;
+	bool touchBeginCallback(Touch* touch, Event* event);
+	void touchMovedCallback(Touch* touch, Event* event);
+	void touchEndenCallback(Touch* touch, Event* event);
+
+	void update(float dt);
+
+	Vector<Trap*> getTraps();
+	int getNumofTraps();
+};
+
+

@@ -123,7 +123,7 @@ void IHomeMenu::onTouchButton(Object* pSender, TouchEventType type)
 				//modeSelector->registerWithTouchDispatcher();
 				this->addChild(modeSelector);
 				*/
-				auto s = Game::createScene(1,1);
+				auto s = Game::createScene(1,0);
 				Director::getInstance()->replaceScene(s);
 				break;
 			}

@@ -63,6 +63,7 @@ bool Game::init()
 	this->schedule(schedule_selector(Game::moveEnemy), 0.5f);
 	this->schedule(schedule_selector(Game::deleteObject), 0.5f);
 	//this->schedule(schedule_selector(Game::countDown), 1.0f);
+	this->schedule(schedule_selector(Game::meetTraps),0.5f);
 	//////////////////////////////////////////////////////////////////////////
 	this->_eventDispatcher->removeEventListenersForTarget(m_modalNode);
 	m_modalNode->setVisible(false);
@@ -451,10 +452,12 @@ void Game::loadEquipmentSlot()
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
+
 	auto rhp = PropsRestoreHp::createWithBaby(m_baby);
 	rhp->setPosition(Vec2(1200,400));
 	rhp->m_position = Rect(1160,360,80,80);
 	this->addChild(rhp,10);
+
 
 	auto sd = PropsSlowdown::createWithTargets(m_enemies);
 	sd->setPosition(Vec2(1100,400));
@@ -462,16 +465,30 @@ void Game::loadEquipmentSlot()
 	sd->setTag(TYPE_PROP_SLOWDOWN);
 	this->addChild(sd,10);
 
+
 	auto sg = PropsSafetyGuard::createWithBaby(m_baby);
 	sg->setPosition(Vec2(1000,400));
 	sg->m_position = Rect(960,360,80,80);
 	sg->setTag(TYPE_PROP_SAFETYGUARD);
 	
+
 	sg->m_safeGRect = Rect(m_baby->getPositionX() - sg->getSafeGuradSize().width /2 ,
 		m_baby->getPositionY() - sg->getSafeGuradSize().height / 2,
 		sg->getSafeGuradSize().width  ,
 		sg->getSafeGuradSize().height );
 	this->addChild(sg,10);
+
+	auto lm = PropsLandmine::createWithRoads(m_roads);
+	lm->setPosition(Vec2(900,400));
+	lm->m_position = Rect(860,360,80,80);
+	lm->setTag(TYPE_PROP_LANDMIND);
+	this->addChild(lm,10);
+
+	auto t = PropsTrap::createWithRoads(m_roads);
+	t->setPosition(Vec2(800,400));
+	t->m_position = Rect(760,360,80,80);
+	t->setTag(TYPE_PROP_TRAP);
+	this->addChild(t,10);
 
 
 }
@@ -563,8 +580,7 @@ void Game::moveEnemy(float dt){
 				m_enemies.eraseObject(enemy);	//容器里也要释放哦
 			}else{	//如果它没死
 				Vec2 enemy_position = enemy->getPosition();	//看看它的位置
-
-				auto safeguard = (PropsSafetyGuard*)this->getChildByTag(TYPE_PROP_SAFETYGUARD);
+				PropsSafetyGuard* safeguard = (PropsSafetyGuard*)this->getChildByTag(TYPE_PROP_SAFETYGUARD);
 				if(safeguard->isGuarding() && safeguard->m_safeGRect.containsPoint(enemy_position)){  
 					//检测是否有保护罩，有保护罩就保护宝贝
 					m_isGameOver = m_baby->setDamage(safeguard->setCurState(enemy->getDamage()));
@@ -613,7 +629,7 @@ void Game::moveEnemy(float dt){
 			}
 		}
 		if (m_enemies.empty() && m_curRound == m_numRound && m_curNumInRound == m_numPerRound){
-			//win
+			/*//win
 			auto listener1 = EventListenerTouchOneByOne::create();//创建一个触摸监听    
 			listener1->setSwallowTouches(true);//设置不想向下传递触摸  true是不想 默认为false  
 			listener1->onTouchBegan = [](Touch* touch, Event* event){   
@@ -693,6 +709,8 @@ void Game::moveEnemy(float dt){
 				return false;   
 			};
 			this->_eventDispatcher->addEventListenerWithSceneGraphPriority(listener2, next);
+*/
+
 		}
 	/*}
 	else	//game over
@@ -729,6 +747,64 @@ void Game::deleteObject(float dt){
 		{
 			bullet->removeFromParent();
 			m_bullets.eraseObject(bullet);
+		}
+	}
+}
+
+void Game::meetTraps(float dt)
+{
+	PropsLandmine* landmines = (PropsLandmine*)this->getChildByTag(TYPE_PROP_LANDMIND);
+	if(landmines->getNumofLandmines() > 0){
+		for (int i = 0; i < landmines->getNumofLandmines(); i++) //对于每个地雷
+		{
+			LandMine* landmine = landmines->getLandmines().at(i);
+			if(landmine->isBomb()){
+				landmine->removeFromParent();
+				landmines->getLandmines().eraseObject(landmine);
+				continue;
+			}
+			bool step = false;
+			for(int j = 0; j < m_enemies.size(); j++) //检测每只怪兽是否踩到它
+			{
+				Enemy* enemy = m_enemies.at(j);
+				if(landmine->m_position.containsPoint(enemy->getPosition())){ 
+					step = true; //踩到了就炸了它
+					enemy->removeFromParent();
+					m_enemies.eraseObject(enemy);
+				}
+			}
+			if(step){ //被踩了自己也要被炸
+				landmine->bomb();
+			}
+		}
+	}
+
+	PropsTrap* traps = (PropsTrap*)this->getChildByTag(TYPE_PROP_TRAP);
+	if(traps->getNumofTraps() > 0){
+		for(int i =0; i < traps->getNumofTraps(); i++)
+		{
+			Trap* trap = traps->getTraps().at(i);
+			if(!trap->isContainable()){
+				trap->destory();
+				for(int j = 0; j < trap->getTargets().size(); j++){
+					Enemy* enemy = trap->getTargets().at(j);
+					enemy->removeFromParent();
+					m_enemies.eraseObject(enemy);
+					trap->getTargets().eraseObject(enemy);
+				}
+				trap->removeFromParent();
+				traps->getTraps().eraseObject(trap);
+				continue;
+			}
+			for (int j = 0; j < m_enemies.size(); j++)
+			{
+				Enemy* enemy = m_enemies.at(j);
+				if(trap->m_position.containsPoint(enemy->getPosition())){
+
+					trap->catchEnemy(enemy);
+				}
+			}
+			//if(!trap->isContainable())
 		}
 	}
 }

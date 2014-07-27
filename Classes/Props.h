@@ -34,6 +34,7 @@ public:
 
 protected:
 	void usePropsAndUpdate();
+	void endCooldownAndRestart();
 };
 
 

@@ -79,3 +79,11 @@ void Props::usePropsAndUpdate()
 	}
 	m_pCdTimer->setVisible(true);
 }
+
+void Props::endCooldownAndRestart()
+{
+	m_canBeUsed = true;
+	m_usedTime = 0.0;
+	m_pCdTimer->setPercentage(100);
+	m_pCdTimer->setVisible(false);
+}
