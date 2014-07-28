@@ -14,6 +14,13 @@ Game::Game(int section, int id)
 {
 	m_section = section;
 	m_id = id;
+	m_countdown = 3;
+	m_isGameOver = false;
+	m_curRound = 0;
+	m_isWaiting = true;
+	m_curNumInRound = 0;
+	m_elapsedTimeRound = 0;
+	m_elapsedTimeMonster = 0;
 }
 
 Scene* Game::createScene(int section, int id){
@@ -57,6 +64,7 @@ bool Game::init()
 	if(ResourceManager::getInstance()->isBackgroundMusicAllow()){
 		CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
 	}
+	srand((unsigned)time(NULL));
 
 	this->scheduleUpdate();
 	this->schedule(schedule_selector(Game::moveEnemy), 0.5f);
@@ -73,42 +81,28 @@ void Game::update(float dt){
 }
 
 void Game::loadData(){
-	m_countdown = 3;
-	m_isGameOver = false;
 	HCSVFile* enemyDesc = ResourceManager::getInstance()->enemyDesc;
 	HCSVFile* sectionData = &ResourceManager::getInstance()->sections[m_section-1];
-	m_numRound = std::atoi(sectionData->getData(m_id, 1));
-	m_curRound = 0;
-	m_isWaiting = true;
-	m_numPerRound = std::atoi(sectionData->getData(m_id, 2));;
-	m_curNumInRound = 0;
+	m_numRound = std::atoi(sectionData->getData(m_id, 1));	
+	m_numPerRound = std::atoi(sectionData->getData(m_id, 2));;	
 	m_timeBetweenRound = std::atof(sectionData->getData(m_id, 3));
-	m_elapsedTimeRound = 0;
-	m_elapsedTimeMonster = 0;
-	srand((unsigned)time(NULL));
+	m_money = std::atoi(sectionData->getData(m_id, 4));
 
-	m_deltaMonsterDefence = std::atoi(enemyDesc->getData(0, 6));
 	m_deltaMonsterGenerateTime = std::atoi(enemyDesc->getData(0, 2));
 	m_deltaMonsterGenerateRate = std::atof(enemyDesc->getData(0, 3));
 	m_numMonster = std::atoi(enemyDesc->getData(0, 4));
-
-	m_deltaLittleBossDefence = std::atoi(enemyDesc->getData(1, 6));
 	m_numLittleBoss = std::atoi(enemyDesc->getData(1, 4));
-
-	m_bigBossAttack = std::atoi(enemyDesc->getData(2, 4));
 	m_numBigBoss = std::atoi(enemyDesc->getData(2, 4));
 
 	SceneReader* s = SceneReader::getInstance();
 	char str[30];
 	sprintf_s(str, "publish/section%d-%d.json", m_section, m_id+1);
-//	Node* node = s->createNodeWithSceneFile("publish/section1-1.json");
 	Node* node = s->createNodeWithSceneFile(str);
 	if(node)	
 		this -> addChild(node);
 	Node* map = node->getChildByTag(101);
 	auto component = (ComRender*)(map->getComponent("CCTMXTiledMap"));
 	m_map = (TMXTiledMap*)(component->getNode());
-	m_money = std::atoi(sectionData->getData(m_id, 4));
 }
 
 void Game::loadMenu(){
@@ -144,6 +138,14 @@ void Game::loadMenu(){
 	listener1->onTouchEnded = [](Touch* touch, Event* event){    
 	};
 	this->_eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, m_modalNode);
+
+	TTFConfig config2;
+	config2.fontSize = 60;
+	config2.fontFilePath = FONT_PRICE;
+	m_labelCountDown = Label::createWithTTF(config2, "");
+	m_labelCountDown->setColor(Color3B(255, 0, 0));
+	m_labelCountDown->setPosition(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2);
+	this->addChild(m_labelCountDown, ZORDER_TEXT);
 }
 
 void Game::loadToolBar(){
@@ -273,14 +275,6 @@ void Game::loadToolBar(){
 	m_labelSection = Label::createWithTTF(config, str->getCString());
 	auto labelsection = node->getChildByTag(306);
 	labelsection->addChild(m_labelSection);
-
-	TTFConfig config2;
-	config2.fontSize = 60;
-	config2.fontFilePath = FONT_PRICE;
-	m_labelCountDown = Label::createWithTTF(config2, "");
-	m_labelCountDown->setColor(Color3B(255, 0, 0));
-	m_labelCountDown->setPosition(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2);
-	this->addChild(m_labelCountDown, ZORDER_TEXT);
 }
 
 void Game::loadPeople(){
@@ -476,11 +470,11 @@ void Game::addEnemy(float dt){
 					if (rate < m_deltaMonsterGenerateRate)
 					{
 						int row = rand() % (m_numMonster);	
-						enemy = Enemy::create(row, m_curRound);
+						enemy = Enemy::create(row, m_curRound, false);
 					}else
 					{
 						int row = rand() % (m_numLittleBoss) + m_numMonster;
-						enemy = Enemy::create(row, m_curRound);
+						enemy = Enemy::create(row, m_curRound, false);
 					}
 					if (!enemy)
 						return;
@@ -517,120 +511,34 @@ void Game::moveEnemy(float dt){
 					m_baby->hurt();	//Baby痛了一下
 					if (m_isGameOver)
 					{
-						auto listener1 = EventListenerTouchOneByOne::create();//创建一个触摸监听    
-						listener1->setSwallowTouches(true);//设置不想向下传递触摸  true是不想 默认为false  
-						listener1->onTouchBegan = [](Touch* touch, Event* event){   
-							return true;   
-						};    
-						listener1->onTouchMoved = [](Touch* touch, Event* event){      
-						};    
-						listener1->onTouchEnded = [](Touch* touch, Event* event){    
-						};
-						this->_eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, m_modalNode);
-						m_modalNode->setVisible(true);
-
-						Size visibleSize = Director::getInstance()->getVisibleSize();
-						Vec2 origin = Director::getInstance()->getVisibleOrigin();
-						auto action = EaseBounceOut::create(MoveTo::create(0.3f, Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2)));
-						auto sprite = Sprite::create("youFail.png");
-						sprite->setPosition(Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height));
-						this->addChild(sprite, ZORDER_TEXT);
-						sprite->runAction(action);
+						gameOver(false);
 					}
 				} 
 				else
 				{	//根据所在的road调整速度（方向）
-					for (std::vector<Road>::iterator it = m_roads.begin(); it != m_roads.end(); it++){
-						if (it->containsPoint(enemy_position)){
-							enemy->setDirection(it->getDirection());
-							enemy->setVelocity(it->getDirectionVec2() * enemy->getSpeed());
-							break;
-						}
+					Road* road = enemy->getRoad();
+					if (road && road->containsPoint(enemy_position)){	//如果还在原本的道路上
+							enemy->setVelocity(road->getDirectionVec2() * enemy->getSpeed());
 					}
+					else //如果走到了其他路上
+					{
+						for (int k = 0; k < m_roads.size(); k++){
+							Road* it = &m_roads.at(k);
+							if (it->containsPoint(enemy_position)){
+								enemy->setDirection(it->getDirection());
+								enemy->setVelocity(it->getDirectionVec2() * enemy->getSpeed());
+								enemy->setRoad(it);
+								break;
+							}
+						}
+					}			
 				}
 			}
 		}
 		if (m_enemies.empty() && m_curRound == m_numRound && m_curNumInRound == m_numPerRound){
 			//win
-			auto listener1 = EventListenerTouchOneByOne::create();//创建一个触摸监听    
-			listener1->setSwallowTouches(true);//设置不想向下传递触摸  true是不想 默认为false  
-			listener1->onTouchBegan = [](Touch* touch, Event* event){   
-				return true;   
-			};    
-			listener1->onTouchMoved = [](Touch* touch, Event* event){      
-			};    
-			listener1->onTouchEnded = [](Touch* touch, Event* event){    
-			};
-			this->_eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, m_modalNode);
-			m_modalNode->setVisible(true);
-
-			Size visibleSize = Director::getInstance()->getVisibleSize();
-			Vec2 origin = Director::getInstance()->getVisibleOrigin();
-			auto action = EaseBounceOut::create(MoveTo::create(0.3f, Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2)));
-			auto sprite = Sprite::create("youWin.png");
-			sprite->setPosition(Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height));
-			this->addChild(sprite, ZORDER_TEXT);
-			sprite->runAction(action);
 			m_isGameOver = true;
-
-			auto toolbar = this->getChildByTag(10004)->getChildByTag(300);
-			this->_eventDispatcher->removeEventListenersForTarget(m_pauseBtn);
-			this->_eventDispatcher->removeEventListenersForTarget(m_playBtn);
-			auto next = Sprite::create("UI/GameMune.psd_Psd.Dir/next.png");
-			next->setPosition(toolbar->getChildByTag(301)->getPosition());
-			toolbar->addChild(next, 2);
-			auto listener2 = EventListenerTouchOneByOne::create();//创建一个触摸监听    
-			listener2->setSwallowTouches(true);//设置不想向下传递触摸  true是不想 默认为false  
-			listener2->onTouchBegan = [next, this](Touch* touch, Event* event){
-				Rect rect = next->getTextureRect();
-				auto target = event->getCurrentTarget();
-				Vec2 point = target->convertTouchToNodeSpace(touch);
-				if (rect.containsPoint(point)){
-					//TODO 跳到下一关
-					int rows = ResourceManager::getInstance()->sections[m_section-1].getRows();
-					m_id++;
-					if (m_id >= rows)//这个section清完了
-					{
-						m_section++;
-						if (m_section >= NUM_SECTIONS) //整个游戏通关了
-						{
-							if(ResourceManager::getInstance()->isBackgroundMusicAllow()){
-								CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
-								CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("music/MenuBackgroundMusic.mp3",true);
-							}
-
-							auto scene = ISectionSelector::createScene();
-							Director::getInstance()->replaceScene(scene);
-						}
-						else	//下一个section的第一关(if any)
-						{
-							if (ResourceManager::getInstance()->sections[m_section-1].getRows() > 0){
-								auto scene = Game::createScene(m_section, 0);
-								Director::getInstance()->replaceScene(scene);
-							}
-							else
-							{
-								if(ResourceManager::getInstance()->isBackgroundMusicAllow()){
-									CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
-									CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("music/MenuBackgroundMusic.mp3",true);
-								}
-
-								auto scene = ISectionSelector::createScene();
-								Director::getInstance()->replaceScene(scene);
-							}
-						}
-					}
-					else //跳到这个section的下一关
-					{
-						auto scene = Game::createScene(m_section, m_id);
-						Director::getInstance()->replaceScene(scene);
-					}
-					
-					return true;
-				}
-				return false;   
-			};
-			this->_eventDispatcher->addEventListenerWithSceneGraphPriority(listener2, next);
+			gameOver(true);
 		}
 	}
 	else	//game over
@@ -671,10 +579,103 @@ void Game::deleteObject(float dt){
 	}
 }
 
+void Game::gameOver(bool isWin){
+	auto listener1 = EventListenerTouchOneByOne::create();//创建一个触摸监听    
+	listener1->setSwallowTouches(true);//设置不想向下传递触摸  true是不想 默认为false  
+	listener1->onTouchBegan = [](Touch* touch, Event* event){   
+		return true;   
+	};    
+	listener1->onTouchMoved = [](Touch* touch, Event* event){      
+	};    
+	listener1->onTouchEnded = [](Touch* touch, Event* event){    
+	};
+	this->_eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, m_modalNode);
+	m_modalNode->setVisible(true);
+
+	Size visibleSize = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	
+	Sprite* sprite = NULL;
+	if (isWin){
+		sprite = Sprite::create("youWin.png");
+	}
+	else
+	{
+		sprite = Sprite::create("youFail.png");
+	}
+	if (sprite){
+		auto action = EaseBounceOut::create(MoveTo::create(0.3f, Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2)));
+		sprite->setPosition(Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height));
+		this->addChild(sprite, ZORDER_TEXT);
+		sprite->runAction(action);
+	}
+
+	if (isWin){
+		auto toolbar = this->getChildByTag(10004)->getChildByTag(300);
+		this->_eventDispatcher->removeEventListenersForTarget(m_pauseBtn);
+		this->_eventDispatcher->removeEventListenersForTarget(m_playBtn);
+		auto next = Sprite::create("UI/GameMune.psd_Psd.Dir/next.png");
+		next->setPosition(toolbar->getChildByTag(301)->getPosition());
+		toolbar->addChild(next, 2);
+		auto listener2 = EventListenerTouchOneByOne::create();//创建一个触摸监听    
+		listener2->setSwallowTouches(true);//设置不想向下传递触摸  true是不想 默认为false  
+		listener2->onTouchBegan = [next, this](Touch* touch, Event* event){
+			Rect rect = next->getTextureRect();
+			auto target = event->getCurrentTarget();
+			Vec2 point = target->convertTouchToNodeSpace(touch);
+			if (rect.containsPoint(point)){
+				//跳到下一关
+				int rows = ResourceManager::getInstance()->sections[m_section-1].getRows();
+				m_id++;
+				if (m_id >= rows)//这个section清完了
+				{
+					m_section++;
+					if (m_section >= NUM_SECTIONS) //整个游戏通关了
+					{
+						if(ResourceManager::getInstance()->isBackgroundMusicAllow()){
+							CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+							CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("music/MenuBackgroundMusic.mp3",true);
+						}
+
+						auto scene = ISectionSelector::createScene();
+						Director::getInstance()->replaceScene(scene);
+					}
+					else	//下一个section的第一关(if any)
+					{
+						if (ResourceManager::getInstance()->sections[m_section-1].getRows() > 0){
+							auto scene = Game::createScene(m_section, 0);
+							Director::getInstance()->replaceScene(scene);
+						}
+						else
+						{
+							if(ResourceManager::getInstance()->isBackgroundMusicAllow()){
+								CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+								CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("music/MenuBackgroundMusic.mp3",true);
+							}
+
+							auto scene = ISectionSelector::createScene();
+							Director::getInstance()->replaceScene(scene);
+						}
+					}
+				}
+				else //跳到这个section的下一关
+				{
+					auto scene = Game::createScene(m_section, m_id);
+					Director::getInstance()->replaceScene(scene);
+				}
+
+				return true;
+			}
+			return false;   
+		};
+		this->_eventDispatcher->addEventListenerWithSceneGraphPriority(listener2, next);
+	}	
+}
+
 void Game::onEnter(){
 	Layer::onEnter();
-	auto listener = EventListenerPhysicsContact::create();
-	listener->onContactBegin = [this](PhysicsContact &contact)->bool{
+	m_contactListener = EventListenerPhysicsContact::create();
+	m_contactListener->onContactBegin = [this](PhysicsContact &contact)->bool{
 		auto nodeA = contact.getShapeA()->getBody()->getNode();
 		auto nodeB = contact.getShapeB()->getBody()->getNode();
 		Bullet* bullet = NULL;
@@ -698,7 +699,12 @@ void Game::onEnter(){
 		}
 		return false;
 	};
-	_eventDispatcher->addEventListenerWithFixedPriority(listener, Priority_EventListenerPhysicsContact);
+	_eventDispatcher->addEventListenerWithFixedPriority(m_contactListener, Priority_EventListenerPhysicsContact);
+}
+
+void Game::onExit(){
+	Layer::onExit();
+	_eventDispatcher->removeEventListener(m_contactListener);
 }
 
 void Game::menuCloseCallback(Ref* pSender)

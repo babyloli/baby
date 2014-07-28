@@ -1,6 +1,7 @@
 #include "ISubUIScene.h"
 #include "AppDelegate.h"
 #include "GameScene.h"
+#include "EndlessGameScene.h"
 #include "ResourceManager.h"
 
 USING_NS_CC;
@@ -70,6 +71,10 @@ void IModeSelector::onTouchSelectButton(Object* pSender, TouchEventType type)
 			}						
 			break;
 		case UI_BUTTON_DOCTOR_MODE:
+			{
+				auto gameScene = Endless::createScene();
+				Director::getInstance()->replaceScene(gameScene);
+			}
 			break;
 		case UI_BUTTON_CLOSESELECTOR:
 			this->removeFromParentAndCleanup(true);

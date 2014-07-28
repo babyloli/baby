@@ -5,12 +5,13 @@ USING_NS_CC;
 
 Enemy::Enemy()
 	:m_pProTimer(NULL)
+	,m_road(NULL)
 {
 }
 
-Enemy* Enemy::create(int id, int curRound){
+Enemy* Enemy::create(int id, int curRound, bool mode){
 	Enemy *pRet = new Enemy();
-	if (pRet && pRet->initWithId(id, curRound)) {
+	if (pRet && pRet->initWithId(id, curRound, mode)) {
 		pRet->autorelease();
 		return pRet;
 	}
@@ -21,13 +22,15 @@ Enemy* Enemy::create(int id, int curRound){
 	} 
 }
 
-bool Enemy::initWithId(int id, int curRound){
+bool Enemy::initWithId(int id, int curRound, bool mode){
 	this->setTag(TAG_ENEMY);
 	this->setZOrder(ZORDER_ENEMY);
 	m_curRound = curRound;
 	initial(id);
+	m_hp = m_maxHp;
 	m_direction = ROAD_NONE;
 	m_isDie = false;
+	m_mode = mode;
 	m_enemy = Sprite::create();
 	if (!m_enemy)
 		return false;
@@ -68,6 +71,8 @@ void Enemy::initial(int id){
 	m_type = std::atoi(enemyData->getData(id, 1));
 	m_id = id;
 	m_name = enemyData->getData(id, 2);
+	m_maxHp = std::atoi(enemyData->getData(id, 10));
+	m_rate = m_maxHp / 100.0f;
 }
 
 //----------------get/set-----------------------
@@ -81,21 +86,21 @@ bool Enemy::setName(std::string name){
 }
 
 float Enemy::getHp(){
-	if (m_pProTimer){
-		return m_pProTimer->getPercentage();
-	}
-	return 0;
+	return m_hp;
 }
 
 bool Enemy::setHp(float hp){
 	if (m_pProTimer){
-		if (hp > 0)
-			m_pProTimer->setPercentage(hp);
+		if (hp > 0){
+			m_hp = hp;
+		}
 		else
 		{
-			m_pProTimer->setPercentage(0);
+			m_hp = 0;			
 			m_isDie = true;
+			m_curSpeed = 0;
 		}
+		m_pProTimer->setPercentage(m_hp / m_rate);
 		return true;
 	}
 	return false;
@@ -163,11 +168,13 @@ void Enemy::setDirection(int direction){
 	if (direction != m_direction){
 		m_enemy->stopAllActions();
 		//�鴤ģʽ
-		if (m_type == 0){
-			HCSVFile* enemyData = ResourceManager::getInstance()->enemyData;
-			int num = std::atoi(ResourceManager::getInstance()->enemyDesc->getData(0, 4));
-			int row = rand() % num;
-			this->initial(row);
+		if (m_mode){
+			if (m_type == 0){
+				HCSVFile* enemyData = ResourceManager::getInstance()->enemyData;
+				int num = std::atoi(ResourceManager::getInstance()->enemyDesc->getData(0, 4));
+				int row = rand() % num;
+				this->initial(row);
+			}			
 		}	
 
 		std::string dir_cur = "";
@@ -190,6 +197,11 @@ void Enemy::setDirection(int direction){
 			AnimationCache::getInstance()->getAnimation(m_name + dir_cur))));
 		m_direction = direction;
 	}
+}
+
+void Enemy::setRoad(Road* road)
+{
+	m_road = road;
 }
 
 int Enemy::getPrice(){

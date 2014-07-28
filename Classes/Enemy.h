@@ -2,10 +2,12 @@
 #define __ENEMY_H__
 
 #include "cocos2d.h"
+#include "Road.h"
 USING_NS_CC;
 
 class Enemy : public Node{
 private:
+	bool m_mode;	//抽搐模式
 	int m_curRound;
 	int m_damage;
 	int m_originSpeed;
@@ -15,15 +17,19 @@ private:
 	int m_price;
 	int m_type; //monster littleBoss bigBoss
 	int m_id;
+	int m_hp;
+	int m_maxHp;
+	float m_rate;
 	std::string m_name;
 	int m_direction;
 	bool m_isDie;
 	ProgressTimer* m_pProTimer;
 	Sprite* m_enemy;
+	Road* m_road;	//当前所在的道路
 public:
-	static Enemy* create(int id, int curRound);
+	static Enemy* create(int id, int curRound, bool mode);
 	Enemy();
-	bool initWithId(int id, int curRound);
+	bool initWithId(int id, int curRound, bool mode);
 	void initial(int id);
 
 	std::string getName();
@@ -48,6 +54,8 @@ public:
 	void setMagicalDefence(int d);
 	int getDirection();
 	void setDirection(int direction);
+	Road* getRoad(){return m_road;}
+	void setRoad(Road* road);
 	int getPrice();
 	void setPrice(int price);
 	Sprite* getEnemy();

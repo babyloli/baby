@@ -13,7 +13,7 @@
 USING_NS_CC;
 class Game : public cocos2d::Layer
 {
-private:
+protected:
 	TMXTiledMap* m_map;
 	Baby* m_baby;
 	Vec2 m_enemyPosition;
@@ -43,31 +43,30 @@ private:
 	bool m_isWaiting;
 	bool m_isGameOver;
 
-	int m_deltaMonsterDefence;
 	int m_deltaMonsterGenerateTime;
 	float m_deltaMonsterGenerateRate;
 	float m_elapsedTimeMonster;
 	int m_numMonster;
-
-	int m_deltaLittleBossDefence;
 	int m_numLittleBoss;
-
-	int m_bigBossAttack;
 	int m_numBigBoss;
 
 	int m_id;
 	int m_section;
 	int m_countdown;
+
+	EventListenerPhysicsContact* m_contactListener;
 public:
 	static cocos2d::Scene* createScene(int section, int id);
 	virtual bool init();  
 	static Game* create(int section, int id);
 	Game(int section, int id);
+	
 	/*~Game();*/
 	void onEnter() override;
-	void loadData();
+	void onExit() override;
+	virtual void loadData();
 	void loadMenu();
-	void loadToolBar();
+	virtual void loadToolBar();
 	void loadPeople();
 	void loadTower();
 	void loadRoadAndBarriers();
@@ -79,11 +78,13 @@ public:
 	void towerDeleteCallback(cocos2d::Ref* pSender, int towerId, Sprite* towerbase);
 
 	void countDown(float dt);
-	void addEnemy(float dt);
+	virtual void addEnemy(float dt);
 	void moveEnemy(float dt);
 	void findEnemy(float dt);
 	void deleteObject(float dt);
 	void update(float dt);
+
+	void gameOver(bool isWin);
 
 	void setPhysicsWorld(PhysicsWorld* world);
 	void addMoney(int money);
