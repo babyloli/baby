@@ -7,6 +7,8 @@
 #include "Props.h"
 #include "GameScene.h"
 #include "Trap.h"
+#include "Assistant.h"
+
 
 //////////////////////////////////////////////////////////////////////////
 // A prop to improve Baby's Hp
@@ -25,6 +27,7 @@ public:
 	void update(float dt);
 
 };
+
 
 
 
@@ -96,6 +99,7 @@ private:
 
 public:
 	PropsLandmine();
+	~PropsLandmine();
 	PropsLandmine(const std::vector<Road>& roads);
 	static PropsLandmine* create();
 	static PropsLandmine* createWithRoads(const std::vector<Road>& roads);
@@ -128,6 +132,7 @@ private:
 	std::vector<Road> m_roads;
 
 public:
+	~PropsTrap();
 	PropsTrap(const std::vector<Road>& roads);
 	static PropsTrap* createWithRoads(const std::vector<Road>& roads);
 
@@ -142,4 +147,24 @@ public:
 	int getNumofTraps();
 };
 
+
+
+//////////////////////////////////////////////////////////////////////////
+// A prop to provide an assistant to resist enemies
+class PropsAssistGuard : public Props
+{
+private:
+	Vec2 m_startPoint;
+public:
+
+	PropsAssistGuard(Vec2 start);
+	~PropsAssistGuard();
+	static PropsAssistGuard* create(Vec2 start);
+
+	void onEnter()override;
+	bool onTouchCallback(Touch* touch, Event* event);
+	void update(float dt);
+	void addAssistant();
+
+};
 

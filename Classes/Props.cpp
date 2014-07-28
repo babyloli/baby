@@ -60,6 +60,7 @@ bool Props::init()
 		m_sprite->setVisible(false);
 		m_notebg->setVisible(false);
 		m_number->setVisible(false);
+		m_canBeUsed = false;
 	}
 
 	this->scheduleUpdate();
@@ -82,7 +83,10 @@ void Props::usePropsAndUpdate()
 
 void Props::endCooldownAndRestart()
 {
-	m_canBeUsed = true;
+	int num = UserDefault::sharedUserDefault()->getIntegerForKey(m_name.c_str());
+	if(num >0){
+		m_canBeUsed = true;
+	}
 	m_usedTime = 0.0;
 	m_pCdTimer->setPercentage(100);
 	m_pCdTimer->setVisible(false);

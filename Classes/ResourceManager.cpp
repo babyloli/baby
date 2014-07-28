@@ -31,6 +31,7 @@ void ResourceManager::init(){
 	spriteFrameCache->addSpriteFramesWithFile("images/props/safetyguard.plist");
 	spriteFrameCache->addSpriteFramesWithFile("images/props/landmine.plist");
 	spriteFrameCache->addSpriteFramesWithFile("images/props/traps.plist");
+	spriteFrameCache->addSpriteFramesWithFile("images/props/assist.plist");
 	loadAnimation();
 
 	//---------------------Texture----------------------------
@@ -91,6 +92,7 @@ void ResourceManager::loadAnimation(){
 	loadAnimation("trap_state_3_%ld.png",3,0.1f,ANIMATION_TRAP_STATE_1);
 	loadAnimation("trap_state_2_%ld.png",3,0.1f,ANIMATION_TRAP_STATE_2);
 	loadAnimation("trap_state_1_%ld.png",3,0.1f,ANIMATION_TRAP_STATE_3);
+	loadAnimation("oryzae%ld.png",6,0.1f,ANIMATION_ASSISTANT);
 }
 
 ResourceManager* ResourceManager::getInstance(){

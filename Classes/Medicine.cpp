@@ -87,6 +87,7 @@ PropsSlowdown::PropsSlowdown(const Vector<Enemy*>& emenies)
 
 PropsSlowdown::~PropsSlowdown()
 {
+	m_targets.clear();
 }
 
 PropsSlowdown* PropsSlowdown::create()
@@ -333,6 +334,17 @@ PropsLandmine::PropsLandmine(const std::vector<Road>& roads)
 	m_landmindcreate->setVisible(false);
 }
 
+
+PropsLandmine::~PropsLandmine()
+{
+	for(int i= 0; i < m_landmines.size(); i++)
+	{
+		m_landmines.at(i)->removeFromParent();
+	}
+	m_landmines.clear();
+	m_roads.clear();
+}
+
 PropsLandmine* PropsLandmine::create()
 {
 	PropsLandmine* prop = new PropsLandmine();
@@ -477,6 +489,17 @@ PropsTrap* PropsTrap::createWithRoads(const std::vector<Road>& roads)
 	return nullptr;
 }
 
+PropsTrap::~PropsTrap()
+{
+	for (int i = 0; i < m_traps.size(); i++)
+	{
+		m_traps.at(i)->removeFromParent();
+	}
+	m_traps.clear();
+	m_roads.clear();
+}
+
+
 void PropsTrap::onEnter()
 {
 	Node::onEnter();
@@ -553,4 +576,83 @@ Vector<Trap*> PropsTrap::getTraps()
 int PropsTrap::getNumofTraps()
 {
 	return m_traps.size();
+}
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////////
+PropsAssistGuard::PropsAssistGuard(Vec2 start)
+{
+	m_id = 5;
+	m_sprite = Sprite::create("images/props/6.png");
+	this->addChild(m_sprite);
+	
+	m_startPoint = start;
+}
+
+PropsAssistGuard::~PropsAssistGuard()
+{
+}
+
+PropsAssistGuard* PropsAssistGuard::create(Vec2 start)
+{
+	PropsAssistGuard* prop = new PropsAssistGuard(start);
+	if(prop && prop->init()){
+		prop->autorelease();
+		return prop;
+	}
+	CC_SAFE_DELETE(prop);
+	return nullptr;
+}
+
+
+void PropsAssistGuard::onEnter()
+{
+	Node::onEnter();
+	auto listener = EventListenerTouchOneByOne::create();
+	listener->setSwallowTouches(true);
+	listener->onTouchBegan = CC_CALLBACK_2(PropsAssistGuard::onTouchCallback, this);
+	this->_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+}
+
+bool PropsAssistGuard::onTouchCallback(Touch* touch, Event* event)
+{
+	if(m_position.containsPoint(touch->getLocation()) && m_canBeUsed){
+		m_canBeUsed = false;
+		usePropsAndUpdate();
+		addAssistant();
+		return true;
+	}
+	return false;
+}
+
+void PropsAssistGuard::update(float dt)
+{
+	if(m_canBeUsed){
+		return;
+	}
+	else{
+		if(m_usedTime >= m_cooldownTime){
+			endCooldownAndRestart();
+		}
+		else{
+			m_usedTime += dt;
+			m_pCdTimer->setPercentage((m_cooldownTime - m_usedTime) / m_cooldownTime * 100);
+		}
+	}
+}
+
+void PropsAssistGuard::addAssistant()
+{
+	Assistant* assistant = Assistant::create();
+	assistant->setPosition(m_startPoint);
+	assistant->setTag(TAG_ASSISTANT);
+	this->getParent()->addChild(assistant,ZORDER_ENEMY);
+	auto game = (Game*)(this->getParent());
+	if(game != NULL){
+		game->m_assistants.pushBack(assistant);
+	}
+
 }

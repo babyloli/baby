@@ -118,13 +118,9 @@ void IHomeMenu::onTouchButton(Object* pSender, TouchEventType type)
 		{
 		case UI_BUTTON_PLAYGAME:
 			{
-				/*
 				auto modeSelector = IModeSelector::create();
 				//modeSelector->registerWithTouchDispatcher();
 				this->addChild(modeSelector);
-				*/
-				auto s = Game::createScene(1,0);
-				Director::getInstance()->replaceScene(s);
 				break;
 			}
 		case UI_BUTTON_SETUP:

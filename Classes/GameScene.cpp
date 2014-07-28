@@ -62,9 +62,9 @@ bool Game::init()
 	this->scheduleUpdate(); //实现主循环调度
 	this->schedule(schedule_selector(Game::moveEnemy), 0.5f);
 	this->schedule(schedule_selector(Game::deleteObject), 0.5f);
-	//this->schedule(schedule_selector(Game::countDown), 1.0f);
+	this->schedule(schedule_selector(Game::countDown), 1.0f);
 	this->schedule(schedule_selector(Game::meetTraps),0.5f);
-	//////////////////////////////////////////////////////////////////////////
+	/*//////////////////////////////////////////////////////////////////////////
 	this->_eventDispatcher->removeEventListenersForTarget(m_modalNode);
 	m_modalNode->setVisible(false);
 	m_towerbase->setVisible(false);
@@ -72,8 +72,7 @@ bool Game::init()
 	m_curRound = 1;
 	m_labelCountDown->removeFromParent();
 	//////////////////////////////////////////////////////////////////////////
-
-	
+*/
 	return true;	
 }
 
@@ -318,6 +317,14 @@ void Game::loadPeople(){
 
 	ValueMap enemyObject = peopleObjectGroup->getObject("enemy");	//获取一个name为“enemy”的对象
 	m_enemyPosition = Vec2(objPosX(enemyObject),objPosY(enemyObject));	//enemy对象的起始位置
+	float emeny_x = enemyObject.at("x").asFloat();
+	float enemy_y = enemyObject.at("y").asFloat();
+	float enemy_width = objWidth(enemyObject);
+	float enemy_height = objHeight(enemyObject);
+	m_enemyRect = Rect(emeny_x,enemy_y,enemy_width,enemy_height);
+
+	ValueMap assistantObject = peopleObjectGroup->getObject("assistant");
+	m_assistPosition = Vec2(objPosX(assistantObject), objPosY(assistantObject));
 }
 
 void Game::loadTower(){
@@ -452,49 +459,58 @@ void Game::loadEquipmentSlot()
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
+	auto equipmentslot = GUIReader::getInstance()->widgetFromJsonFile("UI/equipmentSlot_1/equipmentSlot_1.ExportJson");
+	this->addChild(equipmentslot,ZORDER_TOWER);
 
-	auto rhp = PropsRestoreHp::createWithBaby(m_baby);
-	rhp->setPosition(Vec2(1200,400));
-	rhp->m_position = Rect(1160,360,80,80);
-	this->addChild(rhp,10);
+	auto rHpPos = static_cast<Button*>(Helper::seekWidgetByTag(equipmentslot,UI_POSITION_RESTOREHP));
+	auto sdPos = static_cast<Button*>(Helper::seekWidgetByTag(equipmentslot,UI_POSITION_SLOWDOWN));
+	auto sgPos = static_cast<Button*>(Helper::seekWidgetByTag(equipmentslot,UI_POSITION_SAFEGUARD));
+	auto lmPos = static_cast<Button*>(Helper::seekWidgetByTag(equipmentslot,UI_POSITION_LANDMINE));
+	auto trapPos = static_cast<Button*>(Helper::seekWidgetByTag(equipmentslot,UI_POSITION_TRAP));
+	auto atPos = static_cast<Button*>(Helper::seekWidgetByTag(equipmentslot,UI_POSITION_ASSISTGUARD));
+	
+	PropsRestoreHp* restoreHpProp =  PropsRestoreHp::createWithBaby(m_baby);
+	restoreHpProp->setPosition(rHpPos->getPosition());
+	restoreHpProp->m_position = Rect(restoreHpProp->getPositionX() - 40, restoreHpProp->getPositionY() - 40, 80, 80);
+	this->addChild(restoreHpProp,ZORDER_TOWER + 1);
 
-
-	auto sd = PropsSlowdown::createWithTargets(m_enemies);
-	sd->setPosition(Vec2(1100,400));
-	sd->m_position = Rect(1060,360,80,80);
-	sd->setTag(TYPE_PROP_SLOWDOWN);
-	this->addChild(sd,10);
-
-
-	auto sg = PropsSafetyGuard::createWithBaby(m_baby);
-	sg->setPosition(Vec2(1000,400));
-	sg->m_position = Rect(960,360,80,80);
-	sg->setTag(TYPE_PROP_SAFETYGUARD);
+ 	PropsSlowdown* slowdownProp = PropsSlowdown::createWithTargets(m_enemies);
+	slowdownProp->setPosition(sdPos->getPosition());
+	slowdownProp->m_position = Rect(slowdownProp->getPositionX() - 40, slowdownProp->getPositionY() - 40, 80, 80);
+	slowdownProp->setTag(TYPE_PROP_SLOWDOWN);
+	this->addChild(slowdownProp, ZORDER_TOWER + 1);
 	
 
-	sg->m_safeGRect = Rect(m_baby->getPositionX() - sg->getSafeGuradSize().width /2 ,
-		m_baby->getPositionY() - sg->getSafeGuradSize().height / 2,
-		sg->getSafeGuradSize().width  ,
-		sg->getSafeGuradSize().height );
-	this->addChild(sg,10);
+	PropsSafetyGuard* safetyGuardProp = PropsSafetyGuard::createWithBaby(m_baby);
+	safetyGuardProp->setPosition(sgPos->getPosition());
+	safetyGuardProp->m_position = Rect(safetyGuardProp->getPositionX() - 40, safetyGuardProp->getPositionY() - 40, 80, 80);
+	safetyGuardProp->setTag(TYPE_PROP_SAFETYGUARD);
+	safetyGuardProp->m_safeGRect = Rect(m_baby->getPositionX() - safetyGuardProp->getSafeGuradSize().width /2 ,
+		m_baby->getPositionY() - safetyGuardProp->getSafeGuradSize().height / 2,
+		safetyGuardProp->getSafeGuradSize().width  ,
+		safetyGuardProp->getSafeGuradSize().height );
+	this->addChild(safetyGuardProp,ZORDER_TOWER + 1);
+	
+	PropsLandmine* landmineProp = PropsLandmine::createWithRoads(m_roads);
+	landmineProp->setPosition(lmPos->getPosition());
+	landmineProp->m_position = Rect(landmineProp->getPositionX() - 40, landmineProp->getPositionY() - 40, 80 ,80);
+	landmineProp->setTag(TYPE_PROP_LANDMIND);
+	this->addChild(landmineProp, ZORDER_TOWER + 1);
 
-	auto lm = PropsLandmine::createWithRoads(m_roads);
-	lm->setPosition(Vec2(900,400));
-	lm->m_position = Rect(860,360,80,80);
-	lm->setTag(TYPE_PROP_LANDMIND);
-	this->addChild(lm,10);
+	PropsTrap* trapProp = PropsTrap::createWithRoads(m_roads);
+	trapProp->setPosition(trapPos->getPosition());
+	trapProp->m_position = Rect(trapProp->getPositionX() - 40, trapProp->getPositionY() - 40, 80, 80);
+	trapProp->setTag(TYPE_PROP_TRAP);
+	this->addChild(trapProp,ZORDER_TOWER + 1);
 
-	auto t = PropsTrap::createWithRoads(m_roads);
-	t->setPosition(Vec2(800,400));
-	t->m_position = Rect(760,360,80,80);
-	t->setTag(TYPE_PROP_TRAP);
-	this->addChild(t,10);
-
+	PropsAssistGuard* assistGuardProp = PropsAssistGuard::create(m_assistPosition);
+	assistGuardProp->setPosition(atPos->getPosition());
+	assistGuardProp->m_position = Rect(assistGuardProp->getPositionX() - 40, assistGuardProp->getPositionY() - 40, 80, 80);
+	assistGuardProp->setTag(TYPE_PROP_ASSISTGUARD);
+	this->addChild(assistGuardProp, ZORDER_TOWER + 1);
 
 }
 
-
-/*
 
 void Game::countDown(float dt){
 
@@ -517,7 +533,7 @@ void Game::countDown(float dt){
 		m_labelCountDown->setString(std::to_string(m_countdown--));
 	}
 }
-*/
+
 
 void Game::addEnemy(float dt){
 	if (!m_isGameOver){
@@ -571,7 +587,29 @@ void Game::addEnemy(float dt){
 }
 
 void Game::moveEnemy(float dt){
-//	if (!m_isGameOver){
+	if (!m_isGameOver){
+		for (int i = 0; i < m_assistants.size(); i++)//如果有assistant
+		{
+			Assistant* assist = m_assistants.at(i);
+			if(assist->isDie()){  //如果它英勇牺牲了
+				assist->removeFromParent();
+				m_assistants.eraseObject(assist);
+			}
+			else{ //木有死就调整方向
+				Vec2 assist_position = assist->getPosition();
+				if(m_enemyRect.containsPoint(assist_position)){
+					assist->setDie(true);
+				}
+				for(std::vector<Road>::iterator it = m_roads.begin(); it != m_roads.end(); it++)
+				{
+					if(it->containsPoint(assist_position)){
+						assist->setDirection(it->getDirection());
+						assist->setVelocity(it->getDirectionVec2()* assist->getSpeed()*(-1));
+						break;
+					}
+				}
+			}
+		}
 		for (int i = 0; i < m_enemies.size(); i++){		//对每个enemy
 			Enemy* enemy = m_enemies.at(i);
 			if (enemy->isDie()){	//如果它死了
@@ -593,7 +631,7 @@ void Game::moveEnemy(float dt){
 					enemy->removeFromParent();	//把enemy消除掉
 					m_enemies.eraseObject(enemy);	//容器里也要释放哦
 					m_baby->hurt();	//Baby痛了一下
-					/*if (m_isGameOver)
+					if (m_isGameOver)
 					{
 						auto listener1 = EventListenerTouchOneByOne::create();//创建一个触摸监听    
 						listener1->setSwallowTouches(true);//设置不想向下传递触摸  true是不想 默认为false  
@@ -614,7 +652,7 @@ void Game::moveEnemy(float dt){
 						sprite->setPosition(Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height));
 						this->addChild(sprite, ZORDER_TEXT);
 						sprite->runAction(action);
-					}*/
+					}
 				} 
 				else
 				{	//根据所在的road调整速度（方向）
@@ -629,7 +667,7 @@ void Game::moveEnemy(float dt){
 			}
 		}
 		if (m_enemies.empty() && m_curRound == m_numRound && m_curNumInRound == m_numPerRound){
-			/*//win
+			//win
 			auto listener1 = EventListenerTouchOneByOne::create();//创建一个触摸监听    
 			listener1->setSwallowTouches(true);//设置不想向下传递触摸  true是不想 默认为false  
 			listener1->onTouchBegan = [](Touch* touch, Event* event){   
@@ -709,10 +747,9 @@ void Game::moveEnemy(float dt){
 				return false;   
 			};
 			this->_eventDispatcher->addEventListenerWithSceneGraphPriority(listener2, next);
-*/
 
 		}
-	/*}
+	}
 	else	//game over
 	{
 		for (int i = 0; i < m_enemies.size(); i++){		//对每个enemy
@@ -720,7 +757,7 @@ void Game::moveEnemy(float dt){
 			enemy->removeFromParent();	//然后就把它消除掉
 		}
 		m_enemies.clear();
-	}*/
+	}
 }
 
 void Game::findEnemy(float dt){
@@ -834,6 +871,24 @@ void Game::onEnter(){
 			bullet->setDie();
 			return true;
 		}
+		if(m_assistants.size() > 0){
+			Assistant* assistant = NULL;
+			if(TAG_ASSISTANT == tagA && TAG_ENEMY == tagB){
+				assistant =dynamic_cast<Assistant*>(nodeA);
+				enemy = dynamic_cast<Enemy*>(nodeB);
+			}
+			else if(TAG_ENEMY == tagA &&TAG_ASSISTANT == tagB){
+				enemy = dynamic_cast<Enemy*>(nodeA);
+				assistant = dynamic_cast<Assistant*>(nodeB);
+			}
+			if(enemy && assistant){
+				int damage = abs(assistant->getPhysicalDefence() - enemy->getPhysicalDefence());
+				float rate = enemy->getPhysicalDefence() / (assistant->getPhysicalDefence() + enemy->getPhysicalDefence());
+				enemy->setHp(enemy->getHp() - damage * ( 1 - rate ));
+				assistant->setHp(assistant->getHp() - damage * rate );
+				return true;
+			}
+		}
 		return false;
 	};
 	_eventDispatcher->addEventListenerWithFixedPriority(listener, Priority_EventListenerPhysicsContact);
@@ -945,7 +1000,6 @@ void Game::towerDeleteCallback(cocos2d::Ref* pSender, int towerId, Sprite* tower
 	this->removeChild(tower);
 	this->m_towers.eraseObject(tower);
 }
-
 
 
 //------------------get/sets-----------------------------
