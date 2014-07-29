@@ -12,8 +12,16 @@ bool Baby::init(){
 	this->addChild(m_sprite);
 	m_action = RepeatForever::create(Animate::create(
 		AnimationCache::getInstance()->getAnimation(ANIMATION_BABY_NORMAL)));
+	//m_sprite->setScale(1.5);
 	m_sprite->runAction(m_action);
-	
+
+	auto labelBg = Sprite::create("images/baby/HpBackground.png");
+	labelBg->setPosition(Vec2(m_sprite->getPositionX(),m_sprite->getPositionY() - labelBg->getContentSize().height * 1.4));
+	this->addChild(labelBg);
+	TTFConfig config("fonts/cardFont.ttf",20);
+	m_hpLabel = Label::createWithTTF(config,std::to_string(m_hp));
+	m_hpLabel->setPosition(Vec2(m_sprite->getPositionX(),m_sprite->getPositionY() - labelBg->getContentSize().height * 1.4));
+	this->addChild(m_hpLabel);
 	return true;
 }
 
@@ -28,6 +36,8 @@ void Baby::onEnter(){
 bool Baby::setDamage(int damage){
 	m_hp -= damage;
 	m_sprite->stopAllActions();
+	m_hpLabel->setString(std::to_string(m_hp));
+	
 	if (m_hp <= 0){
 		return true;
 	}
@@ -41,7 +51,7 @@ bool Baby::setDamage(int damage){
 	} else if (m_hp > 4 && m_hp <= 6){
 		m_action = RepeatForever::create(Animate::create(
 			cache->getAnimation(ANIMATION_BABY_SAD)));
-	} else if (m_hp > 6 && m_hp <= 8){
+	} else if (m_hp > 6 /* && m_hp <= 8 */){
 		m_action = RepeatForever::create(Animate::create(
 			cache->getAnimation(ANIMATION_BABY_NORMAL)));
 	} 
@@ -74,4 +84,9 @@ bool Baby::touchCallback(Touch* touch, Event* event){
 		return true;
 	}
 	return false;
+}
+
+void Baby::restoreHealth(){
+	m_hp = m_hp + 1;
+	setDamage(0);
 }

@@ -28,6 +28,10 @@ void ResourceManager::init(){
 	spriteFrameCache->addSpriteFramesWithFile("images/enemy/Monsters.plist");
 	spriteFrameCache->addSpriteFramesWithFile("images/baby/baby1.plist");
 	spriteFrameCache->addSpriteFramesWithFile("images/tower/Towers.plist");
+	spriteFrameCache->addSpriteFramesWithFile("images/props/safetyguard.plist");
+	spriteFrameCache->addSpriteFramesWithFile("images/props/landmine.plist");
+	spriteFrameCache->addSpriteFramesWithFile("images/props/traps.plist");
+	spriteFrameCache->addSpriteFramesWithFile("images/props/assist.plist");
 	loadAnimation();
 
 	//---------------------Texture----------------------------
@@ -77,6 +81,18 @@ void ResourceManager::loadAnimation(){
 	loadAnimation("baby1hurted%1d.png", 6, 0.2f, ANIMATION_BABY_HURTED);
 	loadAnimation("baby1angry%1d.png", 6, 0.2f, ANIMATION_BABY_ANGRY);
 	loadAnimation("baby1win%1d.png", 6, 0.2f, ANIMATION_BABY_WIN);
+
+	loadAnimation("safebubble_state_0_%ld.png",3,0.2f,ANIMATION_SAFETYGUARD_STATE_1);
+	loadAnimation("safebubble_state_1_%ld.png",3,0.2f,ANIMATION_SAFETYGUARD_STATE_2);
+	loadAnimation("safebubble_state_2_%ld.png",3,0.2f,ANIMATION_SAFETYGUARD_STATE_3);
+	loadAnimation("landmine_invalidable_%ld.png",2,0.5f,ANIMATION_LANDMINE_CREATE);
+	loadAnimation("landmine_invalidable_%ld.png",2,0.03f,ANIMATION_LANDMINE_INVALIDABLESET);
+	loadAnimation("landmine_waiting_%ld.png",2,0.04f,ANIMATION_LANDMINE_WAIT);
+	loadAnimation("landmine_bomb_%ld.png",5,0.1f,ANIMATION_LANDMINE_BOMB);
+	loadAnimation("trap_state_3_%ld.png",3,0.1f,ANIMATION_TRAP_STATE_1);
+	loadAnimation("trap_state_2_%ld.png",3,0.1f,ANIMATION_TRAP_STATE_2);
+	loadAnimation("trap_state_1_%ld.png",3,0.1f,ANIMATION_TRAP_STATE_3);
+	loadAnimation("oryzae%ld.png",6,0.1f,ANIMATION_ASSISTANT);
 }
 
 ResourceManager* ResourceManager::getInstance(){

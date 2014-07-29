@@ -6,7 +6,7 @@
 USING_NS_CC;
 
 class Enemy : public Node{
-private:
+protected:
 	bool m_mode;	//�鴤ģʽ
 	int m_curRound;
 	int m_damage;

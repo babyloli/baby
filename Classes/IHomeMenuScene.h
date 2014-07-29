@@ -6,6 +6,7 @@
 #include "ui/CocosGUI.h"
 #include "cocostudio/CocoStudio.h"
 #include "editor-support/cocostudio/CCSGUIReader.h"
+#include "ResourceManager.h"
 using namespace cocostudio;
 using namespace cocos2d::ui;
 

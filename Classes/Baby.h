@@ -9,8 +9,10 @@ private:
 	int m_hp;
 	Sprite* m_sprite;
 	Action* m_action;
+	Label* m_hpLabel;
 public:
 	Rect m_position;
+
 public:
 	Baby();
 	CREATE_FUNC(Baby);
@@ -22,6 +24,8 @@ public:
 	void hurt();
 
 	bool touchCallback(Touch* touch, Event* event);
+	
+	void restoreHealth();
 };
 
 #endif
