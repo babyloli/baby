@@ -23,7 +23,7 @@
    eJxjYBjcQJVIdQY0dQV5dpHiJgFyHIIE1IBYnQL93EDMQ4F+MyA2p0C/NBDLEKmWXnGNbo8GDe1SICAPcosFCeYRm28IAUrSFSnxhEstKemKkJ8JuUeDCDXkAnzhCLOTlPjF5U5cYQALR1z6iEnbqjjY6ICcMCTF78h2cAIxFwn6cKk3QKOJBZJALEWEOlh4EaMe2Q3o4UzIfbjk6Vk/DiUAAAUxCXE=
   </data>
  </layer>
- <objectgroup name="road" width="32" height="18" visible="0">
+ <objectgroup name="road" width="32" height="18">
   <object x="200" y="120" width="480" height="80">
    <properties>
     <property name="direction" value="right"/>
@@ -151,10 +151,11 @@
   <object x="880" y="200" height="160"/>
   <object x="720" y="360" width="160"/>
  </objectgroup>
- <objectgroup name="people" width="32" height="18" visible="0">
+ <objectgroup name="people" width="32" height="18">
   <object name="baby" x="120" y="280" width="80" height="80"/>
-  <object name="enemy" x="243" y="147" width="20" height="20"/>
+  <object name="enemy" x="200" y="120" width="80" height="80"/>
   <object name="nest" x="188" y="147" width="27" height="25"/>
+  <object name="assistant" x="204" y="298" width="40" height="40"/>
  </objectgroup>
  <objectgroup name="tower" width="32" height="18" visible="0">
   <object x="320" y="200" width="80" height="80"/>

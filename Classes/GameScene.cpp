@@ -68,6 +68,7 @@ bool Game::init()
 	srand((unsigned)time(NULL));
 
 	this->scheduleUpdate(); //实现主循环调度
+	this->schedule(schedule_selector(Game::moveAssistant), 0.5f);
 	this->schedule(schedule_selector(Game::moveEnemy), 0.5f);
 	this->schedule(schedule_selector(Game::deleteObject), 0.5f);
 	this->schedule(schedule_selector(Game::countDown), 1.0f);
@@ -414,21 +415,35 @@ void Game::loadRoadAndBarriers(){
 	for (ValueVector::iterator it = roadObjects.begin(); it != roadObjects.end(); it++)//对“road”层里的每一个对象
 	{
 		ValueMap roadObject = it->asValueMap();	//得到这个对象的属性
+		float x = roadObject.at("x").asFloat();
+		float y = roadObject.at("y").asFloat();
+		float width = objWidth(roadObject);
+		float height = objHeight(roadObject);
 		std::string directionStr = roadObject.at("direction").asString();
 		int direction;
+		Vec2 destination;
+		float duration;
 		if ("left" == directionStr){
 			direction = ROAD_LEFT;
+			destination = Vec2(x + width - 40, y + height / 2);
+			duration = width / 40;
 		} else if ("up" == directionStr) {
 			direction = ROAD_UP;
+			destination = Vec2(x + width / 2, y + 40);
+			duration = height / 40;
 		} else if ("right" == directionStr) {
 			direction = ROAD_RIGHT;
+			destination = Vec2(x + 40, y + height / 2);
+			duration = width / 40;
 		} else {
 			direction = ROAD_DOWN;
+			destination = Vec2(x + width / 2, y + height - 40);
+			duration = height / 40;
 		}
-		m_roads.push_back(Road(roadObject.at("x").asFloat(), roadObject.at("y").asFloat(),
-			objWidth(roadObject), objHeight(roadObject),
-			direction));	//把这个对象看作长方形储存到数组里
+		m_roads.push_back(Road(x, y, width, height, direction));	//把这个对象看作长方形储存到数组里
+		m_actionsAssistant.pushBack(MoveTo::create(duration, destination));		
 	}
+	m_actionsAssistant.reverse();
 
 	PhysicsMaterial staticMaterial(PHYSICS_INFINITY, 0, 0.5f);
 	TMXObjectGroup* barrierObjectGroup = m_map->getObjectGroup("barrier");	//读取对象层“barrier”
@@ -580,7 +595,7 @@ void Game::addEnemy(float dt){
 	}
 }
 
-void Game::moveEnemy(float dt){
+void Game::moveAssistant(float dt){
 	if (!m_isGameOver){
 		for (int i = 0; i < m_assistants.size(); i++)//如果有assistant
 		{
@@ -594,16 +609,37 @@ void Game::moveEnemy(float dt){
 				if(m_enemyRect.containsPoint(assist_position)){
 					assist->setDie(true);
 				}
-				for(std::vector<Road>::iterator it = m_roads.begin(); it != m_roads.end(); it++)
-				{
-					if(it->containsPoint(assist_position)){
-						assist->setDirection(it->getDirection());
-						assist->setVelocity(it->getDirectionVec2()* assist->getSpeed()*(-1));
-						break;
-					}
-				}
+// 				Road* road = assist->getRoad();
+// 				if (road && road->containsPoint(assist_position)){	//如果还在原本的道路上
+// 					assist->setVelocity(road->getDirectionVec2() * -assist->getSpeed());
+// 				}
+// 				else //如果走到了其他路上
+// 				{
+// 					for (int k = m_roads.size() - 1; k >= 0; k--){
+// 						Road* it = &m_roads.at(k);
+// 						if (it->containsPoint(assist_position)){
+// 							assist->setDirection(it->getDirection());
+// 							assist->setVelocity(it->getDirectionVec2() * -assist->getSpeed());
+// 							assist->setRoad(it);
+// 							break;
+// 						}
+// 					}
+// 				}
 			}
 		}
+	}
+	else	//game over
+	{
+		for (int i = 0; i < m_assistants.size(); i++){		//对每个Assistant
+			Enemy* as = m_assistants.at(i);
+			as->removeFromParent();	//然后就把它消除掉
+		}
+		m_assistants.clear();
+	}
+}
+
+void Game::moveEnemy(float dt){
+	if (!m_isGameOver){
 		for (int i = 0; i < m_enemies.size(); i++){		//对每个enemy
 			Enemy* enemy = m_enemies.at(i);
 			if (enemy->isDie()){	//如果它死了
@@ -882,7 +918,8 @@ void Game::onEnter(){
 				assistant = dynamic_cast<Assistant*>(nodeB);
 			}
 			if(enemy && assistant){
-				int damage = abs(assistant->getPhysicalDefence() - enemy->getPhysicalDefence());
+				int damage = assistant->getPhysicalDefence() - enemy->getPhysicalDefence();
+				damage = damage < 0 ? -damage : damage;
 				float rate = enemy->getPhysicalDefence() / (assistant->getPhysicalDefence() + enemy->getPhysicalDefence());
 				enemy->setHp(enemy->getHp() - damage * ( 1 - rate ));
 				assistant->setHp(assistant->getHp() - damage * rate );
@@ -1025,4 +1062,12 @@ void Game::addMoney(int money){
 
 void Game::addBullet(Bullet* bullet){
 	m_bullets.pushBack(bullet);
+}
+
+Vector<FiniteTimeAction*>& Game::getActionsAssistant(){
+	return m_actionsAssistant;
+}
+
+Vector<Assistant*>& Game::getAssistants(){
+	return m_assistants;
 }

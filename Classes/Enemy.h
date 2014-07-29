@@ -24,7 +24,7 @@ protected:
 	int m_direction;
 	bool m_isDie;
 	ProgressTimer* m_pProTimer;
-	Sprite* m_enemy;
+	Sprite* m_sprite;
 	Road* m_road;	//当前所在的道路
 public:
 	static Enemy* create(int id, int curRound, bool mode);
@@ -58,6 +58,6 @@ public:
 	void setRoad(Road* road);
 	int getPrice();
 	void setPrice(int price);
-	Sprite* getEnemy();
+	virtual Sprite* getEnemy();
 };
 #endif

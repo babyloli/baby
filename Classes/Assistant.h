@@ -1,4 +1,4 @@
-#ifndef __ASSISTANT_H__
+ï»¿#ifndef __ASSISTANT_H__
 #define __ASSISTANT_H__
 
 #include "Enemy.h"
@@ -18,7 +18,6 @@ public:
 	Assistant();
 	static Assistant* create();
 	virtual bool init();
-	//ÏûÊ§¶¯»­
 
 	int getSpeed();
 	bool setSpeed(int rspeed);

@@ -646,13 +646,13 @@ void PropsAssistGuard::update(float dt)
 
 void PropsAssistGuard::addAssistant()
 {
-	Assistant* assistant = Assistant::create();
-	assistant->setPosition(m_startPoint);
-	assistant->setTag(TAG_ASSISTANT);
-	this->getParent()->addChild(assistant,ZORDER_ENEMY);
 	auto game = (Game*)(this->getParent());
 	if(game != NULL){
-		game->m_assistants.pushBack(assistant);
+		Assistant* assistant = Assistant::create();
+		assistant->setPosition(m_startPoint);
+		assistant->setTag(TAG_ASSISTANT);
+		this->getParent()->addChild(assistant,ZORDER_ENEMY);
+		game->getAssistants().pushBack(assistant);
+		assistant->runAction(Sequence::create(game->getActionsAssistant()));
 	}
-
 }

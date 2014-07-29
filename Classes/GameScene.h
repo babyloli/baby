@@ -62,8 +62,9 @@ protected:
 	int m_countdown;
 
 	EventListenerPhysicsContact* m_contactListener;
-public:
+	Vector<FiniteTimeAction*> m_actionsAssistant;
 	Vector<Assistant*> m_assistants;
+	
 public:
 	static cocos2d::Scene* createScene(int section, int id);
 	virtual bool init();  
@@ -89,7 +90,7 @@ public:
 
 	void countDown(float dt);
 	virtual void addEnemy(float dt);
-
+	void moveAssistant(float dt);
 	void moveEnemy(float dt);
 	void findEnemy(float dt);
 	void deleteObject(float dt);
@@ -102,5 +103,7 @@ public:
 	void addMoney(int money);
 	Vector<Enemy*>& getEnemies();
 	void addBullet(Bullet* bullet);
+	Vector<FiniteTimeAction*>& getActionsAssistant();
+	Vector<Assistant*>& getAssistants();
 };
 #endif

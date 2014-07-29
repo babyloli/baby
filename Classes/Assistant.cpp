@@ -126,11 +126,6 @@ bool Assistant::setHp(float hp)
 	return false;
 }
 
-Sprite* Assistant::getEnemy()
-{
-	return m_assistant;
-}
-
 int Assistant::getPhysicalDefence()
 {
 	return m_physicalDefence;
@@ -139,4 +134,9 @@ int Assistant::getPhysicalDefence()
 int Assistant::getMagicalDefence()
 {
 	return m_magicalDefence;
+}
+
+Sprite* Assistant::getEnemy()
+{
+	return m_assistant;
 }

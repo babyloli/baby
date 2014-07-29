@@ -31,10 +31,10 @@ bool Enemy::initWithId(int id, int curRound, bool mode){
 	m_direction = ROAD_NONE;
 	m_isDie = false;
 	m_mode = mode;
-	m_enemy = Sprite::create();
-	if (!m_enemy)
+	m_sprite = Sprite::create();
+	if (!m_sprite)
 		return false;
-	this->addChild(m_enemy);
+	this->addChild(m_sprite);
 
 	//attach physics body
 	auto body = PhysicsBody::createBox(Size(50, 50), PhysicsMaterial(0.5f, 0.0f, 0.5f));
@@ -166,7 +166,7 @@ int Enemy::getDirection(){
 
 void Enemy::setDirection(int direction){
 	if (direction != m_direction){
-		m_enemy->stopAllActions();
+		m_sprite->stopAllActions();
 		//�鴤ģʽ
 		if (m_mode){
 			if (m_type == 0){
@@ -193,7 +193,7 @@ void Enemy::setDirection(int direction){
 			dir_cur = "down";
 			break;
 		}
-		m_enemy->runAction( RepeatForever::create(Animate::create(
+		m_sprite->runAction( RepeatForever::create(Animate::create(
 			AnimationCache::getInstance()->getAnimation(m_name + dir_cur))));
 		m_direction = direction;
 	}
@@ -213,5 +213,5 @@ void Enemy::setPrice(int price){
 }
 
 Sprite* Enemy::getEnemy(){
-	return m_enemy;	
+	return m_sprite;	
 }
