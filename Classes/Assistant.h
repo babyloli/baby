@@ -1,9 +1,8 @@
 ﻿#ifndef __ASSISTANT_H__
 #define __ASSISTANT_H__
-
-#include "Enemy.h"
-
-class Assistant : public Enemy
+#include "cocos2d.h"
+USING_NS_CC;
+class Assistant : public Node
 {
 private:
 	int m_curSpeed;
@@ -34,7 +33,6 @@ public:
 	void setDamage(int damage);
 	int getPhysicalDefence();
 	int getMagicalDefence();
-	Sprite* getEnemy();
 };
 
 

@@ -41,7 +41,7 @@ bool Props::init()
 	m_notebg->setPosition(40,40);
 	this->addChild(m_notebg);
 	int num = UserDefault::sharedUserDefault()->getIntegerForKey(m_name.c_str());
-	CCLOG("wrong");
+//	CCLOG("wrong");
 	m_number = Label::createWithTTF(configProps,itos(num));
 	m_number->setPosition(40,40);
 	this->addChild(m_number);

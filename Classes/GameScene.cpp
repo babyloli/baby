@@ -3,6 +3,7 @@
 #include "MenuItemTower.h"
 #include "ISubUIScene.h"
 #include "Utils.h"
+#include "Assistant.h"
 #include <time.h>
 USING_NS_CC;
 #define objPosX(obj) obj.at("x").asInt() + obj.at("width").asInt()/2
@@ -615,7 +616,7 @@ void Game::moveAssistant(float dt){
 	else	//game over
 	{
 		for (int i = 0; i < m_assistants.size(); i++){		//对每个Assistant
-			Enemy* as = m_assistants.at(i);
+			Assistant* as = m_assistants.at(i);
 			as->removeFromParent();	//然后就把它消除掉
 		}
 		m_assistants.clear();
