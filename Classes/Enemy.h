@@ -5,7 +5,7 @@
 USING_NS_CC;
 
 class Enemy : public Node{
-private:
+protected:
 	int m_curRound;
 	int m_damage;
 	int m_originSpeed;

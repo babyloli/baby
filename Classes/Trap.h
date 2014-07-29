@@ -1,29 +1,55 @@
-#pragma once
-#include "props.h"
+#ifndef __TRAP_H__
+#define __TRAP_H__
+
+#include "cocos2d.h"
+#include "ResourceManager.h"
+#include "Enemy.h"
+
+USING_NS_CC;
+
+class LandMine : public Node
+{
+protected:
+	Sprite* m_sprite;
+	Action* m_action;
+private:
+	bool m_isbomb;
+public:
+	Rect m_position;
+	LandMine();
+	CREATE_FUNC(LandMine);
+	virtual bool init();
+	
+	//void onEnter() override;
+	//void waitForTargets();  //等待怪兽的动画
+	void bomb();  // 销毁前播放爆炸动画
+	bool isBomb() {return m_isbomb;};
+};
 
 
-//
-class Trap :
-	public Props
+ 
+class Trap : public LandMine
 {
 private:
-	int typeId;
-	int maxCapacity;//monster的最大容量，gamescene中设定；
-	int state;//state对于容量，初始为0，大于maxCapacity则陷阱耗尽；
-
-	bool updateState();
-
+	int m_curState;
+	int m_maxState;
+	Vector<Enemy*> m_targets;
+	//float m_currTime;
+	//float m_holdTime;
 public:
-	Trap();
-	~Trap(void);
+	Trap(int maxState);
+	static Trap* createWithmaxState(int maxstate);
+	virtual bool init() override;
 
-	void setValue(const int id, const int capacity);
-
-	// 返回类型ID
-	const int getTypeId(){return typeId;};
-	
-	// 检测到碰撞之后，根据更新后的state做出相应处理；
-	void act();
+	void catchEnemy(Enemy* enemy);
+	void destory(); //销毁动画
+	bool isContainable();
+	Vector<Enemy*>& getTargets(); 
 
 };
+
+
+
+
+#endif
 

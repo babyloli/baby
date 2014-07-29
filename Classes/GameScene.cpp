@@ -53,15 +53,26 @@ bool Game::init()
 	loadPeople();
 	loadTower();
 	loadRoadAndBarriers();
+	loadEquipmentSlot();
 
 	if(ResourceManager::getInstance()->isBackgroundMusicAllow()){
 		CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
 	}
 
-	this->scheduleUpdate();
+	this->scheduleUpdate(); //实现主循环调度
 	this->schedule(schedule_selector(Game::moveEnemy), 0.5f);
 	this->schedule(schedule_selector(Game::deleteObject), 0.5f);
 	this->schedule(schedule_selector(Game::countDown), 1.0f);
+	this->schedule(schedule_selector(Game::meetTraps),0.5f);
+	/*//////////////////////////////////////////////////////////////////////////
+	this->_eventDispatcher->removeEventListenersForTarget(m_modalNode);
+	m_modalNode->setVisible(false);
+	m_towerbase->setVisible(false);
+	m_isWaiting = false;
+	m_curRound = 1;
+	m_labelCountDown->removeFromParent();
+	//////////////////////////////////////////////////////////////////////////
+*/
 	return true;	
 }
 
@@ -70,6 +81,14 @@ void Game::update(float dt){
 	addEnemy(dt);
 //	moveEnemy(dt);
 	findEnemy(dt);
+
+	//减速道具在可用的情况下， 更新减速道具的目标怪兽
+	auto sd = this->getChildByTag(TYPE_PROP_SLOWDOWN);
+	auto slowdown = (PropsSlowdown*)sd;
+	if(slowdown->isAvailable() && slowdown->getTargetsNumber() != m_enemies.size()){
+		slowdown->setSlowdownTargets(m_enemies);
+	}
+
 }
 
 void Game::loadData(){
@@ -298,6 +317,14 @@ void Game::loadPeople(){
 
 	ValueMap enemyObject = peopleObjectGroup->getObject("enemy");	//获取一个name为“enemy”的对象
 	m_enemyPosition = Vec2(objPosX(enemyObject),objPosY(enemyObject));	//enemy对象的起始位置
+	float emeny_x = enemyObject.at("x").asFloat();
+	float enemy_y = enemyObject.at("y").asFloat();
+	float enemy_width = objWidth(enemyObject);
+	float enemy_height = objHeight(enemyObject);
+	m_enemyRect = Rect(emeny_x,enemy_y,enemy_width,enemy_height);
+
+	ValueMap assistantObject = peopleObjectGroup->getObject("assistant");
+	m_assistPosition = Vec2(objPosX(assistantObject), objPosY(assistantObject));
 }
 
 void Game::loadTower(){
@@ -427,6 +454,64 @@ void Game::loadRoadAndBarriers(){
 	}
 }
 
+void Game::loadEquipmentSlot()
+{
+	Size visibleSize = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
+	auto equipmentslot = GUIReader::getInstance()->widgetFromJsonFile("UI/equipmentSlot_1/equipmentSlot_1.ExportJson");
+	this->addChild(equipmentslot,ZORDER_TOWER);
+
+	auto rHpPos = static_cast<Button*>(Helper::seekWidgetByTag(equipmentslot,UI_POSITION_RESTOREHP));
+	auto sdPos = static_cast<Button*>(Helper::seekWidgetByTag(equipmentslot,UI_POSITION_SLOWDOWN));
+	auto sgPos = static_cast<Button*>(Helper::seekWidgetByTag(equipmentslot,UI_POSITION_SAFEGUARD));
+	auto lmPos = static_cast<Button*>(Helper::seekWidgetByTag(equipmentslot,UI_POSITION_LANDMINE));
+	auto trapPos = static_cast<Button*>(Helper::seekWidgetByTag(equipmentslot,UI_POSITION_TRAP));
+	auto atPos = static_cast<Button*>(Helper::seekWidgetByTag(equipmentslot,UI_POSITION_ASSISTGUARD));
+	
+	PropsRestoreHp* restoreHpProp =  PropsRestoreHp::createWithBaby(m_baby);
+	restoreHpProp->setPosition(rHpPos->getPosition());
+	restoreHpProp->m_position = Rect(restoreHpProp->getPositionX() - 40, restoreHpProp->getPositionY() - 40, 80, 80);
+	this->addChild(restoreHpProp,ZORDER_TOWER + 1);
+
+ 	PropsSlowdown* slowdownProp = PropsSlowdown::createWithTargets(m_enemies);
+	slowdownProp->setPosition(sdPos->getPosition());
+	slowdownProp->m_position = Rect(slowdownProp->getPositionX() - 40, slowdownProp->getPositionY() - 40, 80, 80);
+	slowdownProp->setTag(TYPE_PROP_SLOWDOWN);
+	this->addChild(slowdownProp, ZORDER_TOWER + 1);
+	
+
+	PropsSafetyGuard* safetyGuardProp = PropsSafetyGuard::createWithBaby(m_baby);
+	safetyGuardProp->setPosition(sgPos->getPosition());
+	safetyGuardProp->m_position = Rect(safetyGuardProp->getPositionX() - 40, safetyGuardProp->getPositionY() - 40, 80, 80);
+	safetyGuardProp->setTag(TYPE_PROP_SAFETYGUARD);
+	safetyGuardProp->m_safeGRect = Rect(m_baby->getPositionX() - safetyGuardProp->getSafeGuradSize().width /2 ,
+		m_baby->getPositionY() - safetyGuardProp->getSafeGuradSize().height / 2,
+		safetyGuardProp->getSafeGuradSize().width  ,
+		safetyGuardProp->getSafeGuradSize().height );
+	this->addChild(safetyGuardProp,ZORDER_TOWER + 1);
+	
+	PropsLandmine* landmineProp = PropsLandmine::createWithRoads(m_roads);
+	landmineProp->setPosition(lmPos->getPosition());
+	landmineProp->m_position = Rect(landmineProp->getPositionX() - 40, landmineProp->getPositionY() - 40, 80 ,80);
+	landmineProp->setTag(TYPE_PROP_LANDMIND);
+	this->addChild(landmineProp, ZORDER_TOWER + 1);
+
+	PropsTrap* trapProp = PropsTrap::createWithRoads(m_roads);
+	trapProp->setPosition(trapPos->getPosition());
+	trapProp->m_position = Rect(trapProp->getPositionX() - 40, trapProp->getPositionY() - 40, 80, 80);
+	trapProp->setTag(TYPE_PROP_TRAP);
+	this->addChild(trapProp,ZORDER_TOWER + 1);
+
+	PropsAssistGuard* assistGuardProp = PropsAssistGuard::create(m_assistPosition);
+	assistGuardProp->setPosition(atPos->getPosition());
+	assistGuardProp->m_position = Rect(assistGuardProp->getPositionX() - 40, assistGuardProp->getPositionY() - 40, 80, 80);
+	assistGuardProp->setTag(TYPE_PROP_ASSISTGUARD);
+	this->addChild(assistGuardProp, ZORDER_TOWER + 1);
+
+}
+
+
 void Game::countDown(float dt){
 
 	if (m_countdown <= 0){
@@ -448,6 +533,7 @@ void Game::countDown(float dt){
 		m_labelCountDown->setString(std::to_string(m_countdown--));
 	}
 }
+
 
 void Game::addEnemy(float dt){
 	if (!m_isGameOver){
@@ -502,6 +588,28 @@ void Game::addEnemy(float dt){
 
 void Game::moveEnemy(float dt){
 	if (!m_isGameOver){
+		for (int i = 0; i < m_assistants.size(); i++)//如果有assistant
+		{
+			Assistant* assist = m_assistants.at(i);
+			if(assist->isDie()){  //如果它英勇牺牲了
+				assist->removeFromParent();
+				m_assistants.eraseObject(assist);
+			}
+			else{ //木有死就调整方向
+				Vec2 assist_position = assist->getPosition();
+				if(m_enemyRect.containsPoint(assist_position)){
+					assist->setDie(true);
+				}
+				for(std::vector<Road>::iterator it = m_roads.begin(); it != m_roads.end(); it++)
+				{
+					if(it->containsPoint(assist_position)){
+						assist->setDirection(it->getDirection());
+						assist->setVelocity(it->getDirectionVec2()* assist->getSpeed()*(-1));
+						break;
+					}
+				}
+			}
+		}
 		for (int i = 0; i < m_enemies.size(); i++){		//对每个enemy
 			Enemy* enemy = m_enemies.at(i);
 			if (enemy->isDie()){	//如果它死了
@@ -510,7 +618,15 @@ void Game::moveEnemy(float dt){
 				m_enemies.eraseObject(enemy);	//容器里也要释放哦
 			}else{	//如果它没死
 				Vec2 enemy_position = enemy->getPosition();	//看看它的位置
-				if (m_baby->m_position.containsPoint(enemy_position)){	//如果碰到Baby了
+				PropsSafetyGuard* safeguard = (PropsSafetyGuard*)this->getChildByTag(TYPE_PROP_SAFETYGUARD);
+				if(safeguard->isGuarding() && safeguard->m_safeGRect.containsPoint(enemy_position)){  
+					//检测是否有保护罩，有保护罩就保护宝贝
+					m_isGameOver = m_baby->setDamage(safeguard->setCurState(enemy->getDamage()));
+					enemy->removeFromParent();	//把enemy消除掉
+					m_enemies.eraseObject(enemy);	//容器里也要释放哦
+				}
+				// 木有保护罩
+				else if (m_baby->m_position.containsPoint(enemy_position)){	//如果碰到Baby了
 					m_isGameOver = m_baby->setDamage(enemy->getDamage());	//扣Baby的血看她死不死
 					enemy->removeFromParent();	//把enemy消除掉
 					m_enemies.eraseObject(enemy);	//容器里也要释放哦
@@ -631,6 +747,7 @@ void Game::moveEnemy(float dt){
 				return false;   
 			};
 			this->_eventDispatcher->addEventListenerWithSceneGraphPriority(listener2, next);
+
 		}
 	}
 	else	//game over
@@ -671,6 +788,64 @@ void Game::deleteObject(float dt){
 	}
 }
 
+void Game::meetTraps(float dt)
+{
+	PropsLandmine* landmines = (PropsLandmine*)this->getChildByTag(TYPE_PROP_LANDMIND);
+	if(landmines->getNumofLandmines() > 0){
+		for (int i = 0; i < landmines->getNumofLandmines(); i++) //对于每个地雷
+		{
+			LandMine* landmine = landmines->getLandmines().at(i);
+			if(landmine->isBomb()){
+				landmine->removeFromParent();
+				landmines->getLandmines().eraseObject(landmine);
+				continue;
+			}
+			bool step = false;
+			for(int j = 0; j < m_enemies.size(); j++) //检测每只怪兽是否踩到它
+			{
+				Enemy* enemy = m_enemies.at(j);
+				if(landmine->m_position.containsPoint(enemy->getPosition())){ 
+					step = true; //踩到了就炸了它
+					enemy->removeFromParent();
+					m_enemies.eraseObject(enemy);
+				}
+			}
+			if(step){ //被踩了自己也要被炸
+				landmine->bomb();
+			}
+		}
+	}
+
+	PropsTrap* traps = (PropsTrap*)this->getChildByTag(TYPE_PROP_TRAP);
+	if(traps->getNumofTraps() > 0){
+		for(int i =0; i < traps->getNumofTraps(); i++)
+		{
+			Trap* trap = traps->getTraps().at(i);
+			if(!trap->isContainable()){
+				trap->destory();
+				for(int j = 0; j < trap->getTargets().size(); j++){
+					Enemy* enemy = trap->getTargets().at(j);
+					enemy->removeFromParent();
+					m_enemies.eraseObject(enemy);
+					trap->getTargets().eraseObject(enemy);
+				}
+				trap->removeFromParent();
+				traps->getTraps().eraseObject(trap);
+				continue;
+			}
+			for (int j = 0; j < m_enemies.size(); j++)
+			{
+				Enemy* enemy = m_enemies.at(j);
+				if(trap->m_position.containsPoint(enemy->getPosition())){
+
+					trap->catchEnemy(enemy);
+				}
+			}
+			//if(!trap->isContainable())
+		}
+	}
+}
+
 void Game::onEnter(){
 	Layer::onEnter();
 	auto listener = EventListenerPhysicsContact::create();
@@ -695,6 +870,24 @@ void Game::onEnter(){
 				enemy->setHp(enemy->getHp() - damage);
 			bullet->setDie();
 			return true;
+		}
+		if(m_assistants.size() > 0){
+			Assistant* assistant = NULL;
+			if(TAG_ASSISTANT == tagA && TAG_ENEMY == tagB){
+				assistant =dynamic_cast<Assistant*>(nodeA);
+				enemy = dynamic_cast<Enemy*>(nodeB);
+			}
+			else if(TAG_ENEMY == tagA &&TAG_ASSISTANT == tagB){
+				enemy = dynamic_cast<Enemy*>(nodeA);
+				assistant = dynamic_cast<Assistant*>(nodeB);
+			}
+			if(enemy && assistant){
+				int damage = abs(assistant->getPhysicalDefence() - enemy->getPhysicalDefence());
+				float rate = enemy->getPhysicalDefence() / (assistant->getPhysicalDefence() + enemy->getPhysicalDefence());
+				enemy->setHp(enemy->getHp() - damage * ( 1 - rate ));
+				assistant->setHp(assistant->getHp() - damage * rate );
+				return true;
+			}
 		}
 		return false;
 	};
@@ -807,6 +1000,7 @@ void Game::towerDeleteCallback(cocos2d::Ref* pSender, int towerId, Sprite* tower
 	this->removeChild(tower);
 	this->m_towers.eraseObject(tower);
 }
+
 
 //------------------get/sets-----------------------------
 

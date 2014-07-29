@@ -19,6 +19,7 @@ public:
 #define TAG_LABELPRICE 99
 #define TAG_BULLET 98
 #define TAG_ENEMY 97
+#define TAG_ASSISTANT 95
 	//----------------Priority-------------------
 #define Priority_EventListenerPhysicsContact 10
 	//----------------Z-Order--------------------
@@ -33,18 +34,20 @@ public:
 #define CategoryBitMask_Bullet		0x0000000F
 #define CategoryBitMask_Barrier		0x000000F0
 #define CategoryBitMask_Enemy		0x00000F00
+#define CategoryBitMask_Assist		0x0FF00000
 
 #define ContactTestBitMask_Bullet	0x00000F00
 #define ContactTestBitMask_Barrier	0x00000000
 #define ContactTestBitMask_Enemy	0x0F00000F
+#define ContactTestBitMask_Assist	0x00000F00
 
 #define CollisionBitMask_Bullet		0x00000F00
-#define CollisionBitMask_Barrier	0x00000F00
+#define CollisionBitMask_Barrier	0x00F00F00
 #define CollisionBitMask_Enemy		0x000000FF
+#define CollisionBitMask_Assist		0x000000F0
 
 #define CategoryBitMask_Bullet2		0x0F000000
 #define CollisionBitMask_Bullet2	0x00000000
-
 	//----------------Tower----------------------
 #define MAX_RANGE 9999
 	HCSVFile * towerData;
@@ -53,6 +56,29 @@ public:
 	HCSVFile * enemyDesc;
 	Texture2D* hpBar;
 	//----------------Props----------------------
+#define TYPE_PROP_RESTOREHP 201
+#define TYPE_PROP_SLOWDOWN 202
+#define TYPE_PROP_SAFETYGUARD 203
+#define TYPE_PROP_LANDMIND 204
+#define TYPE_PROP_TRAP 205
+#define TYPE_PROP_ASSISTGUARD 206
+#define ANIMATION_SAFETYGUARD_STATE_1 "safeguard_state_1"
+#define ANIMATION_SAFETYGUARD_STATE_2 "safeguard_state_2"
+#define ANIMATION_SAFETYGUARD_STATE_3 "safeguard_state_3"
+#define ANIMATION_LANDMINE_CREATE "landmine_create"
+#define ANIMATION_LANDMINE_INVALIDABLESET "landmine_invalidableset"
+#define ANIMATION_LANDMINE_WAIT "landmine_wait"
+#define ANIMATION_LANDMINE_BOMB "landmine_bomb"
+#define ANIMATION_TRAP_STATE_1 "trap_state_1"
+#define ANIMATION_TRAP_STATE_2 "trap_state_2"
+#define ANIMATION_TRAP_STATE_3 "trap_state_3"
+#define ANIMATION_ASSISTANT "assistant"
+#define UI_POSITION_RESTOREHP 221
+#define UI_POSITION_SLOWDOWN 222
+#define UI_POSITION_SAFEGUARD 223
+#define UI_POSITION_LANDMINE 224
+#define UI_POSITION_TRAP 225
+#define UI_POSITION_ASSISTGUARD 226
 	HCSVFile * propsData;
 	//----------------Baby-----------------------
 #define ANIMATION_BABY_LAUGH "baby_laugh"

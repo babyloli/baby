@@ -4,11 +4,15 @@
 #include "cocos2d.h"
 #include "ui/CocosGUI.h"
 #include "cocostudio/CocoStudio.h"
+#include "IHomeMenuScene.h"
 #include "Enemy.h"
 #include "Road.h"
 #include "Tower.h"
 #include "Baby.h"
 #include "LabelPrice.h"
+#include "Medicine.h"
+#include "Trap.h"
+#include "Assistant.h"
 
 USING_NS_CC;
 class Game : public cocos2d::Layer
@@ -16,7 +20,9 @@ class Game : public cocos2d::Layer
 private:
 	TMXTiledMap* m_map;
 	Baby* m_baby;
+	Rect m_enemyRect;
 	Vec2 m_enemyPosition;
+	Vec2 m_assistPosition;
 	Node* m_pauseBtn;
 	Node* m_backBtn;
 	Node* m_replayBtn;
@@ -33,6 +39,7 @@ private:
 	Label* m_labelSection; //1 ~ NUM_SECTIONS
 	DrawNode* m_modalNode; //0 ~ NUM_STAGES
 	SpriteBatchNode* m_towerbase;
+	
 	int m_money;
 	int m_numRound;
 	int m_curRound;
@@ -59,6 +66,8 @@ private:
 	int m_section;
 	int m_countdown;
 public:
+	Vector<Assistant*> m_assistants;
+public:
 	static cocos2d::Scene* createScene(int section, int id);
 	virtual bool init();  
 	static Game* create(int section, int id);
@@ -71,6 +80,7 @@ public:
 	void loadPeople();
 	void loadTower();
 	void loadRoadAndBarriers();
+	void loadEquipmentSlot();
 
 	void menuCloseCallback(cocos2d::Ref* pSender);
 	void menuPhysicsCallback(cocos2d::Ref* pSender);
@@ -78,11 +88,12 @@ public:
 	void towerUpgradeCallback(cocos2d::Ref* pSender, int towerId);
 	void towerDeleteCallback(cocos2d::Ref* pSender, int towerId, Sprite* towerbase);
 
-	void countDown(float dt);
+ 	void countDown(float dt); 
 	void addEnemy(float dt);
 	void moveEnemy(float dt);
 	void findEnemy(float dt);
 	void deleteObject(float dt);
+	void meetTraps(float dt);
 	void update(float dt);
 
 	void setPhysicsWorld(PhysicsWorld* world);
