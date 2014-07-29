@@ -116,7 +116,7 @@ void Game::loadData(){
 
 	SceneReader* s = SceneReader::getInstance();
 	char str[30];
-	sprintf_s(str, "publish/section%d-%d.json", m_section, m_id+1);
+	sprintf(str, "publish/section%d-%d.json", m_section, m_id+1);
 	Node* node = s->createNodeWithSceneFile(str);
 	if(node)	
 		this -> addChild(node);
@@ -539,7 +539,7 @@ void Game::countDown(float dt){
 	}
 	else
 	{
-		m_labelCountDown->setString(std::to_string(m_countdown--));
+		m_labelCountDown->setString(itos(m_countdown--));
 	}
 }
 
@@ -609,22 +609,6 @@ void Game::moveAssistant(float dt){
 				if(m_enemyRect.containsPoint(assist_position)){
 					assist->setDie(true);
 				}
-// 				Road* road = assist->getRoad();
-// 				if (road && road->containsPoint(assist_position)){	//如果还在原本的道路上
-// 					assist->setVelocity(road->getDirectionVec2() * -assist->getSpeed());
-// 				}
-// 				else //如果走到了其他路上
-// 				{
-// 					for (int k = m_roads.size() - 1; k >= 0; k--){
-// 						Road* it = &m_roads.at(k);
-// 						if (it->containsPoint(assist_position)){
-// 							assist->setDirection(it->getDirection());
-// 							assist->setVelocity(it->getDirectionVec2() * -assist->getSpeed());
-// 							assist->setRoad(it);
-// 							break;
-// 						}
-// 					}
-// 				}
 			}
 		}
 	}

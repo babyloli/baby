@@ -17,7 +17,7 @@ void ResourceManager::init(){
 	sections = new HCSVFile[NUM_SECTIONS];
 	for (int i = 1; i <= NUM_SECTIONS; i++){
 		char str[20] = {0};
-		sprintf_s(str, "data/gameData%1d.csv", i);
+		sprintf(str, "data/gameData%1d.csv", i);
 		sections[i-1].openFile(str);
 	}
 
@@ -45,7 +45,7 @@ void ResourceManager::loadAnimation(const char* mosterName, const char* directio
 	char str[100] = {0};
 	Vector<SpriteFrame*> spriteFrames;
 	for (int i = 1; i <= size; i++){
-		sprintf_s(str, "%s%s%1d.png", mosterName, direction, i);
+		sprintf(str, "%s%s%1d.png", mosterName, direction, i);
 		spriteFrames.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName(str));
 	}
 	animationCache->addAnimation(Animation::createWithSpriteFrames(spriteFrames, delay), name);
@@ -56,7 +56,7 @@ void ResourceManager::loadAnimation(const char* fomat, int size, float delay, co
 	char str[100] = {0};
 	Vector<SpriteFrame*> spriteFrames;
 	for (int i = 1; i <= size; i++){
-		sprintf_s(str, fomat, i);
+		sprintf(str, fomat, i);
 		spriteFrames.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName(str));
 	}
 	animationCache->addAnimation(Animation::createWithSpriteFrames(spriteFrames, delay), name);

@@ -423,7 +423,7 @@ bool IShop::init()
 	Item3_price->setText(data->getData(2,2));
 	Item4_price->setText(data->getData(3,2));
 	Item5_price->setText(data->getData(4,2));
-	auto priceLabel1 = Label::createWithTTF(configShop,std::to_string(1));
+	auto priceLabel1 = Label::createWithTTF(configShop,itos(1));
 
 	for(int i = 0 ;i<5;i++){
 		price[i]=atoi(data->getData(i,2));

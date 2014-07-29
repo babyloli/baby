@@ -19,7 +19,7 @@ bool Baby::init(){
 	labelBg->setPosition(Vec2(m_sprite->getPositionX(),m_sprite->getPositionY() - labelBg->getContentSize().height * 1.4));
 	this->addChild(labelBg);
 	TTFConfig config("fonts/cardFont.ttf",20);
-	m_hpLabel = Label::createWithTTF(config,std::to_string(m_hp));
+	m_hpLabel = Label::createWithTTF(config,itos(m_hp));
 	m_hpLabel->setPosition(Vec2(m_sprite->getPositionX(),m_sprite->getPositionY() - labelBg->getContentSize().height * 1.4));
 	this->addChild(m_hpLabel);
 	return true;
@@ -36,7 +36,7 @@ void Baby::onEnter(){
 bool Baby::setDamage(int damage){
 	m_hp -= damage;
 	m_sprite->stopAllActions();
-	m_hpLabel->setString(std::to_string(m_hp));
+	m_hpLabel->setString(itos(m_hp));
 	
 	if (m_hp <= 0){
 		return true;

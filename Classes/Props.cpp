@@ -42,7 +42,7 @@ bool Props::init()
 	this->addChild(m_notebg);
 	int num = UserDefault::sharedUserDefault()->getIntegerForKey(m_name.c_str());
 	CCLOG("wrong");
-	m_number = Label::createWithTTF(configProps,std::to_string(num));
+	m_number = Label::createWithTTF(configProps,itos(num));
 	m_number->setPosition(40,40);
 	this->addChild(m_number);
 	
@@ -72,7 +72,7 @@ void Props::usePropsAndUpdate()
 {
 	int num = UserDefault::sharedUserDefault()->getIntegerForKey(m_name.c_str()) - 1;
 	UserDefault::sharedUserDefault()->setIntegerForKey(m_name.c_str(),num);
-	m_number->setString(std::to_string(num));
+	m_number->setString(itos(num));
 	if(num <= 0){
 		m_sprite->setVisible(false);
 		m_notebg->setVisible(false);
