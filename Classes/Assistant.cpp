@@ -19,7 +19,7 @@ Assistant* Assistant::create()
 
 bool Assistant::init()
 {
-	this->setZOrder(ZORDER_ENEMY);
+	this->setZOrder(ZORDER_BIGBOSS);
 	m_direction = ROAD_NONE;
 
 	//根据等级确定攻击力,速度等

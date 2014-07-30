@@ -74,15 +74,6 @@ bool Game::init()
 	this->schedule(schedule_selector(Game::deleteObject), 0.5f);
 	this->schedule(schedule_selector(Game::countDown), 1.0f);
 	this->schedule(schedule_selector(Game::meetTraps),0.5f);
-	/*//////////////////////////////////////////////////////////////////////////
-	this->_eventDispatcher->removeEventListenersForTarget(m_modalNode);
-	m_modalNode->setVisible(false);
-	m_towerbase->setVisible(false);
-	m_isWaiting = false;
-	m_curRound = 1;
-	m_labelCountDown->removeFromParent();
-	//////////////////////////////////////////////////////////////////////////
-*/
 	return true;	
 }
 
@@ -108,6 +99,7 @@ void Game::loadData(){
 	m_numPerRound = std::atoi(sectionData->getData(m_id, 2));;	
 	m_timeBetweenRound = std::atof(sectionData->getData(m_id, 3));
 	m_money = std::atoi(sectionData->getData(m_id, 4));
+	m_bossRound = std::atoi(sectionData->getData(m_id, 5));
 
 	m_deltaMonsterGenerateTime = std::atoi(enemyDesc->getData(0, 2));
 	m_deltaMonsterGenerateRate = std::atof(enemyDesc->getData(0, 3));
@@ -532,6 +524,16 @@ void Game::countDown(float dt){
 		m_isWaiting = false;
 		m_curRound = 1;
 		m_labelCountDown->removeFromParent();
+		//生成大BOSS
+		if (m_curRound == m_bossRound){
+			int row = rand() % (m_numBigBoss) + m_numMonster + m_numLittleBoss;
+			Enemy* enemy = Enemy::create(row, m_curRound, false);
+			if (!enemy)
+				return;
+			enemy->setPosition(m_enemyPosition);
+			this->addChild(enemy);
+			m_enemies.pushBack(enemy);
+		}
 
 		if(ResourceManager::getInstance()->isBackgroundMusicAllow()){		
 			CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("music/GameSceneMusic0.mp3");
@@ -546,9 +548,9 @@ void Game::countDown(float dt){
 
 
 void Game::addEnemy(float dt){
-	if (!m_isGameOver){
-		if (m_isWaiting){
-			if (m_curRound != 0){
+	if (!m_isGameOver){ //如果游戏还没结束
+		if (m_isWaiting){	//如果在倒计时状态
+			if (m_curRound != 0){	//如果不是刚进入游戏（刚进入游戏需要倒数3秒）
 				m_elapsedTimeRound += dt;
 				if (m_elapsedTimeRound > m_timeBetweenRound){
 					m_elapsedTimeRound = 0;
@@ -557,11 +559,21 @@ void Game::addEnemy(float dt){
 						m_isWaiting = false;
 						auto str = String::createWithFormat("Section%d-%d    %d/%d", m_section, m_id+1, m_curRound, m_numRound);
 						m_labelSection->setString(str->getCString());
+						//生成大BOSS
+						if (m_curRound == m_bossRound){
+							int row = rand() % (m_numBigBoss) + m_numMonster + m_numLittleBoss;
+							Enemy* enemy = Enemy::create(row, m_curRound, false);
+							if (!enemy)
+								return;
+							enemy->setPosition(m_enemyPosition);
+							this->addChild(enemy);
+							m_enemies.pushBack(enemy);
+						}
 					}
 				}
 			}
 		}
-		else {
+		else { //如果不在倒计时状态(正在生成怪物）
 			if (m_curNumInRound < m_numPerRound){
 				m_elapsedTimeMonster += dt;
 				if (m_elapsedTimeMonster > m_deltaMonsterGenerateTime){
@@ -827,8 +839,7 @@ void Game::meetTraps(float dt)
 				Enemy* enemy = m_enemies.at(j);
 				if(landmine->m_position.containsPoint(enemy->getPosition())){ 
 					step = true; //踩到了就炸了它
-					enemy->removeFromParent();
-					m_enemies.eraseObject(enemy);
+					enemy->setHp(0);
 				}
 			}
 			if(step){ //被踩了自己也要被炸
@@ -846,8 +857,7 @@ void Game::meetTraps(float dt)
 				trap->destory();
 				for(int j = 0; j < trap->getTargets().size(); j++){
 					Enemy* enemy = trap->getTargets().at(j);
-					enemy->removeFromParent();
-					m_enemies.eraseObject(enemy);
+					enemy->setHp(0);
 					trap->getTargets().eraseObject(enemy);
 				}
 				trap->removeFromParent();

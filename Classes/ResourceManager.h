@@ -28,7 +28,8 @@ public:
 #define ZORDER_MENU 10
 #define ZORDER_MODAL 9
 #define ZORDER_MENUITEMTOWER 8
-#define ZORDER_TOWER 5
+#define ZORDER_TOWER 6
+#define ZORDER_BIGBOSS 5
 #define ZORDER_ENEMY 4
 	//----------------PhysicsMask----------------
 #define CategoryBitMask_Bullet		0x0000000F

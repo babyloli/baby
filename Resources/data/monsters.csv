@@ -11,4 +11,4 @@ id,level,name,numberOfFrame,physics_defense,magic_defense,moveSpeed,attack,money
 9,0,sarcopticmite,4,0,0,100,1,40,15,150
 10,1,schistosoma,4,0,0,90,2,25,10,300
 11,1,T.rubrum,4,0,0,30,2,40,15,300
-12,2,Tick,4,0,0,100,2,100,0,1000
+12,2,Tick,4,0,0,10,10,500,0,1000

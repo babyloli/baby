@@ -610,7 +610,7 @@ void PropsAssistGuard::addAssistant()
 		Assistant* assistant = Assistant::create();
 		assistant->setPosition(m_startPoint);
 		assistant->setTag(TAG_ASSISTANT);
-		this->getParent()->addChild(assistant,ZORDER_ENEMY);
+		game->addChild(assistant);
 		game->getAssistants().pushBack(assistant);
 		assistant->runAction(Sequence::create(game->getActionsAssistant()));
 	}

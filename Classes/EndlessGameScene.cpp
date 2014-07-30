@@ -37,6 +37,7 @@ void Endless::loadData(){
 	m_numPerRound = 15;	
 	m_timeBetweenRound = 10;
 	m_money = 0;
+	m_bossRound = -1;
 
 	m_deltaMonsterGenerateTime = std::atoi(enemyDesc->getData(0, 2));
 	m_deltaMonsterGenerateRate = std::atof(enemyDesc->getData(0, 3));

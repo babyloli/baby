@@ -41,6 +41,7 @@ protected:
 	SpriteBatchNode* m_towerbase;
 	
 	int m_money;
+	int m_bossRound;
 	int m_numRound;
 	int m_curRound;
 	int m_numPerRound;

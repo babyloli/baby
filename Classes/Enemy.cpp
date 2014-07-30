@@ -24,9 +24,14 @@ Enemy* Enemy::create(int id, int curRound, bool mode){
 
 bool Enemy::initWithId(int id, int curRound, bool mode){
 	this->setTag(TAG_ENEMY);
-	this->setZOrder(ZORDER_ENEMY);
 	m_curRound = curRound;
 	initial(id);
+	if (m_type < 2)
+		this->setZOrder(ZORDER_ENEMY);
+	else
+	{
+		this->setZOrder(ZORDER_BIGBOSS);
+	}
 	m_hp = m_maxHp;
 	m_direction = ROAD_NONE;
 	m_isDie = false;
