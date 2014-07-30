@@ -38,10 +38,8 @@ class PropsSlowdown : public Props
 private:
 	Vector<Enemy*> m_targets;
 public:
-	PropsSlowdown();
 	PropsSlowdown(const Vector<Enemy*>& emenies);
 	~PropsSlowdown();
-	static PropsSlowdown* create();
 	static PropsSlowdown* createWithTargets(const Vector<Enemy*>& emenies);
 	
 	void onEnter() override;
@@ -98,10 +96,8 @@ private:
 	std::vector<Road> m_roads;
 
 public:
-	PropsLandmine();
 	~PropsLandmine();
 	PropsLandmine(const std::vector<Road>& roads);
-	static PropsLandmine* create();
 	static PropsLandmine* createWithRoads(const std::vector<Road>& roads);
 
 	void onEnter() override;

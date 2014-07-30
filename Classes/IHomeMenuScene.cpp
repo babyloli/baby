@@ -66,27 +66,27 @@ bool IHomeMenu::init()
 	Vector<SpriteFrame*> oryzaeFrames(4);
 	for (int i = 1; i < 5; i++)
 	{
-		if ( (i%2) == 0)
+		/*if ( (i%2) == 0)
 		{
 			auto frame = cache->getSpriteFrameByName("hpsprite2.png");
 			oryzaeFrames.pushBack(frame);
 		}
 		else
-		{
+		{*/
 			auto frame = cache->getSpriteFrameByName(String::createWithFormat("hpsprite%ld.png",i)->getCString());
 			oryzaeFrames.pushBack(frame);
-		}
+		/*}*/
 	}
 	auto bgAnimation = Animation::createWithSpriteFrames(oryzaeFrames,1.0f/6.0f);
 	bgOryzae->runAction(RepeatForever::create(Animate::create(bgAnimation)));
-	Button *shopButton=Button::create("store_1/shopbutton01.png","store_1/shopbutton02.png");
-	shopButton->setPosition(Vec2(1200,680));
-	shopButton->addTouchEventListener(this,toucheventselector(IHomeMenu::onTouchShopButton));
-	this->addChild(shopButton);
+ 
 	auto userdefault=UserDefault::sharedUserDefault();
 	if(!userdefault->getBoolForKey("isExisted")){
 		userdefault->setBoolForKey("isExisted",true);
-		userdefault->setIntegerForKey("myGold",0);
+		userdefault->setIntegerForKey("Health",0);
+		userdefault->setIntegerForKey("Section",4);
+		userdefault->setIntegerForKey("Level",0);
+		userdefault->setIntegerForKey("myGold",10000);
 	    /*userdefault->setIntegerForKey("Item1",0);
      	userdefault->setIntegerForKey("Item2",0);
 	    userdefault->setIntegerForKey("Item3",0);
@@ -97,15 +97,9 @@ bool IHomeMenu::init()
 		{
 			userdefault->setIntegerForKey(data->getData(i,1),0);
 		}
-		userdefault->setIntegerForKey("Stage",0);
-		userdefault->setIntegerForKey("Level",0);
+		
 	}
     return true;
-}
-
-void IHomeMenu::onTouchShopButton(Object* pSender, TouchEventType type){
-	auto shopUI = IShop::create();
-	this->addChild(shopUI);
 }
 
 void IHomeMenu::onTouchButton(Object* pSender, TouchEventType type)

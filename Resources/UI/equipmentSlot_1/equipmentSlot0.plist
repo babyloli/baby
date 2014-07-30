@@ -42,18 +42,113 @@
 				<key>offsetY</key>
 				<real>0</real>
 			</dict>
-			<key>EquipmentSlot.psd_Psd.Dir/Base 2.png</key>
+			<key>propsIcon_v3_1.psd_Psd.Dir/restoreHp.png</key>
 			<dict>
 				<key>width</key>
-				<integer>108</integer>
+				<integer>65</integer>
 				<key>height</key>
-				<integer>98</integer>
+				<integer>65</integer>
 				<key>originalWidth</key>
-				<integer>108</integer>
+				<integer>65</integer>
 				<key>originalHeight</key>
-				<integer>98</integer>
+				<integer>65</integer>
 				<key>x</key>
 				<integer>937</integer>
+				<key>y</key>
+				<integer>0</integer>
+				<key>offsetX</key>
+				<real>0</real>
+				<key>offsetY</key>
+				<real>0</real>
+			</dict>
+			<key>propsIcon_v3_1.psd_Psd.Dir/slowdown.png</key>
+			<dict>
+				<key>width</key>
+				<integer>65</integer>
+				<key>height</key>
+				<integer>65</integer>
+				<key>originalWidth</key>
+				<integer>65</integer>
+				<key>originalHeight</key>
+				<integer>65</integer>
+				<key>x</key>
+				<integer>1004</integer>
+				<key>y</key>
+				<integer>0</integer>
+				<key>offsetX</key>
+				<real>0</real>
+				<key>offsetY</key>
+				<real>0</real>
+			</dict>
+			<key>propsIcon_v3_1.psd_Psd.Dir/safeguard.png</key>
+			<dict>
+				<key>width</key>
+				<integer>65</integer>
+				<key>height</key>
+				<integer>65</integer>
+				<key>originalWidth</key>
+				<integer>65</integer>
+				<key>originalHeight</key>
+				<integer>65</integer>
+				<key>x</key>
+				<integer>1071</integer>
+				<key>y</key>
+				<integer>0</integer>
+				<key>offsetX</key>
+				<real>0</real>
+				<key>offsetY</key>
+				<real>0</real>
+			</dict>
+			<key>propsIcon_v3_1.psd_Psd.Dir/landmine.png</key>
+			<dict>
+				<key>width</key>
+				<integer>65</integer>
+				<key>height</key>
+				<integer>65</integer>
+				<key>originalWidth</key>
+				<integer>65</integer>
+				<key>originalHeight</key>
+				<integer>65</integer>
+				<key>x</key>
+				<integer>1138</integer>
+				<key>y</key>
+				<integer>0</integer>
+				<key>offsetX</key>
+				<real>0</real>
+				<key>offsetY</key>
+				<real>0</real>
+			</dict>
+			<key>propsIcon_v3_1.psd_Psd.Dir/trap.png</key>
+			<dict>
+				<key>width</key>
+				<integer>65</integer>
+				<key>height</key>
+				<integer>65</integer>
+				<key>originalWidth</key>
+				<integer>65</integer>
+				<key>originalHeight</key>
+				<integer>65</integer>
+				<key>x</key>
+				<integer>1205</integer>
+				<key>y</key>
+				<integer>0</integer>
+				<key>offsetX</key>
+				<real>0</real>
+				<key>offsetY</key>
+				<real>0</real>
+			</dict>
+			<key>propsIcon_v3_1.psd_Psd.Dir/assist.png</key>
+			<dict>
+				<key>width</key>
+				<integer>65</integer>
+				<key>height</key>
+				<integer>65</integer>
+				<key>originalWidth</key>
+				<integer>65</integer>
+				<key>originalHeight</key>
+				<integer>65</integer>
+				<key>x</key>
+				<integer>1272</integer>
 				<key>y</key>
 				<integer>0</integer>
 				<key>offsetX</key>

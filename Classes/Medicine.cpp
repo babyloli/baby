@@ -6,7 +6,7 @@ PropsRestoreHp::PropsRestoreHp(Baby* bb)
 {
 	m_id = 0;
 	m_bb = bb;
-	m_sprite = Sprite::create("images/props/1.png");
+	m_sprite = Sprite::create("images/props/propsIcon1.png");
 	this->addChild(m_sprite);
 }
 
@@ -67,13 +67,6 @@ void  PropsRestoreHp::update(float dt)
 
 
 //////////////////////////////////////////////////////////////////////////
-PropsSlowdown::PropsSlowdown()
-{
-	m_id = 1;
-	m_sprite = Sprite::create("images/props/2.png");
-	this->addChild(m_sprite);
-}
-
 PropsSlowdown::PropsSlowdown(const Vector<Enemy*>& emenies)
 {
 	m_id = 1;
@@ -81,24 +74,13 @@ PropsSlowdown::PropsSlowdown(const Vector<Enemy*>& emenies)
 	if (m_targets.size() == 0){
 		CCLOG("0");
 	}
-	m_sprite = Sprite::create("images/props/2.png");
+	m_sprite = Sprite::create("images/props/propsIcon2.png");
 	this->addChild(m_sprite);
 }
 
 PropsSlowdown::~PropsSlowdown()
 {
 	m_targets.clear();
-}
-
-PropsSlowdown* PropsSlowdown::create()
-{
-	PropsSlowdown* prop = new (std::nothrow)PropsSlowdown();
-	if(prop && prop->init()){
-		prop->autorelease();
-		return prop;
-	}
-	CC_SAFE_DELETE(prop);
-	return nullptr;
 }
 
 PropsSlowdown* PropsSlowdown::createWithTargets(const Vector<Enemy*>& emenies)
@@ -179,7 +161,7 @@ PropsSafetyGuard::PropsSafetyGuard(Baby* bb)
 {
 	m_id = 2;
 	m_bb = bb;
-	m_sprite = Sprite::create("images/props/3.png");
+	m_sprite = Sprite::create("images/props/propsIcon3.png");
 	this->addChild(m_sprite);
 
 	m_safetyG = Sprite::create("images/props/SafeGuard.png");
@@ -225,6 +207,7 @@ void PropsSafetyGuard::onEnter()
 
 bool PropsSafetyGuard::touchCallback(Touch* touch, Event* event)
 {
+
 	if(m_position.containsPoint(touch->getLocation()) && m_canBeUsed){
 		m_canBeUsed = false;
 		usePropsAndUpdate();
@@ -244,6 +227,7 @@ void PropsSafetyGuard::update(float dt)
 	else{
 		if(m_usedTime >= m_cooldownTime){
 			m_canBeUsed = true;
+			m_usedTime = 0.0;
 			m_pCdTimer->setPercentage(100);
 			m_pCdTimer->setVisible(false);
 		}
@@ -305,24 +289,10 @@ int PropsSafetyGuard::setCurState(int damage)
 
 
 //////////////////////////////////////////////////////////////////////////
-PropsLandmine::PropsLandmine()
-{
-	m_id = 3;
-	m_sprite = Sprite::create("images/props/4.png");
-	this->addChild(m_sprite);
-	
-	m_landmindcreate = Sprite::create();
-	this->addChild(m_landmindcreate);
-	m_landmineAnimation = RepeatForever::create(Animate::create(
-		AnimationCache::getInstance()->getAnimation(ANIMATION_LANDMINE_CREATE)));
-	m_landmindcreate->runAction(m_landmineAnimation);
-	m_landmindcreate->setVisible(false);
-}
-
 PropsLandmine::PropsLandmine(const std::vector<Road>& roads)
 {
 	m_id = 3;
-	m_sprite = Sprite::create("images/props/4.png");
+	m_sprite = Sprite::create("images/props/propsIcon4.png");
 	this->addChild(m_sprite);
 
 	m_roads = roads;
@@ -343,17 +313,6 @@ PropsLandmine::~PropsLandmine()
 	}
 	m_landmines.clear();
 	m_roads.clear();
-}
-
-PropsLandmine* PropsLandmine::create()
-{
-	PropsLandmine* prop = new PropsLandmine();
-	if(prop && prop->init()){
-		prop->autorelease();
-		return prop;
-	}
-	CC_SAFE_DELETE(prop);
-	return nullptr;
 }
 
 PropsLandmine* PropsLandmine::createWithRoads(const std::vector<Road>& roads)
@@ -459,7 +418,7 @@ int PropsLandmine::getNumofLandmines()
 PropsTrap::PropsTrap(const std::vector<Road>& roads)
 {
 	m_id = 4;
-	m_sprite = Sprite::create("images/props/5.png");
+	m_sprite = Sprite::create("images/props/propsIcon5.png");
 	this->addChild(m_sprite);
 
 	/*
@@ -586,7 +545,7 @@ int PropsTrap::getNumofTraps()
 PropsAssistGuard::PropsAssistGuard(Vec2 start)
 {
 	m_id = 5;
-	m_sprite = Sprite::create("images/props/6.png");
+	m_sprite = Sprite::create("images/props/propsIcon6.png");
 	this->addChild(m_sprite);
 	
 	m_startPoint = start;

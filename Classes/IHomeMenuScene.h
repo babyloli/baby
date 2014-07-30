@@ -24,10 +24,7 @@ public:
     
 	// a selector callback
 	void onTouchButton(Object* pSender, TouchEventType type);
-	void onTouchShopButton(Object* pSender, TouchEventType type);
-	//void menuCloseCallback(cocos2d::Ref* pSender);
-    // implement the "static create()" method manually
-    CREATE_FUNC(IHomeMenu);
+	CREATE_FUNC(IHomeMenu);
 };
 
 

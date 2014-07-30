@@ -16,11 +16,13 @@ bool Baby::init(){
 	m_sprite->runAction(m_action);
 
 	auto labelBg = Sprite::create("images/baby/HpBackground.png");
-	labelBg->setPosition(Vec2(m_sprite->getPositionX(),m_sprite->getPositionY() - labelBg->getContentSize().height * 1.4));
+	labelBg->setPosition(Vec2(m_sprite->getPositionX(),m_sprite->getPositionY() - labelBg->getContentSize().height * 1.3));
+	labelBg->setScale(1.2);
 	this->addChild(labelBg);
 	TTFConfig config("fonts/cardFont.ttf",20);
 	m_hpLabel = Label::createWithTTF(config,std::to_string(m_hp));
-	m_hpLabel->setPosition(Vec2(m_sprite->getPositionX(),m_sprite->getPositionY() - labelBg->getContentSize().height * 1.4));
+	m_hpLabel->setPosition(Vec2(m_sprite->getPositionX(),m_sprite->getPositionY() - labelBg->getContentSize().height * 1.3));
+	m_hpLabel->setColor(Color3B(114,85,52));
 	this->addChild(m_hpLabel);
 	return true;
 }
