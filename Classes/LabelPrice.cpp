@@ -27,7 +27,7 @@ bool LabelPrice::initWithFile(const std::string& backgroundSprite, int price){
 		return false;
 	this->addChild(sprite);
 	this->setContentSize(sprite->getContentSize());
-	m_label = Label::createWithTTF(m_config, std::to_string(price));
+	m_label = Label::createWithTTF(m_config, itos(price));
 	this->addChild(m_label);
 	return true;
 }
@@ -52,7 +52,7 @@ bool LabelPrice::initWithTexture(Texture2D* texture, int price)
 		return false;
 	this->addChild(sprite);
 	this->setContentSize(sprite->getContentSize());
-	m_label = Label::createWithTTF(m_config, std::to_string(price));
+	m_label = Label::createWithTTF(m_config, itos(price));
 	this->addChild(m_label);
 	return true;
 }
@@ -72,13 +72,13 @@ LabelPrice* LabelPrice::create(int price){
 
 bool LabelPrice::initWithPrice(int price)
 {
-	m_label = Label::createWithTTF(m_config, std::to_string(price));
+	m_label = Label::createWithTTF(m_config, itos(price));
 	this->addChild(m_label);
 	return true;
 }
 
 void LabelPrice::setPrice(int price){
 	if (m_label){
-		m_label->setString(std::to_string(price));
+		m_label->setString(itos(price));
 	}
 }

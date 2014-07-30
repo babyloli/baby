@@ -135,8 +135,3 @@ int Assistant::getMagicalDefence()
 {
 	return m_magicalDefence;
 }
-
-Sprite* Assistant::getEnemy()
-{
-	return m_assistant;
-}

@@ -398,7 +398,7 @@
                 "plistFile": null,
                 "resourceType": 0
               },
-              "fontName": "方正流行体简体.ttf",
+              "fontName": "fangzhengliuxingtijianti.ttf",
               "fontSize": 33,
               "fontType": 0,
               "normal": null,
@@ -1275,7 +1275,7 @@
               "areaHeight": 0,
               "areaWidth": 0,
               "fontFile": null,
-              "fontName": "方正喵呜体.ttf",
+              "fontName": "fangzhengmiaowuti.ttf",
               "fontSize": 20,
               "hAlignment": 0,
               "text": "0",

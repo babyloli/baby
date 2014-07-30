@@ -87,17 +87,12 @@ bool IHomeMenu::init()
 		userdefault->setIntegerForKey("Section",4);
 		userdefault->setIntegerForKey("Level",0);
 		userdefault->setIntegerForKey("myGold",10000);
-	    /*userdefault->setIntegerForKey("Item1",0);
-     	userdefault->setIntegerForKey("Item2",0);
-	    userdefault->setIntegerForKey("Item3",0);
-     	userdefault->setIntegerForKey("Item4",0);
-	    userdefault->setIntegerForKey("Item5",0);*/
+	  
 		HCSVFile* data = ResourceManager::getInstance()->propsData;
 		for (int i = 0; i < 6; i++)
 		{
 			userdefault->setIntegerForKey(data->getData(i,1),0);
 		}
-		
 	}
     return true;
 }
