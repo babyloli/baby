@@ -17,7 +17,7 @@ bool Baby::init(){
 
 	auto labelBg = Sprite::create("images/baby/HpBackground.png");
 	labelBg->setPosition(Vec2(m_sprite->getPositionX(),m_sprite->getPositionY() - labelBg->getContentSize().height * 1.3));
-	labelBg->setScale(1.2);
+	labelBg->setScale(1.2f);
 	this->addChild(labelBg);
 	TTFConfig config("fonts/cardFont.ttf",20);
 	m_hpLabel = Label::createWithTTF(config,itos(m_hp));

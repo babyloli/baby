@@ -53,6 +53,7 @@ public:
 #define MAX_RANGE 9999
 	HCSVFile * towerData;
 	//----------------Enemy----------------------
+#define ANIMATION_EXPLOSION "animation_explosion"
 	HCSVFile * enemyData;
 	HCSVFile * enemyDesc;
 	Texture2D* hpBar;
@@ -97,6 +98,8 @@ public:
 	//-----------------Game-----------------------
 #define PATH_TOWERBASE "images/tower/towerbase.png"
 #define NUM_SECTIONS 4
+#define ANIMATION_MOUSE "animation_mouse"
+#define TILESIZE 80
 	HCSVFile* sections;
 	Texture2D* background_price;
 	Texture2D* background_price_big;

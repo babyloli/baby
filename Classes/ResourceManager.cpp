@@ -32,6 +32,8 @@ void ResourceManager::init(){
 	spriteFrameCache->addSpriteFramesWithFile("images/props/landmine.plist");
 	spriteFrameCache->addSpriteFramesWithFile("images/props/traps.plist");
 	spriteFrameCache->addSpriteFramesWithFile("images/props/assist.plist");
+	spriteFrameCache->addSpriteFramesWithFile("images/mouse/Mouse.plist");
+	spriteFrameCache->addSpriteFramesWithFile("images/enemy/Explosion.plist");
 	loadAnimation();
 
 	//---------------------Texture----------------------------
@@ -93,6 +95,9 @@ void ResourceManager::loadAnimation(){
 	loadAnimation("trap_state_2_%ld.png",3,0.1f,ANIMATION_TRAP_STATE_2);
 	loadAnimation("trap_state_1_%ld.png",3,0.1f,ANIMATION_TRAP_STATE_3);
 	loadAnimation("oryzae%ld.png",6,0.1f,ANIMATION_ASSISTANT);
+
+	loadAnimation("mouse%d.png",10,0.15f,ANIMATION_MOUSE);
+	loadAnimation("explosion%d.png",6,0.1f,ANIMATION_EXPLOSION);
 }
 
 ResourceManager* ResourceManager::getInstance(){

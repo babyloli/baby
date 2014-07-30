@@ -38,7 +38,7 @@ bool Assistant::init()
 	this->addChild(m_assistant);
 
 
-	auto body = PhysicsBody::createBox(Size(10, 10), PhysicsMaterial(0.5f, 0.0f, 0.5f));
+	auto body = PhysicsBody::createBox(Size(40, 40), PhysicsMaterial(0.5f, 0.0f, 0.5f));
 	body->setCategoryBitmask(CategoryBitMask_Assist);
 	body->setContactTestBitmask(ContactTestBitMask_Assist);
 	body->setCollisionBitmask(CollisionBitMask_Assist);

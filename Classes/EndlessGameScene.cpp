@@ -4,7 +4,10 @@
 #include "ResourceManager.h"
 
 Endless::Endless()
-	:Game(1, 0){}
+	:Game(1, 0)
+{
+	m_elapsedTimeMouse = 0;
+}
 
 Scene* Endless::createScene(){
 	auto scene = Scene::createWithPhysics();
@@ -29,6 +32,15 @@ Endless* Endless::create(){
 		pRet = NULL; 
 		return NULL; 
 	} 
+}
+
+bool Endless::init(){
+	if (!Game::init())
+		return false;
+	loadMousePosition();
+
+	this->schedule(schedule_selector(Endless::showMouse));
+	return true;
 }
 
 void Endless::loadData(){
@@ -179,6 +191,22 @@ void Endless::loadToolBar(){
 	labelsection->addChild(m_labelSection);
 }
 
+void Endless::loadMousePosition(){
+	TMXObjectGroup* roadObjectGroup = m_map->getObjectGroup("shrewmouse");	//读取对象层“地鼠”
+	ValueVector roadObjects = roadObjectGroup->getObjects();	//获得“地鼠”对象层里面的所有对象
+	for (ValueVector::iterator it = roadObjects.begin(); it != roadObjects.end(); it++)//对“地鼠”层里的每一个对象
+	{
+		ValueMap mouseObject = it->asValueMap();	//得到这个对象的属性
+		auto mouse = Mouse::create();
+		mouse->setPosition(Vec2(objPosX(mouseObject), objPosY(mouseObject)));
+		this->addChild(mouse, ZORDER_TOWER);
+		m_mouses.pushBack(mouse);
+		auto listener = EventListenerTouchOneByOne::create();
+		listener->onTouchBegan = CC_CALLBACK_2(Endless::mouseTouchCallback, this);
+		_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, mouse);
+	}
+}
+
 void Endless::addEnemy(float dt)
 {
 	if (!m_isGameOver){ //如果游戏还没结束
@@ -228,4 +256,32 @@ void Endless::addEnemy(float dt)
 			}
 		}
 	}
+}
+
+void Endless::showMouse(float dt){
+	if (!m_isGameOver){
+//		if (!m_isWaiting){
+			m_elapsedTimeMouse += dt;
+			if (m_elapsedTimeMouse > INTERVAL_MOUSE)
+			{
+				m_elapsedTimeMouse -= INTERVAL_MOUSE;
+				int idx = rand() % m_mouses.size();
+				auto mouse = m_mouses.at(idx);	//生成地鼠的位置
+				mouse->goUp();
+			}
+//		}
+	}
+}
+
+bool Endless::mouseTouchCallback(Touch* touch, Event* event){
+	Mouse* mouse = static_cast<Mouse*>(event->getCurrentTarget());
+	Vec2 pos = mouse->convertTouchToNodeSpace(touch);
+	Rect rect = Rect(-TILESIZE/2, -TILESIZE/2, TILESIZE, TILESIZE);
+	if (rect.containsPoint(pos) && mouse->isUp())
+	{
+		mouse->killed();
+		//TODO 得到道具
+		return true;
+	}
+	return false;
 }

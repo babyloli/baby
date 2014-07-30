@@ -6,10 +6,6 @@
 #include "Assistant.h"
 #include <time.h>
 USING_NS_CC;
-#define objPosX(obj) obj.at("x").asInt() + obj.at("width").asInt()/2
-#define objPosY(obj) obj.at("y").asInt() + obj.at("height").asInt()/2
-#define objWidth(obj) obj.at("width").asFloat()
-#define objHeight(obj) obj.at("height").asFloat()
 
 Game::Game(int section, int id)
 {

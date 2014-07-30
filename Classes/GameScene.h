@@ -17,6 +17,10 @@
 USING_NS_CC;
 class Game : public cocos2d::Layer
 {
+#define objPosX(obj) obj.at("x").asInt() + obj.at("width").asInt()/2
+#define objPosY(obj) obj.at("y").asInt() + obj.at("height").asInt()/2
+#define objWidth(obj) obj.at("width").asFloat()
+#define objHeight(obj) obj.at("height").asFloat()
 protected:
 	TMXTiledMap* m_map;
 	Baby* m_baby;
@@ -68,7 +72,7 @@ protected:
 	
 public:
 	static cocos2d::Scene* createScene(int section, int id);
-	virtual bool init();  
+	virtual bool init() override;  
 	static Game* create(int section, int id);
 	Game(int section, int id);
 	
