@@ -4,14 +4,14 @@
 	<dict>
 		<key>frames</key>
 		<dict>
-			<key>selectmode.psd_Psd.Dir/ModeSelect.png</key>
+			<key>selectmode.psd_Psd.Dir/selectMode.png</key>
 			<dict>
 				<key>width</key>
-				<integer>913</integer>
+				<integer>909</integer>
 				<key>height</key>
 				<integer>614</integer>
 				<key>originalWidth</key>
-				<integer>913</integer>
+				<integer>909</integer>
 				<key>originalHeight</key>
 				<integer>614</integer>
 				<key>x</key>
@@ -34,9 +34,9 @@
 				<key>originalHeight</key>
 				<integer>110</integer>
 				<key>x</key>
-				<integer>0</integer>
+				<integer>911</integer>
 				<key>y</key>
-				<integer>616</integer>
+				<integer>0</integer>
 				<key>offsetX</key>
 				<real>0</real>
 				<key>offsetY</key>
@@ -53,9 +53,9 @@
 				<key>originalHeight</key>
 				<integer>141</integer>
 				<key>x</key>
-				<integer>381</integer>
+				<integer>1292</integer>
 				<key>y</key>
-				<integer>616</integer>
+				<integer>0</integer>
 				<key>offsetX</key>
 				<real>0</real>
 				<key>offsetY</key>
@@ -72,9 +72,9 @@
 				<key>originalHeight</key>
 				<integer>64</integer>
 				<key>x</key>
-				<integer>770</integer>
+				<integer>1681</integer>
 				<key>y</key>
-				<integer>616</integer>
+				<integer>0</integer>
 				<key>offsetX</key>
 				<real>0</real>
 				<key>offsetY</key>
@@ -90,12 +90,12 @@
 			<key>realTextureFileName</key>
 			<string>selectMode0.png</string>
 			<key>size</key>
-			<string>{1024,1024}</string>
+			<string>{2048,1024}</string>
 		</dict>
 		<key>texture</key>
 		<dict>
 			<key>width</key>
-			<integer>1024</integer>
+			<integer>2048</integer>
 			<key>height</key>
 			<integer>1024</integer>
 		</dict>

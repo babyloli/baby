@@ -4,16 +4,16 @@
 	<dict>
 		<key>frames</key>
 		<dict>
-			<key>chooseBar_1_1.psd_Psd.Dir/BaseV.png</key>
+			<key>chooseBar_3.psd_Psd.Dir/[Basev2].png</key>
 			<dict>
 				<key>width</key>
-				<integer>103</integer>
+				<integer>390</integer>
 				<key>height</key>
-				<integer>339</integer>
+				<integer>88</integer>
 				<key>originalWidth</key>
-				<integer>103</integer>
+				<integer>390</integer>
 				<key>originalHeight</key>
-				<integer>339</integer>
+				<integer>88</integer>
 				<key>x</key>
 				<integer>0</integer>
 				<key>y</key>
@@ -23,7 +23,7 @@
 				<key>offsetY</key>
 				<real>0</real>
 			</dict>
-			<key>chooseBar_1_1.psd_Psd.Dir/[Back btn].png</key>
+			<key>chooseBar_3.psd_Psd.Dir/[Back btn].png</key>
 			<dict>
 				<key>width</key>
 				<integer>69</integer>
@@ -34,7 +34,7 @@
 				<key>originalHeight</key>
 				<integer>71</integer>
 				<key>x</key>
-				<integer>105</integer>
+				<integer>392</integer>
 				<key>y</key>
 				<integer>0</integer>
 				<key>offsetX</key>
@@ -42,7 +42,7 @@
 				<key>offsetY</key>
 				<real>0</real>
 			</dict>
-			<key>chooseBar_1_1.psd_Psd.Dir/[Store btn].png</key>
+			<key>chooseBar_3.psd_Psd.Dir/[Store btn].png</key>
 			<dict>
 				<key>width</key>
 				<integer>68</integer>
@@ -53,7 +53,7 @@
 				<key>originalHeight</key>
 				<integer>71</integer>
 				<key>x</key>
-				<integer>176</integer>
+				<integer>463</integer>
 				<key>y</key>
 				<integer>0</integer>
 				<key>offsetX</key>
@@ -61,7 +61,7 @@
 				<key>offsetY</key>
 				<real>0</real>
 			</dict>
-			<key>chooseBar_1_1.psd_Psd.Dir/Heartbtn.png</key>
+			<key>chooseBar_3.psd_Psd.Dir/Heartbtn.png</key>
 			<dict>
 				<key>width</key>
 				<integer>69</integer>
@@ -72,7 +72,7 @@
 				<key>originalHeight</key>
 				<integer>71</integer>
 				<key>x</key>
-				<integer>246</integer>
+				<integer>533</integer>
 				<key>y</key>
 				<integer>0</integer>
 				<key>offsetX</key>
