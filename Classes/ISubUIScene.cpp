@@ -13,10 +13,10 @@ const int UI_BUTTON_CLOSESELECTOR = 10;
 const int UI_CHECKBOX_BACKGROUND_MUSIC = 11;
 const int UI_CHECKBOX_SOUND_EFFECT = 12;
 const int UI_BUTTON_CLOSESETTER = 18;
-const int UI_BUTTON_RETURN = 6;
-const int UI_BUTTON_SHOP = 7;
-const int UI_BUTTON_HEALTH = 8;
-const int UI_BUTTON_HOME = 8;
+const int UI_BUTTON_RETURN = 13;
+const int UI_BUTTON_SHOP = 14;
+const int UI_BUTTON_HEALTH = 15;
+const int UI_BUTTON_HOME = 15;
 //Tags for select mode UI
 const int UI_SECTIONSELECT = 60;
 const int UI_BUTTON_SELECT_BABY = 61;
@@ -334,12 +334,6 @@ bool IGameLevelSelector::init(int section)
 	bgimg->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2);
 	this->addChild(bgimg, 0);
 
-	/*auto returnItem = MenuItemImage::create("back.png","back.png",CC_CALLBACK_1(IGameLevelSelector::menuReturnCallback,this));
-	returnItem->setPosition(Vec2(origin.x + visibleSize.width - returnItem->getContentSize().width / 2, origin.y + returnItem->getContentSize().height /2));
-	auto menu = Menu::create(returnItem,NULL);
-	menu->setPosition(Vec2::ZERO);
-	this->addChild(menu, ZORDER_MENU);	*/
-
 	auto menuBar = GUIReader::getInstance()->widgetFromJsonFile("UI/chooseBar_2/chooseBar_2.ExportJson");
 	this->addChild(menuBar);
 	auto returnButton = static_cast<Button*>(Helper::seekWidgetByTag(menuBar,UI_BUTTON_RETURN));
@@ -349,9 +343,9 @@ bool IGameLevelSelector::init(int section)
 	shopButton->addTouchEventListener(this,toucheventselector(IGameLevelSelector::ontouchBar));
 	homeButton->addTouchEventListener(this,toucheventselector(IGameLevelSelector::ontouchBar));
 
-	TableView* tableView = TableView::create(this,visibleSize);      // 创建一个tableView
+	TableView* tableView = TableView::create(this,Size(1280, 360));      // 创建一个tableView
 	tableView->setDirection(TableView::Direction::HORIZONTAL);   // 设置方向
-	tableView->setPosition(origin.x, origin.y + 200);      //设置位置
+	tableView->setPosition(origin.x, origin.y + 180);      //设置位置
 	tableView->setDelegate(this);  //该步骤非常关键，把tableView和当前类绑定在一起，故后面后面调用的主体是tableView
 	this->addChild(tableView,0);
 	tableView->reloadData();  
@@ -377,7 +371,7 @@ void IGameLevelSelector::tableCellTouched(cocos2d::extension::TableView* table, 
 
 Size IGameLevelSelector::tableCellSizeForIndex(TableView* table, ssize_t idx)
 {
-	return Size(860,400);
+	return Size(860,360);
 }
 
 //设置数据源tableCellAtIndex
