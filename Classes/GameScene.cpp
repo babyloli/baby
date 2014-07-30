@@ -835,7 +835,7 @@ void Game::meetTraps(float dt)
 				Enemy* enemy = m_enemies.at(j);
 				if(landmine->m_position.containsPoint(enemy->getPosition())){ 
 					step = true; //踩到了就炸了它
-					enemy->setHp(0);
+					enemy->setHp(enemy->getHp() - landmines->getDamage());
 				}
 			}
 			if(step){ //被踩了自己也要被炸
@@ -853,7 +853,10 @@ void Game::meetTraps(float dt)
 				trap->destory();
 				for(int j = 0; j < trap->getTargets().size(); j++){
 					Enemy* enemy = trap->getTargets().at(j);
-					enemy->setHp(0);
+					enemy->setHp(enemy->getHp() - traps->getDamage());
+					if(enemy->getHp() > 0){
+						enemy->setSpeed(enemy->getOriginSpeed());
+					}
 					trap->getTargets().eraseObject(enemy);
 				}
 				trap->removeFromParent();

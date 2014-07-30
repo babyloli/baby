@@ -1,7 +1,7 @@
-id,name,price,maxState,framesNumber,cooldownTime,holdTime,Icon
-0,RestroeHp,10,0,2,12,0,images/props/1.png
-1,SlowDown,15,0,2,20,15,images/props/2.png
-2,SafetyGuard,30,3,2,12,8,images/props/3.png
-3,Landmine,5,0,1,12,0,images/props/4.png
-4,Trap,7,5,1,12,0,images/props/5.png
-5,AssistGurad,15,0,1,12,0,images/props/6.png
+id,name,price,maxState,framesNumber,cooldownTime,holdTime,Icon,damage
+0,RestroeHp,10,0,2,12,0,images/props/1.png,0
+1,SlowDown,15,0,2,20,15,images/props/2.png,0
+2,SafetyGuard,30,3,2,12,8,images/props/3.png,0
+3,Landmine,5,0,1,12,0,images/props/4.png,400
+4,Trap,7,5,1,12,0,images/props/5.png,500
+5,AssistGurad,15,0,1,12,0,images/props/6.png,0

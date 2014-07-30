@@ -11,6 +11,7 @@ protected:
 	int m_price;
 	int m_maxState;
 	int m_framesNumber;
+	int m_damage;
 	float m_cooldownTime;
 	float m_holdTime;
 	float m_usedTime;
@@ -31,6 +32,7 @@ public:
 
 	const std::string getName(){return m_name;}
 	const int getPrice(){return m_price;}
+	const int getDamage(){return m_damage;}
 
 protected:
 	void usePropsAndUpdate();
