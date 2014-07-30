@@ -32,6 +32,8 @@ public:
 	bool initWithId(int id, int curRound, bool mode);
 	void initial(int id);
 
+	void killed();
+
 	std::string getName();
 	bool setName(std::string name);
 	int getMaxHp();

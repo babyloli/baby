@@ -80,6 +80,14 @@ void Enemy::initial(int id){
 	m_rate = m_maxHp / 100.0f;
 }
 
+void Enemy::killed(){
+	m_sprite->runAction(Sequence::create(
+		Animate::create(AnimationCache::getInstance()->getAnimation(ANIMATION_EXPLOSION))
+		, CallFuncN::create([this](Node* node){
+			this->removeFromParent();
+		}), NULL));
+}
+
 //----------------get/set-----------------------
 
 std::string Enemy::getName(){

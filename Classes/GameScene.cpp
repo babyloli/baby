@@ -637,8 +637,8 @@ void Game::moveEnemy(float dt){
 			Enemy* enemy = m_enemies.at(i);
 			if (enemy->isDie()){	//如果它死了
 				this->addMoney(enemy->getPrice());	//那么它会掉金钱
-				enemy->removeFromParent();	//然后就把它消除掉
-				m_enemies.eraseObject(enemy);	//容器里也要释放哦
+				m_enemies.eraseObject(enemy);	//容器里要释放哦
+				enemy->killed();	//然后就把它消除掉
 			}else{	//如果它没死
 				Vec2 enemy_position = enemy->getPosition();	//看看它的位置
 				PropsSafetyGuard* safeguard = (PropsSafetyGuard*)this->getChildByTag(TYPE_PROP_SAFETYGUARD);
