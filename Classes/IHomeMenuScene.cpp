@@ -87,11 +87,11 @@ bool IHomeMenu::init()
 	if(!userdefault->getBoolForKey("isExisted")){
 		userdefault->setBoolForKey("isExisted",true);
 		userdefault->setIntegerForKey("myGold",0);
-	    /*userdefault->setIntegerForKey("Item1",0);
+	    userdefault->setIntegerForKey("Item1",0);
      	userdefault->setIntegerForKey("Item2",0);
 	    userdefault->setIntegerForKey("Item3",0);
      	userdefault->setIntegerForKey("Item4",0);
-	    userdefault->setIntegerForKey("Item5",0);*/
+	    userdefault->setIntegerForKey("Item5",0);
 		HCSVFile* data = ResourceManager::getInstance()->propsData;
 		for (int i = 0; i < 6; i++)
 		{

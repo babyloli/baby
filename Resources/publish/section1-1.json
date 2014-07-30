@@ -32,7 +32,7 @@
           "name": "CCSprite",
           "file": null,
           "fileData": {
-            "path": "Mapsource/map1 resource.psd_Psd.Dir/cloud.png",
+            "path": "Mapsource/map1_resource.psd_Psd.Dir/cloud.png",
             "plistFile": "",
             "resourceType": 0
           }
@@ -60,7 +60,7 @@
           "name": "CCSprite",
           "file": null,
           "fileData": {
-            "path": "Mapsource/map1 resource.psd_Psd.Dir/DoubleTree.png",
+            "path": "Mapsource/map1_resource.psd_Psd.Dir/DoubleTree.png",
             "plistFile": "",
             "resourceType": 0
           }
@@ -116,7 +116,7 @@
           "name": "CCSprite",
           "file": null,
           "fileData": {
-            "path": "Mapsource/map1 resource.psd_Psd.Dir/gift.png",
+            "path": "Mapsource/map1_resource.psd_Psd.Dir/gift.png",
             "plistFile": "",
             "resourceType": 0
           }
@@ -144,7 +144,7 @@
           "name": "CCSprite",
           "file": null,
           "fileData": {
-            "path": "Mapsource/map1 resource.psd_Psd.Dir/nipple.png",
+            "path": "Mapsource/map1_resource.psd_Psd.Dir/nipple.png",
             "plistFile": "",
             "resourceType": 0
           }
@@ -172,7 +172,7 @@
           "name": "CCSprite",
           "file": null,
           "fileData": {
-            "path": "Mapsource/map1 resource.psd_Psd.Dir/nipple.png",
+            "path": "Mapsource/map1_resource.psd_Psd.Dir/nipple.png",
             "plistFile": "",
             "resourceType": 0
           }
@@ -200,7 +200,7 @@
           "name": "CCSprite",
           "file": null,
           "fileData": {
-            "path": "Mapsource/map1 resource.psd_Psd.Dir/nipple.png",
+            "path": "Mapsource/map1_resource.psd_Psd.Dir/nipple.png",
             "plistFile": "",
             "resourceType": 0
           }
@@ -228,7 +228,7 @@
           "name": "CCSprite",
           "file": null,
           "fileData": {
-            "path": "Mapsource/map1 resource.psd_Psd.Dir/nipple.png",
+            "path": "Mapsource/map1_resource.psd_Psd.Dir/nipple.png",
             "plistFile": "",
             "resourceType": 0
           }
@@ -256,7 +256,7 @@
           "name": "CCSprite",
           "file": null,
           "fileData": {
-            "path": "Mapsource/map1 resource.psd_Psd.Dir/rainbow.png",
+            "path": "Mapsource/map1_resource.psd_Psd.Dir/rainbow.png",
             "plistFile": "",
             "resourceType": 0
           }
@@ -284,7 +284,7 @@
           "name": "CCSprite",
           "file": null,
           "fileData": {
-            "path": "Mapsource/map1 resource.psd_Psd.Dir/rainbow.png",
+            "path": "Mapsource/map1_resource.psd_Psd.Dir/rainbow.png",
             "plistFile": "",
             "resourceType": 0
           }
@@ -312,7 +312,7 @@
           "name": "CCSprite",
           "file": null,
           "fileData": {
-            "path": "Mapsource/map1 resource.psd_Psd.Dir/GO.png",
+            "path": "Mapsource/map1_resource.psd_Psd.Dir/GO.png",
             "plistFile": "",
             "resourceType": 0
           }
