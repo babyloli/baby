@@ -66,34 +66,13 @@ bool IHomeMenu::init()
 	Vector<SpriteFrame*> oryzaeFrames(4);
 	for (int i = 1; i < 5; i++)
 	{
-		/*if ( (i%2) == 0)
-		{
-			auto frame = cache->getSpriteFrameByName("hpsprite2.png");
-			oryzaeFrames.pushBack(frame);
-		}
-		else
-		{*/
 			auto frame = cache->getSpriteFrameByName(String::createWithFormat("hpsprite%ld.png",i)->getCString());
 			oryzaeFrames.pushBack(frame);
-		/*}*/
+
 	}
 	auto bgAnimation = Animation::createWithSpriteFrames(oryzaeFrames,1.0f/6.0f);
 	bgOryzae->runAction(RepeatForever::create(Animate::create(bgAnimation)));
  
-	auto userdefault=UserDefault::sharedUserDefault();
-	if(!userdefault->getBoolForKey("isExisted")){
-		userdefault->setBoolForKey("isExisted",true);
-		userdefault->setIntegerForKey("Health",0);
-		userdefault->setIntegerForKey("Section",4);
-		userdefault->setIntegerForKey("Level",0);
-		userdefault->setIntegerForKey("myGold",10000);
-	  
-		HCSVFile* data = ResourceManager::getInstance()->propsData;
-		for (int i = 0; i < 6; i++)
-		{
-			userdefault->setIntegerForKey(data->getData(i,1),0);
-		}
-	}
     return true;
 }
 

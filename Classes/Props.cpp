@@ -33,6 +33,7 @@ bool Props::init()
 	m_framesNumber = std::atoi(propsData->getData(m_id,4));
 	m_cooldownTime = std::atof(propsData->getData(m_id,5));
 	m_holdTime = std::atof(propsData->getData(m_id,6));
+	m_damage = std::atoi(propsData->getData(m_id,8));
 
 	m_usedTime = 0.0;
 	m_canBeUsed = true;
@@ -91,3 +92,4 @@ void Props::endCooldownAndRestart()
 	m_pCdTimer->setPercentage(100);
 	m_pCdTimer->setVisible(false);
 }
+

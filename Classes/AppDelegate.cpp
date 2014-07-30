@@ -34,6 +34,22 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("music/MenuBackgroundMusic.mp3");
 	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("music/MenuBackgroundMusic.mp3",true);
 
+	// Initial database£¡
+	auto userdefault=UserDefault::sharedUserDefault();
+	if(!userdefault->getBoolForKey("isExisted")){
+		userdefault->setBoolForKey("isExisted",true);
+		userdefault->setIntegerForKey("Health",1000);
+		userdefault->setIntegerForKey("Section",4);
+		userdefault->setIntegerForKey("Level",0);
+		userdefault->setIntegerForKey("myGold",10000);
+
+		HCSVFile* data = ResourceManager::getInstance()->propsData;
+		for (int i = 0; i < 6; i++)
+		{
+			userdefault->setIntegerForKey(data->getData(i,1),0);
+		}
+	}
+
     // run
     director->runWithScene(scene);
 
