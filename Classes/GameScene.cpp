@@ -364,10 +364,12 @@ void Game::loadTower(){
 
 		auto listener = EventListenerTouchOneByOne::create();	//´¥Ãþ¼àÌýÆ÷
 		listener->setSwallowTouches(true);
-		listener->onTouchBegan = [towerId, tower, this](Touch* touch, Event* event){
-			auto target = event->getCurrentTarget();
-			if (tower->getTextureRect().containsPoint(target->convertTouchToNodeSpace(touch))){
-				//				tower->stopAction(actionRepeateFadeOutIn);
+		listener->onTouchBegan = [towerId, this](Touch* touch, Event* event){
+			Sprite* target = static_cast<Sprite*>(event->getCurrentTarget());
+			Rect rect = target->getTextureRect();
+			Vec2 point = target->convertTouchToNodeSpace(touch);
+			if (rect.containsPoint(point)){
+//				tower->stopAction(actionRepeateFadeOutIn);
 				Menu* menu = this->m_menus.at(towerId);
 				if (menu->getParent() == NULL){
 					for (Node* node : menu->getChildren())
