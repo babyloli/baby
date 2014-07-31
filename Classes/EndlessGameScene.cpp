@@ -236,7 +236,12 @@ void Endless::addEnemy(float dt)
 					{
 						int row = rand() % (m_numMonster);	
 						enemy = Enemy::create(row, m_curRound, true);
-					}else
+					} else if (rate < m_deltaMonsterGenerateRate + 0.02f)
+					{
+						int row = rand() % (m_numBigBoss) + m_numMonster + m_numLittleBoss;
+						enemy = Enemy::create(row, m_curRound, true);
+					}					
+					else
 					{
 						int row = rand() % (m_numLittleBoss) + m_numMonster;
 						enemy = Enemy::create(row, m_curRound, true);
