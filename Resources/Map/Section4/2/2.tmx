@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="16" height="9" tilewidth="80" tileheight="80">
+ <tileset firstgid="1" name="2" tilewidth="80" tileheight="80">
+  <image source="2.png" width="1280" height="720"/>
+ </tileset>
+ <layer name="块层 1" width="16" height="9">
+  <data encoding="base64" compression="zlib">
+   eJwNwwc3FgAAAMDPzJY9yqiskGzJLIpQVraQTRkNSkgpMuMnu3vvggKBQLAhhhpmuLeMMNIoo40x1jjjvW2CiSaZbIqpppluhpne8a5ZZptjrve87wPzzLfAQot8aLEllvrIMh9bboWVVlltjbXW+cR6n9pgo00222Krz3xum+2+8KUddvrKLrvt8bVv7LXPfgcc9K1DDjviqGOOO+Gk75xy2hnfO+uc8y646JLLrrjqBz+65robbvrJz37xq1tu+83v7vjDXffc96cH/vK3h/7xr0ce+88TTz3z3Asv/e+V194ABtEoyQ==
+  </data>
+ </layer>
+ <objectgroup name="people" width="16" height="9">
+  <object name="enemy" x="640" y="240" width="80" height="80"/>
+  <object name="baby" x="480" y="400" width="80" height="80"/>
+  <object name="assistant" x="505" y="364" width="31" height="33"/>
+ </objectgroup>
+ <objectgroup name="barrier" width="16" height="9">
+  <object x="640" y="240" width="80"/>
+  <object x="640" y="160" height="480"/>
+  <object x="720" y="240" height="320"/>
+  <object x="720" y="560" width="320"/>
+  <object x="1040" y="160" height="400"/>
+  <object x="1120" y="80" height="560"/>
+  <object x="160" y="160" width="880"/>
+  <object x="80" y="80" width="1040"/>
+  <object x="80" y="80" height="400"/>
+  <object x="160" y="160" height="240"/>
+  <object x="160" y="400" width="80"/>
+  <object x="240" y="160" height="240"/>
+  <object x="80" y="480" width="240"/>
+  <object x="320" y="240" height="400"/>
+  <object x="320" y="240" width="240"/>
+  <object x="400" y="320" width="80"/>
+  <object x="480" y="320" height="160"/>
+  <object x="400" y="320" height="240"/>
+  <object x="400" y="560" width="160"/>
+  <object x="560" y="240" height="320"/>
+  <object x="320" y="640" width="800"/>
+ </objectgroup>
+ <objectgroup name="road" width="16" height="9">
+  <object x="643" y="243" width="76" height="359">
+   <properties>
+    <property name="direction" value="down"/>
+   </properties>
+  </object>
+  <object x="643" y="563" width="435" height="76">
+   <properties>
+    <property name="direction" value="right"/>
+   </properties>
+  </object>
+  <object x="1043" y="117" width="75" height="521">
+   <properties>
+    <property name="direction" value="up"/>
+   </properties>
+  </object>
+  <object x="120" y="80" width="996" height="79">
+   <properties>
+    <property name="direction" value="left"/>
+   </properties>
+  </object>
+  <object x="80" y="79" width="80" height="363">
+   <properties>
+    <property name="direction" value="down"/>
+   </properties>
+  </object>
+  <object x="79" y="404" width="201" height="73">
+   <properties>
+    <property name="direction" value="right"/>
+   </properties>
+  </object>
+  <object x="244" y="196" width="73" height="281">
+   <properties>
+    <property name="direction" value="up"/>
+   </properties>
+  </object>
+  <object x="241" y="161" width="357" height="79">
+   <properties>
+    <property name="direction" value="right"/>
+   </properties>
+  </object>
+  <object x="561" y="164" width="75" height="439">
+   <properties>
+    <property name="direction" value="down"/>
+   </properties>
+  </object>
+  <object x="359" y="565" width="277" height="75">
+   <properties>
+    <property name="direction" value="left"/>
+   </properties>
+  </object>
+  <object x="321" y="280" width="76" height="359">
+   <properties>
+    <property name="direction" value="up"/>
+   </properties>
+  </object>
+  <object x="321" y="241" width="196" height="80">
+   <properties>
+    <property name="direction" value="right"/>
+   </properties>
+  </object>
+  <object x="484" y="243" width="73" height="159">
+   <properties>
+    <property name="direction" value="down"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="tower" width="16" height="9">
+  <object x="880" y="480" width="80" height="80">
+   <properties>
+    <property name="type" value="2,3,7"/>
+   </properties>
+  </object>
+  <object x="960" y="400" width="80" height="80">
+   <properties>
+    <property name="type" value="2,3,7"/>
+   </properties>
+  </object>
+  <object x="960" y="240" width="80" height="80">
+   <properties>
+    <property name="type" value="2,3,7"/>
+   </properties>
+  </object>
+  <object x="720" y="160" width="80" height="80">
+   <properties>
+    <property name="type" value="2,3,7"/>
+   </properties>
+  </object>
+  <object x="160" y="240" width="80" height="80">
+   <properties>
+    <property name="type" value="2,3,7"/>
+   </properties>
+  </object>
+  <object x="400" y="400" width="80" height="80">
+   <properties>
+    <property name="type" value="2,3,7"/>
+   </properties>
+  </object>
+  <object x="480" y="480" width="80" height="80">
+   <properties>
+    <property name="type" value="2,3,7"/>
+   </properties>
+  </object>
+  <object x="160" y="480" width="80" height="80">
+   <properties>
+    <property name="type" value="2,3,7"/>
+   </properties>
+  </object>
+  <object x="240" y="560" width="80" height="80">
+   <properties>
+    <property name="type" value="2,3,7"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

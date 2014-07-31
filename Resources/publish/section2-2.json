@@ -60,7 +60,7 @@
           "name": "CCSprite",
           "file": null,
           "fileData": {
-            "path": "Mapsource/map2_resource.psd_Psd.Dir/Go.png",
+            "path": "Mapsource/map2resource.psd_Psd.Dir/Go.png",
             "plistFile": "",
             "resourceType": 0
           }
@@ -88,7 +88,7 @@
           "name": "CCSprite",
           "file": null,
           "fileData": {
-            "path": "Mapsource/map2_resource.psd_Psd.Dir/horse.png",
+            "path": "Mapsource/map2resource.psd_Psd.Dir/horse.png",
             "plistFile": "",
             "resourceType": 0
           }
@@ -116,7 +116,7 @@
           "name": "CCSprite",
           "file": null,
           "fileData": {
-            "path": "Mapsource/map2_resource.psd_Psd.Dir/horse.png",
+            "path": "Mapsource/map2resource.psd_Psd.Dir/horse.png",
             "plistFile": "",
             "resourceType": 0
           }
@@ -144,7 +144,7 @@
           "name": "CCSprite",
           "file": null,
           "fileData": {
-            "path": "Mapsource/map2_resource.psd_Psd.Dir/stub.png",
+            "path": "Mapsource/map2resource.psd_Psd.Dir/stub.png",
             "plistFile": "",
             "resourceType": 0
           }
@@ -172,7 +172,7 @@
           "name": "CCSprite",
           "file": null,
           "fileData": {
-            "path": "Mapsource/map2_resource.psd_Psd.Dir/stub1.png",
+            "path": "Mapsource/map2resource.psd_Psd.Dir/stub1.png",
             "plistFile": "",
             "resourceType": 0
           }
@@ -200,7 +200,7 @@
           "name": "CCSprite",
           "file": null,
           "fileData": {
-            "path": "Mapsource/map2_resource.psd_Psd.Dir/car2.png",
+            "path": "Mapsource/map2resource.psd_Psd.Dir/car2.png",
             "plistFile": "",
             "resourceType": 0
           }
@@ -228,7 +228,7 @@
           "name": "CCSprite",
           "file": null,
           "fileData": {
-            "path": "Mapsource/map2_resource.psd_Psd.Dir/car1.png",
+            "path": "Mapsource/map2resource.psd_Psd.Dir/car1.png",
             "plistFile": "",
             "resourceType": 0
           }
@@ -256,7 +256,7 @@
           "name": "CCSprite",
           "file": null,
           "fileData": {
-            "path": "Mapsource/map2_resource.psd_Psd.Dir/bus1.png",
+            "path": "Mapsource/map2resource.psd_Psd.Dir/bus1.png",
             "plistFile": "",
             "resourceType": 0
           }
@@ -284,7 +284,7 @@
           "name": "CCSprite",
           "file": null,
           "fileData": {
-            "path": "Mapsource/map2_resource.psd_Psd.Dir/bus 2.png",
+            "path": "Mapsource/map2resource.psd_Psd.Dir/stub1.png",
             "plistFile": "",
             "resourceType": 0
           }

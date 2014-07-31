@@ -56,9 +56,10 @@ void Endless::loadData(){
 	m_numMonster = std::atoi(enemyDesc->getData(0, 4));
 	m_numLittleBoss = std::atoi(enemyDesc->getData(1, 4));
 	m_numBigBoss = std::atoi(enemyDesc->getData(2, 4));
+}
 
+void Endless::loadMap(){
 	cocostudio::SceneReader* s = cocostudio::SceneReader::getInstance();
-	
 	m_map = TMXTiledMap::create("Map/Endless/Endless.tmx");
 	this->addChild(m_map);
 }

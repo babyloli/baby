@@ -16,62 +16,6 @@
       "classname": "CCNode",
       "name": null,
       "canedit": true,
-      "objecttag": 103,
-      "rotation": 0,
-      "scalex": 1,
-      "scaley": 1,
-      "visible": 1,
-      "x": 599.5003662109375,
-      "y": 589.00042724609375,
-      "zorder": 1,
-      "gameobjects": [],
-      "components": [
-        {
-          "__type": "ComSpriteSurrogate:#EditorCommon.JsonModel.Component",
-          "classname": "CCSprite",
-          "name": "CCSprite",
-          "file": null,
-          "fileData": {
-            "path": "Mapsource/map1_resource.psd_Psd.Dir/cloud.png",
-            "plistFile": "",
-            "resourceType": 0
-          }
-        }
-      ]
-    },
-    {
-      "__type": "ComGameObjectSurrogate:#EditorCommon.JsonModel",
-      "classname": "CCNode",
-      "name": null,
-      "canedit": true,
-      "objecttag": 104,
-      "rotation": 0,
-      "scalex": 1,
-      "scaley": 1,
-      "visible": 1,
-      "x": 600.00048828125,
-      "y": 350.00030517578125,
-      "zorder": 1,
-      "gameobjects": [],
-      "components": [
-        {
-          "__type": "ComSpriteSurrogate:#EditorCommon.JsonModel.Component",
-          "classname": "CCSprite",
-          "name": "CCSprite",
-          "file": null,
-          "fileData": {
-            "path": "Mapsource/map1_resource.psd_Psd.Dir/DoubleTree.png",
-            "plistFile": "",
-            "resourceType": 0
-          }
-        }
-      ]
-    },
-    {
-      "__type": "ComGameObjectSurrogate:#EditorCommon.JsonModel",
-      "classname": "CCNode",
-      "name": null,
-      "canedit": true,
       "objecttag": 101,
       "rotation": 0,
       "scalex": 1,
@@ -100,7 +44,7 @@
       "classname": "CCNode",
       "name": null,
       "canedit": true,
-      "objecttag": 105,
+      "objecttag": 103,
       "rotation": 0,
       "scalex": 1,
       "scaley": 1,
@@ -116,7 +60,7 @@
           "name": "CCSprite",
           "file": null,
           "fileData": {
-            "path": "Mapsource/map1_resource.psd_Psd.Dir/gift.png",
+            "path": "Mapsource/map1resource.psd_Psd.Dir/gift.png",
             "plistFile": "",
             "resourceType": 0
           }
@@ -144,7 +88,7 @@
           "name": "CCSprite",
           "file": null,
           "fileData": {
-            "path": "Mapsource/map1_resource.psd_Psd.Dir/nipple.png",
+            "path": "Mapsource/map1resource.psd_Psd.Dir/nipple.png",
             "plistFile": "",
             "resourceType": 0
           }
@@ -172,7 +116,7 @@
           "name": "CCSprite",
           "file": null,
           "fileData": {
-            "path": "Mapsource/map1_resource.psd_Psd.Dir/nipple.png",
+            "path": "Mapsource/map1resource.psd_Psd.Dir/nipple.png",
             "plistFile": "",
             "resourceType": 0
           }
@@ -200,7 +144,7 @@
           "name": "CCSprite",
           "file": null,
           "fileData": {
-            "path": "Mapsource/map1_resource.psd_Psd.Dir/nipple.png",
+            "path": "Mapsource/map1resource.psd_Psd.Dir/nipple.png",
             "plistFile": "",
             "resourceType": 0
           }
@@ -228,7 +172,7 @@
           "name": "CCSprite",
           "file": null,
           "fileData": {
-            "path": "Mapsource/map1_resource.psd_Psd.Dir/nipple.png",
+            "path": "Mapsource/map1resource.psd_Psd.Dir/nipple.png",
             "plistFile": "",
             "resourceType": 0
           }
@@ -240,7 +184,7 @@
       "classname": "CCNode",
       "name": null,
       "canedit": true,
-      "objecttag": 110,
+      "objecttag": 105,
       "rotation": 0,
       "scalex": 1,
       "scaley": 1,
@@ -256,7 +200,7 @@
           "name": "CCSprite",
           "file": null,
           "fileData": {
-            "path": "Mapsource/map1_resource.psd_Psd.Dir/rainbow.png",
+            "path": "Mapsource/map1resource.psd_Psd.Dir/rainbow.png",
             "plistFile": "",
             "resourceType": 0
           }
@@ -268,7 +212,7 @@
       "classname": "CCNode",
       "name": null,
       "canedit": true,
-      "objecttag": 111,
+      "objecttag": 104,
       "rotation": 0,
       "scalex": 1,
       "scaley": 1,
@@ -284,7 +228,7 @@
           "name": "CCSprite",
           "file": null,
           "fileData": {
-            "path": "Mapsource/map1_resource.psd_Psd.Dir/rainbow.png",
+            "path": "Mapsource/map1resource.psd_Psd.Dir/rainbow.png",
             "plistFile": "",
             "resourceType": 0
           }
@@ -312,7 +256,7 @@
           "name": "CCSprite",
           "file": null,
           "fileData": {
-            "path": "Mapsource/map1_resource.psd_Psd.Dir/GO.png",
+            "path": "Mapsource/map1resource.psd_Psd.Dir/GO.png",
             "plistFile": "",
             "resourceType": 0
           }

@@ -12,6 +12,7 @@ public:
 	Endless();
 
 	void loadData() override;
+	void loadMap() override;
 	void loadToolBar() override;
 	void loadMousePosition();
 

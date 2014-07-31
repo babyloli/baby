@@ -377,32 +377,40 @@ Size IGameLevelSelector::tableCellSizeForIndex(TableView* table, ssize_t idx)
 //设置数据源tableCellAtIndex
 TableViewCell* IGameLevelSelector::tableCellAtIndex(TableView* table, ssize_t idx)
 {
-//	String* string = String::createWithFormat("%d", idx);
+	idx++;
+	String* string = String::createWithFormat("%d", idx);
 	TableViewCell* cell = table->dequeueCell();
-
+	
+	auto str = String::createWithFormat("Map/Section%d/%d/%d.png", m_section, idx, idx);
 	if (!cell)
 	{
 		//创建单元，如果自定义单元效果，需要继承tableViewCell, 并且重载draw
 		cell = TableViewCell::create();
-//		cell->autorelease();
-		idx++;
-		auto str = String::createWithFormat("Map/Section%d/%d/%d.png", m_section, idx, idx);
+//		cell = new TableViewCell();
+//		cell->autorelease();	
+		
 		Sprite* sprite = Sprite::create(str->getCString());
 		auto cellSize = tableCellSizeForIndex(table, idx);
 		sprite->setScale(0.5f);
+		sprite->setTag(123);
 		sprite->setPosition(Vec2(cellSize.width/2,cellSize.height/2));
 		cell->addChild(sprite);
 
-// 		auto label = LabelTTF::create(string->getCString(),"Helvetica",20.0);
-// 		label->setPosition(Vec2(cellSize.width/2 -10,200));
-// 		label->setTag(456);
-// 		cell->addChild(label);
+		auto label = LabelTTF::create(string->getCString(),"Helvetica",60.0);
+		label->setColor(Color3B(255, 0, 0));
+		label->setPosition(Vec2(cellSize.width/2 -10,200));
+		label->setTag(456);
+		cell->addChild(label);
 	}
-// 	else
-// 	{
-// 		auto label = (LabelTTF*)cell->getChildByTag(456);
-// 		label->setString(string->getCString());
-// 	}
+	else
+	{
+		Texture2D* texture = TextureCache::getInstance()->addImage(str->getCString());
+		Sprite* sprite = (Sprite*)cell->getChildByTag(123);
+		sprite->setTexture(texture);
+
+		auto label = (LabelTTF*)cell->getChildByTag(456);
+		label->setString(string->getCString());
+	}
 
 	return cell;
 }

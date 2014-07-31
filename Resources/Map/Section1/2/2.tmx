@@ -26,11 +26,11 @@
   <object name="assistant" x="1001" y="538"/>
  </objectgroup>
  <objectgroup name="barrier" width="16" height="9">
-  <object x="160" y="160" height="80"/>
   <object x="160" y="160" width="880"/>
-  <object x="1040" y="160" height="480"/>
+  <object x="160" y="160" height="80"/>
   <object x="160" y="240" width="800"/>
   <object x="960" y="240" height="400"/>
+  <object x="1040" y="160" height="480"/>
  </objectgroup>
  <objectgroup name="tower" width="16" height="9" visible="0">
   <object x="240" y="240" width="80" height="80">

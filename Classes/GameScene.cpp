@@ -52,6 +52,7 @@ bool Game::init()
 		return false;
 	}
 	loadData();
+	loadMap();
 	loadToolBar();
 	loadMenu();
 	loadPeople();
@@ -102,13 +103,16 @@ void Game::loadData(){
 	m_numMonster = std::atoi(enemyDesc->getData(0, 4));
 	m_numLittleBoss = std::atoi(enemyDesc->getData(1, 4));
 	m_numBigBoss = std::atoi(enemyDesc->getData(2, 4));
+}
 
+void Game::loadMap(){
 	SceneReader* s = SceneReader::getInstance();
 	char str[30];
 	sprintf(str, "publish/section%d-%d.json", m_section, m_id+1);
 	Node* node = s->createNodeWithSceneFile(str);
 	if(node)	
 		this -> addChild(node);
+	//get TMXmap
 	Node* map = node->getChildByTag(101);
 	auto component = (ComRender*)(map->getComponent("CCTMXTiledMap"));
 	m_map = (TMXTiledMap*)(component->getNode());
@@ -472,13 +476,13 @@ void Game::loadEquipmentSlot()
 	PropsRestoreHp* restoreHpProp =  PropsRestoreHp::createWithBaby(m_baby);
 	restoreHpProp->setPosition(rHpPos->getPosition());
 	restoreHpProp->m_position = Rect(restoreHpProp->getPositionX() - 40, restoreHpProp->getPositionY() - 40, 80, 80);
-	this->addChild(restoreHpProp,ZORDER_TOWER + 1);
+	this->addChild(restoreHpProp, ZORDER_PROPS);
 
  	PropsSlowdown* slowdownProp = PropsSlowdown::createWithTargets(m_enemies);
 	slowdownProp->setPosition(sdPos->getPosition());
 	slowdownProp->m_position = Rect(slowdownProp->getPositionX() - 40, slowdownProp->getPositionY() - 40, 80, 80);
 	slowdownProp->setTag(TYPE_PROP_SLOWDOWN);
-	this->addChild(slowdownProp, ZORDER_TOWER + 1);
+	this->addChild(slowdownProp, ZORDER_PROPS);
 	
 
 	PropsSafetyGuard* safetyGuardProp = PropsSafetyGuard::createWithBaby(m_baby);
@@ -489,25 +493,25 @@ void Game::loadEquipmentSlot()
 		m_baby->getPositionY() - safetyGuardProp->getSafeGuradSize().height / 2,
 		safetyGuardProp->getSafeGuradSize().width  ,
 		safetyGuardProp->getSafeGuradSize().height );
-	this->addChild(safetyGuardProp,ZORDER_TOWER + 1);
+	this->addChild(safetyGuardProp, ZORDER_PROPS);
 	
 	PropsLandmine* landmineProp = PropsLandmine::createWithRoads(m_roads);
 	landmineProp->setPosition(lmPos->getPosition());
 	landmineProp->m_position = Rect(landmineProp->getPositionX() - 40, landmineProp->getPositionY() - 40, 80 ,80);
 	landmineProp->setTag(TYPE_PROP_LANDMIND);
-	this->addChild(landmineProp, ZORDER_TOWER + 1);
+	this->addChild(landmineProp, ZORDER_PROPS);
 
 	PropsTrap* trapProp = PropsTrap::createWithRoads(m_roads);
 	trapProp->setPosition(trapPos->getPosition());
 	trapProp->m_position = Rect(trapProp->getPositionX() - 40, trapProp->getPositionY() - 40, 80, 80);
 	trapProp->setTag(TYPE_PROP_TRAP);
-	this->addChild(trapProp,ZORDER_TOWER + 1);
+	this->addChild(trapProp, ZORDER_PROPS);
 
 	PropsAssistGuard* assistGuardProp = PropsAssistGuard::create(m_assistPosition);
 	assistGuardProp->setPosition(atPos->getPosition());
 	assistGuardProp->m_position = Rect(assistGuardProp->getPositionX() - 40, assistGuardProp->getPositionY() - 40, 80, 80);
 	assistGuardProp->setTag(TYPE_PROP_ASSISTGUARD);
-	this->addChild(assistGuardProp, ZORDER_TOWER + 1);
+	this->addChild(assistGuardProp, ZORDER_PROPS);
 
 }
 

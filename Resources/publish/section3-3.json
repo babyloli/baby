@@ -60,7 +60,7 @@
           "name": "CCSprite",
           "file": null,
           "fileData": {
-            "path": "Mapsource/map3_resource.psd_Psd.Dir/GOPicture.png",
+            "path": "Mapsource/map3resource.psd_Psd.Dir/GOPicture.png",
             "plistFile": "",
             "resourceType": 0
           }
@@ -77,7 +77,7 @@
       "scalex": 1,
       "scaley": 1,
       "visible": 1,
-      "x": 635.17169189453125,
+      "x": 651.17169189453125,
       "y": 397.05953979492188,
       "zorder": 1,
       "gameobjects": [],
@@ -88,7 +88,7 @@
           "name": "CCSprite",
           "file": null,
           "fileData": {
-            "path": "Mapsource/map3_resource.psd_Psd.Dir/PBigBook1.png",
+            "path": "Mapsource/map3resource.psd_Psd.Dir/PBigBook1.png",
             "plistFile": "",
             "resourceType": 0
           }
@@ -105,8 +105,8 @@
       "scalex": 1,
       "scaley": 1,
       "visible": 1,
-      "x": 638.5050048828125,
-      "y": 157.05966186523438,
+      "x": 648.5050048828125,
+      "y": 159.05966186523438,
       "zorder": 1,
       "gameobjects": [],
       "components": [
@@ -116,7 +116,7 @@
           "name": "CCSprite",
           "file": null,
           "fileData": {
-            "path": "Mapsource/map3_resource.psd_Psd.Dir/PBigBook1.png",
+            "path": "Mapsource/map3resource.psd_Psd.Dir/PBigBook1.png",
             "plistFile": "",
             "resourceType": 0
           }
@@ -144,7 +144,7 @@
           "name": "CCSprite",
           "file": null,
           "fileData": {
-            "path": "Mapsource/map3_resource.psd_Psd.Dir/PBox.png",
+            "path": "Mapsource/map3resource.psd_Psd.Dir/PBox.png",
             "plistFile": "",
             "resourceType": 0
           }
@@ -172,7 +172,7 @@
           "name": "CCSprite",
           "file": null,
           "fileData": {
-            "path": "Mapsource/map3_resource.psd_Psd.Dir/PBox.png",
+            "path": "Mapsource/map3resource.psd_Psd.Dir/PBox.png",
             "plistFile": "",
             "resourceType": 0
           }
@@ -200,7 +200,7 @@
           "name": "CCSprite",
           "file": null,
           "fileData": {
-            "path": "Mapsource/map3_resource.psd_Psd.Dir/PDice1.png",
+            "path": "Mapsource/map3resource.psd_Psd.Dir/PDice1.png",
             "plistFile": "",
             "resourceType": 0
           }
@@ -228,7 +228,7 @@
           "name": "CCSprite",
           "file": null,
           "fileData": {
-            "path": "Mapsource/map3_resource.psd_Psd.Dir/PDice1.png",
+            "path": "Mapsource/map3resource.psd_Psd.Dir/PDice1.png",
             "plistFile": "",
             "resourceType": 0
           }
@@ -256,7 +256,7 @@
           "name": "CCSprite",
           "file": null,
           "fileData": {
-            "path": "Mapsource/map3_resource.psd_Psd.Dir/PPigment1.png",
+            "path": "Mapsource/map3resource.psd_Psd.Dir/PPigment1.png",
             "plistFile": "",
             "resourceType": 0
           }
@@ -274,7 +274,7 @@
       "scaley": 1,
       "visible": 1,
       "x": 239.53276062011719,
-      "y": 235.4761962890625,
+      "y": 317.47625732421875,
       "zorder": 1,
       "gameobjects": [],
       "components": [
@@ -284,7 +284,7 @@
           "name": "CCSprite",
           "file": null,
           "fileData": {
-            "path": "Mapsource/map3_resource.psd_Psd.Dir/PPigment1.png",
+            "path": "Mapsource/map3resource.psd_Psd.Dir/PPigment1.png",
             "plistFile": "",
             "resourceType": 0
           }
