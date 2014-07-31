@@ -473,19 +473,20 @@ void Game::loadEquipmentSlot()
 	auto trapPos = static_cast<Button*>(Helper::seekWidgetByTag(equipmentslot,UI_POSITION_TRAP));
 	auto atPos = static_cast<Button*>(Helper::seekWidgetByTag(equipmentslot,UI_POSITION_ASSISTGUARD));
 	
-	PropsRestoreHp* restoreHpProp =  PropsRestoreHp::createWithBaby(m_baby);
+	PropsRestoreHp* restoreHpProp =  PropsRestoreHp::createWithBaby(m_baby,MODE_GROWUP);
 	restoreHpProp->setPosition(rHpPos->getPosition());
 	restoreHpProp->m_position = Rect(restoreHpProp->getPositionX() - 40, restoreHpProp->getPositionY() - 40, 80, 80);
+	restoreHpProp->setTag(TYPE_PROP_RESTOREHP);
 	this->addChild(restoreHpProp, ZORDER_PROPS);
 
- 	PropsSlowdown* slowdownProp = PropsSlowdown::createWithTargets(m_enemies);
+ 	PropsSlowdown* slowdownProp = PropsSlowdown::createWithTargets(m_enemies,MODE_GROWUP);
 	slowdownProp->setPosition(sdPos->getPosition());
 	slowdownProp->m_position = Rect(slowdownProp->getPositionX() - 40, slowdownProp->getPositionY() - 40, 80, 80);
 	slowdownProp->setTag(TYPE_PROP_SLOWDOWN);
 	this->addChild(slowdownProp, ZORDER_PROPS);
 	
 
-	PropsSafetyGuard* safetyGuardProp = PropsSafetyGuard::createWithBaby(m_baby);
+	PropsSafetyGuard* safetyGuardProp = PropsSafetyGuard::createWithBaby(m_baby,MODE_GROWUP);
 	safetyGuardProp->setPosition(sgPos->getPosition());
 	safetyGuardProp->m_position = Rect(safetyGuardProp->getPositionX() - 40, safetyGuardProp->getPositionY() - 40, 80, 80);
 	safetyGuardProp->setTag(TYPE_PROP_SAFETYGUARD);
@@ -495,19 +496,19 @@ void Game::loadEquipmentSlot()
 		safetyGuardProp->getSafeGuradSize().height );
 	this->addChild(safetyGuardProp, ZORDER_PROPS);
 	
-	PropsLandmine* landmineProp = PropsLandmine::createWithRoads(m_roads);
+	PropsLandmine* landmineProp = PropsLandmine::createWithRoads(m_roads,MODE_GROWUP);
 	landmineProp->setPosition(lmPos->getPosition());
 	landmineProp->m_position = Rect(landmineProp->getPositionX() - 40, landmineProp->getPositionY() - 40, 80 ,80);
 	landmineProp->setTag(TYPE_PROP_LANDMIND);
 	this->addChild(landmineProp, ZORDER_PROPS);
 
-	PropsTrap* trapProp = PropsTrap::createWithRoads(m_roads);
+	PropsTrap* trapProp = PropsTrap::createWithRoads(m_roads,MODE_GROWUP);
 	trapProp->setPosition(trapPos->getPosition());
 	trapProp->m_position = Rect(trapProp->getPositionX() - 40, trapProp->getPositionY() - 40, 80, 80);
 	trapProp->setTag(TYPE_PROP_TRAP);
 	this->addChild(trapProp, ZORDER_PROPS);
 
-	PropsAssistGuard* assistGuardProp = PropsAssistGuard::create(m_assistPosition);
+	PropsAssistGuard* assistGuardProp = PropsAssistGuard::create(m_assistPosition,MODE_GROWUP);
 	assistGuardProp->setPosition(atPos->getPosition());
 	assistGuardProp->m_position = Rect(assistGuardProp->getPositionX() - 40, assistGuardProp->getPositionY() - 40, 80, 80);
 	assistGuardProp->setTag(TYPE_PROP_ASSISTGUARD);
@@ -856,7 +857,6 @@ void Game::meetTraps(float dt)
 		{
 			Trap* trap = traps->getTraps().at(i);
 			if(!trap->isContainable()){
-				trap->destory();
 				for(int j = 0; j < trap->getTargets().size(); j++){
 					Enemy* enemy = trap->getTargets().at(j);
 					enemy->setHp(enemy->getHp() - traps->getDamage());
@@ -865,6 +865,7 @@ void Game::meetTraps(float dt)
 					}
 					trap->getTargets().eraseObject(enemy);
 				}
+				trap->destory();
 				trap->removeFromParent();
 				traps->getTraps().eraseObject(trap);
 				continue;
@@ -875,6 +876,9 @@ void Game::meetTraps(float dt)
 				if(trap->m_position.containsPoint(enemy->getPosition())){
 
 					trap->catchEnemy(enemy);
+					if(enemy->getSpeed() == 0){
+						CCLOG("stop");
+					}
 				}
 			}
 			//if(!trap->isContainable())

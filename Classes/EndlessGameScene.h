@@ -15,6 +15,7 @@ public:
 	void loadMap() override;
 	void loadToolBar() override;
 	void loadMousePosition();
+	void loadEquipmentSlot() override;
 
 	void addEnemy(float dt) override;
 	void showMouse(float dt);

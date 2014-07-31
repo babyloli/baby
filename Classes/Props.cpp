@@ -16,6 +16,7 @@ Props* Props::createWithId(int id)
 Props::Props(int id)
 {
 	m_id = id;
+	m_mode = MODE_GROWUP;
 }
 
 Props::Props(){}
@@ -41,9 +42,16 @@ bool Props::init()
 	m_notebg = Sprite::create("images/props/noteBackground.png");
 	m_notebg->setPosition(40,40);
 	this->addChild(m_notebg);
-	int num = UserDefault::sharedUserDefault()->getIntegerForKey(m_name.c_str());
-//	CCLOG("wrong");
-	m_number = Label::createWithTTF(configProps,itos(num));
+
+	if(m_mode == MODE_GROWUP){
+		m_count = UserDefault::sharedUserDefault()->getIntegerForKey(m_name.c_str());
+	}
+	else if(m_mode == MODE_ENDLESS){
+		m_count = 0;
+		m_cooldownTime = 0;
+	}
+
+	m_number = Label::createWithTTF(configProps,itos(m_count));
 	m_number->setPosition(40,40);
 	this->addChild(m_number);
 	
@@ -57,7 +65,7 @@ bool Props::init()
 	this->addChild(m_pCdTimer,4);
 	m_pCdTimer->setVisible(false);
 
-	if (num <= 0){
+	if (m_count <= 0){
 		m_sprite->setVisible(false);
 		m_notebg->setVisible(false);
 		m_number->setVisible(false);
@@ -71,25 +79,50 @@ bool Props::init()
 
 void Props::usePropsAndUpdate()
 {
-	int num = UserDefault::sharedUserDefault()->getIntegerForKey(m_name.c_str()) - 1;
-	UserDefault::sharedUserDefault()->setIntegerForKey(m_name.c_str(),num);
-	m_number->setString(itos(num));
-	if(num <= 0){
+	m_usedTime = 0.0;
+	if(m_mode == MODE_GROWUP){
+		m_canBeUsed = false;
+		m_count = UserDefault::sharedUserDefault()->getIntegerForKey(m_name.c_str()) - 1;
+		UserDefault::sharedUserDefault()->setIntegerForKey(m_name.c_str(),m_count);
+		m_pCdTimer->setVisible(true);
+	}
+	else if(m_mode == MODE_ENDLESS)
+	{
+		m_count -= 1;
+		if(m_count<=0){
+			m_canBeUsed = false;
+		}
+	}
+	m_number->setString(itos(m_count));
+	if(m_count <= 0){
 		m_sprite->setVisible(false);
 		m_notebg->setVisible(false);
 		m_number->setVisible(false);
 	}
-	m_pCdTimer->setVisible(true);
 }
 
 void Props::endCooldownAndRestart()
 {
-	int num = UserDefault::sharedUserDefault()->getIntegerForKey(m_name.c_str());
-	if(num >0){
-		m_canBeUsed = true;
+	if(m_mode == MODE_GROWUP){
+		m_count = UserDefault::sharedUserDefault()->getIntegerForKey(m_name.c_str());
+		m_pCdTimer->setPercentage(100);
+		m_pCdTimer->setVisible(false);
+		if(m_count >0){
+			m_canBeUsed = true;
+		}
 	}
-	m_usedTime = 0.0;
-	m_pCdTimer->setPercentage(100);
-	m_pCdTimer->setVisible(false);
 }
 
+void Props::AndEndlessNumber()
+{
+	if(m_mode == MODE_ENDLESS){
+		m_count++;
+		m_number->setString(std::to_string(m_count));
+		if(m_count > 0){
+			m_sprite->setVisible(true);
+			m_notebg->setVisible(true);
+			m_number->setVisible(true);
+			m_canBeUsed = true;
+		}
+	}
+}

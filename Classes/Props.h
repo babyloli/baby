@@ -1,6 +1,13 @@
 #pragma once
 #include "ResourceManager.h"
 #include "IHomeMenuScene.h"
+
+enum Mode
+{
+	MODE_ENDLESS,
+	MODE_GROWUP
+};
+
 //////////////////////////////////////////////////////////////////////////
 // Basic class for props
 class Props: public Node
@@ -17,6 +24,8 @@ protected:
 	float m_usedTime;
 	bool m_canBeUsed;
 	
+	int m_mode;
+	int m_count;
 	Sprite* m_notebg;
 	ProgressTimer* m_pCdTimer;
 	Label* m_number;
@@ -33,6 +42,7 @@ public:
 	const std::string getName(){return m_name;}
 	const int getPrice(){return m_price;}
 	const int getDamage(){return m_damage;}
+	void AndEndlessNumber();
 
 protected:
 	void usePropsAndUpdate();

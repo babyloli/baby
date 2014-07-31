@@ -2,21 +2,22 @@
 
 
 //////////////////////////////////////////////////////////////////////////
-PropsRestoreHp::PropsRestoreHp(Baby* bb)
+PropsRestoreHp::PropsRestoreHp(Baby* bb, Mode mode)
 {
 	m_id = 0;
 	m_bb = bb;
 	m_sprite = Sprite::create("images/props/propsIcon1.png");
 	this->addChild(m_sprite);
+	m_mode = mode;
 }
 
 PropsRestoreHp::~PropsRestoreHp()
 {
 }
 
-PropsRestoreHp* PropsRestoreHp::createWithBaby(Baby* bb)
+PropsRestoreHp* PropsRestoreHp::createWithBaby(Baby* bb, Mode mode)
 {
-	PropsRestoreHp* prop = new (std::nothrow)PropsRestoreHp(bb);
+	PropsRestoreHp* prop = new (std::nothrow)PropsRestoreHp(bb, mode);
 	if(prop && prop->init()){
 		prop->autorelease();
 		return prop;
@@ -37,10 +38,8 @@ void PropsRestoreHp::onEnter()
 
 bool PropsRestoreHp::touchCallback(Touch* touch, Event* event)
 {
-
 	if (m_position.containsPoint(touch->getLocation()) && m_canBeUsed){
 		m_bb->restoreHealth();
-		m_canBeUsed = false;
 		usePropsAndUpdate();
 		return true; //接受触摸事件
 	}
@@ -67,15 +66,13 @@ void  PropsRestoreHp::update(float dt)
 
 
 //////////////////////////////////////////////////////////////////////////
-PropsSlowdown::PropsSlowdown(const Vector<Enemy*>& emenies)
+PropsSlowdown::PropsSlowdown(const Vector<Enemy*>& emenies, Mode mode)
 {
 	m_id = 1;
 	m_targets = emenies;
-	if (m_targets.size() == 0){
-		CCLOG("0");
-	}
 	m_sprite = Sprite::create("images/props/propsIcon2.png");
 	this->addChild(m_sprite);
+	m_mode = mode;
 }
 
 PropsSlowdown::~PropsSlowdown()
@@ -83,9 +80,9 @@ PropsSlowdown::~PropsSlowdown()
 	m_targets.clear();
 }
 
-PropsSlowdown* PropsSlowdown::createWithTargets(const Vector<Enemy*>& emenies)
+PropsSlowdown* PropsSlowdown::createWithTargets(const Vector<Enemy*>& emenies, Mode mode)
 {
-	PropsSlowdown* prop = new PropsSlowdown(emenies);
+	PropsSlowdown* prop = new PropsSlowdown(emenies, mode);
 	if(prop && prop->init()){
 		prop->autorelease();
 		return prop;
@@ -107,9 +104,7 @@ void PropsSlowdown::onEnter()
 bool PropsSlowdown::touchCallback(Touch* touch, Event* event)
 {
 	if (m_position.containsPoint(touch->getLocation()) && m_canBeUsed){
-		m_canBeUsed = false;
 		usePropsAndUpdate();
-
 		for(int i = 0; i < m_targets.size(); i++)
 		{
 			auto enemy = m_targets.at(i);
@@ -122,26 +117,47 @@ bool PropsSlowdown::touchCallback(Touch* touch, Event* event)
 
 void PropsSlowdown::update(float dt)
 {
-	if(m_canBeUsed){
-		/////////
-		return;
-	}
-	else{
-		if(m_usedTime >= m_cooldownTime){
-			endCooldownAndRestart();
+	switch (m_mode)
+	{
+	case MODE_GROWUP:{
+		if(m_canBeUsed){
+			return;
 		}
 		else{
-			m_usedTime += dt;
-			m_pCdTimer->setPercentage((m_cooldownTime - m_usedTime) / m_cooldownTime * 100);
-			if(m_usedTime >= m_holdTime){
-				for(int i = 0; i < m_targets.size(); i++)
-				{
-					Enemy* enemy = m_targets.at(i);
-					enemy->setSpeed(enemy->getOriginSpeed());
-					m_targets.erase(i);
+			if(m_usedTime >= m_cooldownTime){
+				endCooldownAndRestart();
+			}
+			else{
+				m_usedTime += dt;
+				m_pCdTimer->setPercentage((m_cooldownTime - m_usedTime) / m_cooldownTime * 100);
+				if(m_usedTime >= m_holdTime){
+					for(int i = 0; i < m_targets.size(); i++)
+					{
+						Enemy* enemy = m_targets.at(i);
+						enemy->setSpeed(enemy->getOriginSpeed());
+						m_targets.erase(i);
+					}
 				}
 			}
 		}
+		break;
+					 }
+	case  MODE_ENDLESS:{
+		if(m_usedTime >= m_holdTime){
+			for(int i = 0; i < m_targets.size(); i++)
+			{
+				Enemy* enemy = m_targets.at(i);
+				enemy->setSpeed(enemy->getOriginSpeed());
+				m_targets.erase(i);
+			}
+		}
+		else{
+			m_usedTime += dt;
+		}
+		break;
+					   }
+	default:
+		break;
 	}
 }
 
@@ -149,7 +165,7 @@ void PropsSlowdown::setSlowdownTargets(const Vector<Enemy*>& emenies)
 {
 	for (int i=0; i<emenies.size(); i++)
 	{
-			m_targets.pushBack(emenies.at(i));
+		m_targets.pushBack(emenies.at(i));
 	}
 }
 
@@ -157,7 +173,7 @@ void PropsSlowdown::setSlowdownTargets(const Vector<Enemy*>& emenies)
 
 
 //////////////////////////////////////////////////////////////////////////
-PropsSafetyGuard::PropsSafetyGuard(Baby* bb)
+PropsSafetyGuard::PropsSafetyGuard(Baby* bb, Mode mode)
 {
 	m_id = 2;
 	m_bb = bb;
@@ -176,17 +192,18 @@ PropsSafetyGuard::PropsSafetyGuard(Baby* bb)
 	bb->addChild(m_visiableG);
 	m_visiableG->setVisible(false);
 
-	m_curState = 0;
-	m_lastState = 0;
+	m_curState = m_maxState;
+	m_lastState = m_maxState;
+	m_mode = mode;
 }
 
 PropsSafetyGuard::~PropsSafetyGuard()
 {
 }
 
-PropsSafetyGuard* PropsSafetyGuard::createWithBaby(Baby* bb)
+PropsSafetyGuard* PropsSafetyGuard::createWithBaby(Baby* bb,Mode mode)
 {
-	PropsSafetyGuard* prop = new PropsSafetyGuard(bb);
+	PropsSafetyGuard* prop = new PropsSafetyGuard(bb,mode);
 	if(prop && prop->init()){
 		prop->autorelease();
 		return prop;
@@ -209,7 +226,6 @@ bool PropsSafetyGuard::touchCallback(Touch* touch, Event* event)
 {
 
 	if(m_position.containsPoint(touch->getLocation()) && m_canBeUsed){
-		m_canBeUsed = false;
 		usePropsAndUpdate();
 		m_curState = 0; //使保护罩有效
 		m_lastState = 0;
@@ -221,49 +237,82 @@ bool PropsSafetyGuard::touchCallback(Touch* touch, Event* event)
 
 void PropsSafetyGuard::update(float dt)
 {
-	if(m_canBeUsed){
-		return;
-	}
-	else{
-		if(m_usedTime >= m_cooldownTime){
-			m_canBeUsed = true;
-			m_usedTime = 0.0;
-			m_pCdTimer->setPercentage(100);
-			m_pCdTimer->setVisible(false);
+	switch (m_mode)
+	{
+	case MODE_GROWUP:
+		{
+			if(m_canBeUsed){
+				return;
+			}
+			else{
+				if(m_usedTime >= m_cooldownTime){
+					endCooldownAndRestart();
+				}
+				else{  //道具冷却时间
+					m_usedTime += dt;
+					m_pCdTimer->setPercentage((m_cooldownTime - m_usedTime) / m_cooldownTime * 100);
+					if (m_usedTime < m_holdTime){  //在保护罩保护时间内
+						if(m_lastState != m_curState){
+							m_visiableG->stopAllActions();
+							switch (m_maxState - m_curState)
+							{
+							case 3: m_state= RepeatForever::create(Animate::create(AnimationCache::getInstance()->getAnimation(ANIMATION_SAFETYGUARD_STATE_1)));
+								break;
+							case 2: m_state= RepeatForever::create(Animate::create(AnimationCache::getInstance()->getAnimation(ANIMATION_SAFETYGUARD_STATE_2)));
+								break;
+							case 1: m_state= RepeatForever::create(Animate::create(AnimationCache::getInstance()->getAnimation(ANIMATION_SAFETYGUARD_STATE_3)));
+								break;
+							default:m_state= RepeatForever::create(Animate::create(AnimationCache::getInstance()->getAnimation(ANIMATION_SAFETYGUARD_STATE_1)));
+								break;
+							}
+							m_lastState = m_curState;
+							m_visiableG->runAction(m_state);
+						}
+					}
+					else{ //超出保护时间
+						CCLOG("notwork");
+						m_curState = m_maxState; // 让保护罩失效
+						m_visiableG->setVisible(false);
+					}
+				}
+			}
+			break;
 		}
-		else{  //道具冷却时间
+	case MODE_ENDLESS:
+		{
 			m_usedTime += dt;
-			m_pCdTimer->setPercentage((m_cooldownTime - m_usedTime) / m_cooldownTime * 100);
 			if (m_usedTime < m_holdTime){  //在保护罩保护时间内
 				if(m_lastState != m_curState){
 					m_visiableG->stopAllActions();
 					switch (m_maxState - m_curState)
 					{
 					case 3: m_state= RepeatForever::create(Animate::create(AnimationCache::getInstance()->getAnimation(ANIMATION_SAFETYGUARD_STATE_1)));
-							break;
+						break;
 					case 2: m_state= RepeatForever::create(Animate::create(AnimationCache::getInstance()->getAnimation(ANIMATION_SAFETYGUARD_STATE_2)));
-							break;
+						break;
 					case 1: m_state= RepeatForever::create(Animate::create(AnimationCache::getInstance()->getAnimation(ANIMATION_SAFETYGUARD_STATE_3)));
-							break;
+						break;
 					default:m_state= RepeatForever::create(Animate::create(AnimationCache::getInstance()->getAnimation(ANIMATION_SAFETYGUARD_STATE_1)));
-							break;
+						break;
 					}
 					m_lastState = m_curState;
 					m_visiableG->runAction(m_state);
 				}
 			}
 			else{ //超出保护时间
-				CCLOG("notwork");
 				m_curState = m_maxState; // 让保护罩失效
 				m_visiableG->setVisible(false);
 			}
+			break;
 		}
+	default:
+		break;
 	}
 }
 
 bool PropsSafetyGuard::isGuarding()
 {
-	if(!m_canBeUsed && m_curState < m_maxState) //使用了保护罩并且保护罩有效
+	if( m_curState < m_maxState) //使用了保护罩并且保护罩有效
 		return true;
 	else
 		return false;
@@ -289,7 +338,7 @@ int PropsSafetyGuard::setCurState(int damage)
 
 
 //////////////////////////////////////////////////////////////////////////
-PropsLandmine::PropsLandmine(const std::vector<Road>& roads)
+PropsLandmine::PropsLandmine(const std::vector<Road>& roads, Mode mode)
 {
 	m_id = 3;
 	m_sprite = Sprite::create("images/props/propsIcon4.png");
@@ -302,6 +351,7 @@ PropsLandmine::PropsLandmine(const std::vector<Road>& roads)
 	
 	m_landmindcreate->runAction(m_landmineAnimation);
 	m_landmindcreate->setVisible(false);
+	m_mode = mode;
 }
 
 
@@ -315,9 +365,9 @@ PropsLandmine::~PropsLandmine()
 	m_roads.clear();
 }
 
-PropsLandmine* PropsLandmine::createWithRoads(const std::vector<Road>& roads)
+PropsLandmine* PropsLandmine::createWithRoads(const std::vector<Road>& roads, Mode mode)
 {
-	PropsLandmine* prop = new PropsLandmine(roads);
+	PropsLandmine* prop = new PropsLandmine(roads,mode);
 	if(prop && prop->init()){
 		prop->autorelease();
 		return prop;
@@ -374,7 +424,6 @@ void PropsLandmine::touchEndenCallback(Touch* touch, Event* event)
 		m_landmindcreate->setVisible(false);
 	}
 	else{ //使用正确，冷却道具，添加地雷，create消失
-		m_canBeUsed = false;
 		usePropsAndUpdate();
 		m_landmindcreate->setVisible(false);
 		auto landmine = LandMine::create();
@@ -415,31 +464,23 @@ int PropsLandmine::getNumofLandmines()
 
 
 //////////////////////////////////////////////////////////////////////////
-PropsTrap::PropsTrap(const std::vector<Road>& roads)
+PropsTrap::PropsTrap(const std::vector<Road>& roads, Mode mode)
 {
 	m_id = 4;
 	m_sprite = Sprite::create("images/props/propsIcon5.png");
 	this->addChild(m_sprite);
-
-	/*
-	m_trapcreate = Sprite::create();
-	this->addChild(m_trapcreate);
-	m_trapAnimation = RepeatForever::create(Animate::create(
-		AnimationCache::getInstance()->getAnimation(ANIMATION_LANDMINE_CREATE)));
-	m_trapcreate->runAction(m_trapAnimation);
-	m_trapcreate->setVisible(false);
-	*/
 
 	m_trapcreate = Sprite::create("images/props/5.png");
 	this->addChild(m_trapcreate);
 	m_trapcreate->setVisible(false);
 
 	m_roads = roads;
+	m_mode = mode;
 }
 
-PropsTrap* PropsTrap::createWithRoads(const std::vector<Road>& roads)
+PropsTrap* PropsTrap::createWithRoads(const std::vector<Road>& roads, Mode mode)
 {
-	PropsTrap* prop = new PropsTrap(roads);
+	PropsTrap* prop = new PropsTrap(roads,mode);
 	if(prop && prop->init()){
 		prop->autorelease();
 		return prop;
@@ -496,7 +537,6 @@ void PropsTrap::touchEndenCallback(Touch* touch, Event* event)
 	for(std::vector<Road>::iterator it = m_roads.begin(); it != m_roads.end(); it++)
 	{
 		if(it->containsPoint(lastpoint)){ 
-			m_canBeUsed = false;
 			usePropsAndUpdate();
 			auto trap = Trap::createWithmaxState(m_maxState);
 			trap->setPosition(lastpoint);
@@ -506,7 +546,6 @@ void PropsTrap::touchEndenCallback(Touch* touch, Event* event)
 			break;
 		}
 	}
-	//
 	m_trapcreate->setVisible(false);
 }
 
@@ -522,7 +561,6 @@ void PropsTrap::update(float dt)
 		else{
 			m_usedTime += dt;
 			m_pCdTimer->setPercentage((m_cooldownTime - m_usedTime) / m_cooldownTime * 100);
-			////
 		}
 	}
 }
@@ -542,22 +580,22 @@ int PropsTrap::getNumofTraps()
 
 
 //////////////////////////////////////////////////////////////////////////
-PropsAssistGuard::PropsAssistGuard(Vec2 start)
+PropsAssistGuard::PropsAssistGuard(Vec2 start, Mode mode)
 {
 	m_id = 5;
 	m_sprite = Sprite::create("images/props/propsIcon6.png");
 	this->addChild(m_sprite);
-	
 	m_startPoint = start;
+	m_mode = mode;
 }
 
 PropsAssistGuard::~PropsAssistGuard()
 {
 }
 
-PropsAssistGuard* PropsAssistGuard::create(Vec2 start)
+PropsAssistGuard* PropsAssistGuard::create(Vec2 start, Mode mode)
 {
-	PropsAssistGuard* prop = new PropsAssistGuard(start);
+	PropsAssistGuard* prop = new PropsAssistGuard(start, mode);
 	if(prop && prop->init()){
 		prop->autorelease();
 		return prop;
@@ -579,7 +617,6 @@ void PropsAssistGuard::onEnter()
 bool PropsAssistGuard::onTouchCallback(Touch* touch, Event* event)
 {
 	if(m_position.containsPoint(touch->getLocation()) && m_canBeUsed){
-		m_canBeUsed = false;
 		usePropsAndUpdate();
 		addAssistant();
 		return true;
