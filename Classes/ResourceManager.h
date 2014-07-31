@@ -58,6 +58,7 @@ public:
 	HCSVFile * enemyDesc;
 	Texture2D* hpBar;
 	//----------------Props----------------------
+#define TYPE_PROPS 200
 #define TYPE_PROP_RESTOREHP 201
 #define TYPE_PROP_SLOWDOWN 202
 #define TYPE_PROP_SAFETYGUARD 203

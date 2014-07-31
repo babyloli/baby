@@ -75,8 +75,7 @@ public:
 	virtual bool init() override;  
 	static Game* create(int section, int id);
 	Game(int section, int id);
-	
-	/*~Game();*/
+
 	void onEnter() override;
 	void onExit() override;
 	virtual void loadData();
@@ -85,7 +84,7 @@ public:
 	void loadPeople();
 	void loadTower();
 	void loadRoadAndBarriers();
-	void loadEquipmentSlot();
+	virtual void loadEquipmentSlot();
 
 	void menuCloseCallback(cocos2d::Ref* pSender);
 	void menuPhysicsCallback(cocos2d::Ref* pSender);

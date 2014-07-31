@@ -18,9 +18,9 @@ private:
 	Baby* m_bb;
 
 public:
-	 PropsRestoreHp(Baby* bb);
+	 PropsRestoreHp(Baby* bb,Mode mode);
 	~PropsRestoreHp();
-	static PropsRestoreHp* createWithBaby(Baby* bb);
+	static PropsRestoreHp* createWithBaby(Baby* bb, Mode mode);
 
 	void onEnter() override;
 	bool touchCallback(Touch* touch, Event* event);
@@ -38,9 +38,9 @@ class PropsSlowdown : public Props
 private:
 	Vector<Enemy*> m_targets;
 public:
-	PropsSlowdown(const Vector<Enemy*>& emenies);
+	PropsSlowdown(const Vector<Enemy*>& emenies, Mode mode);
 	~PropsSlowdown();
-	static PropsSlowdown* createWithTargets(const Vector<Enemy*>& emenies);
+	static PropsSlowdown* createWithTargets(const Vector<Enemy*>& emenies, Mode mode);
 	
 	void onEnter() override;
 	bool touchCallback(Touch* touch, Event* event);
@@ -69,9 +69,9 @@ public:
 	Rect m_safeGRect;
 
 public:
-	PropsSafetyGuard(Baby* bb);
+	PropsSafetyGuard(Baby* bb, Mode mode);
 	~PropsSafetyGuard();
-	static PropsSafetyGuard* createWithBaby(Baby* bb);
+	static PropsSafetyGuard* createWithBaby(Baby* bb, Mode mode);
 
 	void onEnter() override;
 	bool touchCallback(Touch* touch, Event* event);
@@ -97,8 +97,8 @@ private:
 
 public:
 	~PropsLandmine();
-	PropsLandmine(const std::vector<Road>& roads);
-	static PropsLandmine* createWithRoads(const std::vector<Road>& roads);
+	PropsLandmine(const std::vector<Road>& roads, Mode mode);
+	static PropsLandmine* createWithRoads(const std::vector<Road>& roads, Mode mode);
 
 	void onEnter() override;
 	bool touchBeginCallback(Touch* touch, Event* event);
@@ -129,8 +129,8 @@ private:
 
 public:
 	~PropsTrap();
-	PropsTrap(const std::vector<Road>& roads);
-	static PropsTrap* createWithRoads(const std::vector<Road>& roads);
+	PropsTrap(const std::vector<Road>& roads,Mode mode);
+	static PropsTrap* createWithRoads(const std::vector<Road>& roads, Mode mode);
 
 	void onEnter() override;
 	bool touchBeginCallback(Touch* touch, Event* event);
@@ -153,9 +153,9 @@ private:
 	Vec2 m_startPoint;
 public:
 
-	PropsAssistGuard(Vec2 start);
+	PropsAssistGuard(Vec2 start, Mode mode);
 	~PropsAssistGuard();
-	static PropsAssistGuard* create(Vec2 start);
+	static PropsAssistGuard* create(Vec2 start, Mode mode);
 
 	void onEnter()override;
 	bool onTouchCallback(Touch* touch, Event* event);

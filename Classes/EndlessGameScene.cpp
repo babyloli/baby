@@ -207,6 +207,65 @@ void Endless::loadMousePosition(){
 	}
 }
 
+void Endless::loadEquipmentSlot()
+{
+	Size visibleSize = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
+	auto equipmentslot = GUIReader::getInstance()->widgetFromJsonFile("UI/equipmentSlot_3/equipmentSlot_3.ExportJson");
+	this->addChild(equipmentslot,ZORDER_TOWER);
+
+
+	auto rHpPos = static_cast<Button*>(Helper::seekWidgetByTag(equipmentslot,UI_POSITION_RESTOREHP));
+	auto sdPos = static_cast<Button*>(Helper::seekWidgetByTag(equipmentslot,UI_POSITION_SLOWDOWN));
+	auto sgPos = static_cast<Button*>(Helper::seekWidgetByTag(equipmentslot,UI_POSITION_SAFEGUARD));
+	auto lmPos = static_cast<Button*>(Helper::seekWidgetByTag(equipmentslot,UI_POSITION_LANDMINE));
+	auto trapPos = static_cast<Button*>(Helper::seekWidgetByTag(equipmentslot,UI_POSITION_TRAP));
+	auto atPos = static_cast<Button*>(Helper::seekWidgetByTag(equipmentslot,UI_POSITION_ASSISTGUARD));
+
+	PropsRestoreHp* restoreHpProp =  PropsRestoreHp::createWithBaby(m_baby,MODE_ENDLESS);
+	restoreHpProp->setPosition(rHpPos->getPosition());
+	restoreHpProp->m_position = Rect(restoreHpProp->getPositionX() - 40, restoreHpProp->getPositionY() - 40, 80, 80);
+	restoreHpProp->setTag(TYPE_PROP_RESTOREHP);
+	this->addChild(restoreHpProp,ZORDER_TOWER + 1);
+
+	PropsSlowdown* slowdownProp = PropsSlowdown::createWithTargets(m_enemies,MODE_ENDLESS);
+	slowdownProp->setPosition(sdPos->getPosition());
+	slowdownProp->m_position = Rect(slowdownProp->getPositionX() - 40, slowdownProp->getPositionY() - 40, 80, 80);
+	slowdownProp->setTag(TYPE_PROP_SLOWDOWN);
+	this->addChild(slowdownProp, ZORDER_TOWER + 1);
+
+
+	PropsSafetyGuard* safetyGuardProp = PropsSafetyGuard::createWithBaby(m_baby,MODE_ENDLESS);
+	safetyGuardProp->setPosition(sgPos->getPosition());
+	safetyGuardProp->m_position = Rect(safetyGuardProp->getPositionX() - 40, safetyGuardProp->getPositionY() - 40, 80, 80);
+	safetyGuardProp->setTag(TYPE_PROP_SAFETYGUARD);
+	safetyGuardProp->m_safeGRect = Rect(m_baby->getPositionX() - safetyGuardProp->getSafeGuradSize().width /2 ,
+		m_baby->getPositionY() - safetyGuardProp->getSafeGuradSize().height / 2,
+		safetyGuardProp->getSafeGuradSize().width  ,
+		safetyGuardProp->getSafeGuradSize().height );
+	this->addChild(safetyGuardProp,ZORDER_TOWER + 1);
+
+	PropsLandmine* landmineProp = PropsLandmine::createWithRoads(m_roads,MODE_ENDLESS);
+	landmineProp->setPosition(lmPos->getPosition());
+	landmineProp->m_position = Rect(landmineProp->getPositionX() - 40, landmineProp->getPositionY() - 40, 80 ,80);
+	landmineProp->setTag(TYPE_PROP_LANDMIND);
+	this->addChild(landmineProp, ZORDER_TOWER + 1);
+
+	PropsTrap* trapProp = PropsTrap::createWithRoads(m_roads,MODE_ENDLESS);
+	trapProp->setPosition(trapPos->getPosition());
+	trapProp->m_position = Rect(trapProp->getPositionX() - 40, trapProp->getPositionY() - 40, 80, 80);
+	trapProp->setTag(TYPE_PROP_TRAP);
+	this->addChild(trapProp,ZORDER_TOWER + 1);
+
+	PropsAssistGuard* assistGuardProp = PropsAssistGuard::create(m_assistPosition,MODE_ENDLESS);
+	assistGuardProp->setPosition(atPos->getPosition());
+	assistGuardProp->m_position = Rect(assistGuardProp->getPositionX() - 40, assistGuardProp->getPositionY() - 40, 80, 80);
+	assistGuardProp->setTag(TYPE_PROP_ASSISTGUARD);
+	this->addChild(assistGuardProp, ZORDER_TOWER + 1);
+	
+}
+
 void Endless::addEnemy(float dt)
 {
 	if (!m_isGameOver){ //如果游戏还没结束
@@ -286,6 +345,9 @@ bool Endless::mouseTouchCallback(Touch* touch, Event* event){
 	{
 		mouse->killed();
 		//TODO 得到道具
+		int tag = rand() % 6;
+		auto prop = (Props*)this->getChildByTag(TYPE_PROPS + tag + 1);
+		prop->AndEndlessNumber();
 		return true;
 	}
 	return false;

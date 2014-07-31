@@ -39,7 +39,7 @@ bool Trap::init()
 	this->addChild(m_sprite);
 	m_action = RepeatForever::create(Animate::create((AnimationCache::getInstance()->getAnimation(ANIMATION_TRAP_STATE_1))));
 	m_sprite->runAction(m_action);
-	//m_sprite->setVisible(false);
+	
 	m_curState = 0;
 	return true;
 }
@@ -90,7 +90,6 @@ void Trap::catchEnemy(Enemy* enemy)
 void Trap::destory()
 {
 	m_sprite->stopAction(m_action);
-	//m_sprite->runAction(Animate::create(AnimationCache::getInstance()->getAnimation(ANIMATION_LANDMINE_BOMB)));
 	m_curState = m_maxState;
 }
 
