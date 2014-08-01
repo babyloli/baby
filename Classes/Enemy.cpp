@@ -225,6 +225,14 @@ void Enemy::setPrice(int price){
 	m_price = price;
 }
 
+bool Enemy::getMode(){
+	return m_mode;
+}
+
+void Enemy::setMode(bool b){
+	m_mode = b;
+}
+
 Sprite* Enemy::getEnemy(){
 	return m_sprite;	
 }

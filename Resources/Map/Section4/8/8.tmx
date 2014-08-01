@@ -8,7 +8,7 @@
    eJwNwwc3FgAAAMDPzJY9yqiskGzJLIpQVraQTRkNSkgpMuMnu3vvggKBQLAhhhpmuLeMMNIoo40x1jjjvW2CiSaZbIqpppluhpne8a5ZZptjrve87wPzzLfAQot8aLEllvrIMh9bboWVVlltjbXW+cR6n9pgo00222Krz3xum+2+8KUddvrKLrvt8bVv7LXPfgcc9K1DDjviqGOOO+Gk75xy2hnfO+uc8y646JLLrrjqBz+65robbvrJz37xq1tu+83v7vjDXffc96cH/vK3h/7xr0ce+88TTz3z3Asv/e+V194ABtEoyQ==
   </data>
  </layer>
- <objectgroup name="road" width="16" height="9" visible="0">
+ <objectgroup name="road" width="16" height="9">
   <object x="400" y="80" width="679" height="81">
    <properties>
     <property name="direction" value="right"/>
@@ -35,7 +35,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="tower" width="16" height="9" visible="0">
+ <objectgroup name="tower" width="16" height="9">
   <object x="560" y="160" width="80" height="80">
    <properties>
     <property name="type" value="1,2,3"/>
@@ -87,7 +87,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="barreir" width="16" height="9" visible="0">
+ <objectgroup name="barrier" width="16" height="9">
   <object x="400" y="80" width="720"/>
   <object x="1120" y="80" height="400"/>
   <object x="400" y="480" width="720"/>
@@ -103,5 +103,6 @@
  <objectgroup name="people" width="16" height="9">
   <object name="baby" x="800" y="240" width="80" height="80"/>
   <object name="enemy" x="400" y="80" width="80" height="80"/>
+  <object name="assistant" x="768" y="269" width="30" height="24"/>
  </objectgroup>
 </map>

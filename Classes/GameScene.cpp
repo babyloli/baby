@@ -355,6 +355,7 @@ void Game::loadTower(){
 		std::string type = towerObject.at("type").asString();	//可建的塔的类型
 		std::vector<std::string> types;
 		split(type, ",", &types);
+		int mid = types.size()/2;
 		for (int j = 0; j < types.size(); j++)
 		{
 			int temp = std::atoi(types.at(j).c_str());
@@ -363,7 +364,7 @@ void Game::loadTower(){
 			if (towerItemSprite){
 				auto towerItem = MenuItemTower::create(std::atoi(rm->towerData->getData(temp, 8)), towerItemSprite, towerItemSprite,
 					CC_CALLBACK_1(Game::towerCreateCallback, this, temp, tower, towerId));
-				towerItem->setPosition(Vec2(j * towerItem->getContentSize().width,0));//
+				towerItem->setPosition(Vec2((j - mid) * towerItem->getContentSize().width,0));//
 				menu->addChild(towerItem);
 			}			
 		}

@@ -9,9 +9,9 @@
   </data>
  </layer>
  <objectgroup name="people" width="16" height="9">
-  <object x="160" y="80" width="80" height="80"/>
-  <object x="1120" y="400" width="80" height="80"/>
-  <object x="1081" y="427" width="33" height="33"/>
+  <object name="enemy" x="160" y="80" width="80" height="80"/>
+  <object name="baby" x="1120" y="400" width="80" height="80"/>
+  <object name="assistant" x="1081" y="427" width="33" height="33"/>
  </objectgroup>
  <objectgroup name="barrier" width="16" height="9">
   <object x="160" y="80" width="320"/>

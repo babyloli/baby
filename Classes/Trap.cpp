@@ -70,6 +70,7 @@ void Trap::catchEnemy(Enemy* enemy)
 	m_sprite->stopAllActions();
 
 	enemy->setSpeed(0);
+	enemy->setMode(false);
 	m_targets.pushBack(enemy);
 	m_curState++;
 

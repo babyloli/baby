@@ -60,6 +60,8 @@ public:
 	void setRoad(Road* road);
 	int getPrice();
 	void setPrice(int price);
+	bool getMode();
+	void setMode(bool b);
 	virtual Sprite* getEnemy();
 };
 #endif
