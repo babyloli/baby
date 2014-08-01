@@ -1,0 +1,411 @@
+{
+  "classname": "CCNode",
+  "name": null,
+  "canedit": true,
+  "objecttag": 10000,
+  "rotation": 0,
+  "scalex": 1,
+  "scaley": 1,
+  "visible": 1,
+  "x": 0,
+  "y": 0,
+  "zorder": 1,
+  "gameobjects": [
+    {
+      "__type": "ComGameObjectSurrogate:#EditorCommon.JsonModel",
+      "classname": "CCNode",
+      "name": null,
+      "canedit": true,
+      "objecttag": 500,
+      "rotation": 0,
+      "scalex": 1,
+      "scaley": 1,
+      "visible": 1,
+      "x": -0.00018310546875,
+      "y": -1.78582763671875,
+      "zorder": 1,
+      "gameobjects": [],
+      "components": [
+        {
+          "__type": "ComGUIAdapterSurrogate:#EditorCommon.JsonModel.Component",
+          "classname": "GUIComponent",
+          "name": "GUIComponent",
+          "file": null,
+          "fileData": {
+            "path": "UI/GameOver_success_1/GameOver_success_1.ExportJson",
+            "plistFile": "",
+            "resourceType": 0
+          }
+        }
+      ]
+    },
+    {
+      "__type": "ComGameObjectSurrogate:#EditorCommon.JsonModel",
+      "classname": "CCNode",
+      "name": null,
+      "canedit": true,
+      "objecttag": 499,
+      "rotation": 0,
+      "scalex": 1,
+      "scaley": 1,
+      "visible": 1,
+      "x": 480.99990844726562,
+      "y": 381.2142333984375,
+      "zorder": 1,
+      "gameobjects": [
+        {
+          "__type": "ComGameObjectSurrogate:#EditorCommon.JsonModel",
+          "classname": "CCNode",
+          "name": null,
+          "canedit": true,
+          "objecttag": 10005,
+          "rotation": 0,
+          "scalex": 1,
+          "scaley": 1,
+          "visible": 1,
+          "x": 0,
+          "y": 0,
+          "zorder": 1,
+          "gameobjects": [],
+          "components": [
+            {
+              "__type": "ComSpriteSurrogate:#EditorCommon.JsonModel.Component",
+              "classname": "CCSprite",
+              "name": "CCSprite",
+              "file": null,
+              "fileData": {
+                "path": "UI/GameOver_Win_1/gameover_v3/p1.png",
+                "plistFile": "",
+                "resourceType": 0
+              }
+            }
+          ]
+        }
+      ],
+      "components": [
+        {
+          "__type": "ComSpriteSurrogate:#EditorCommon.JsonModel.Component",
+          "classname": "CCSprite",
+          "name": "CCSprite",
+          "file": null,
+          "fileData": {
+            "path": "",
+            "plistFile": "",
+            "resourceType": 0
+          }
+        }
+      ]
+    },
+    {
+      "__type": "ComGameObjectSurrogate:#EditorCommon.JsonModel",
+      "classname": "CCNode",
+      "name": null,
+      "canedit": true,
+      "objecttag": 501,
+      "rotation": 0,
+      "scalex": 1,
+      "scaley": 1,
+      "visible": 1,
+      "x": 664.99993896484375,
+      "y": 423.21426391601562,
+      "zorder": 1,
+      "gameobjects": [
+        {
+          "__type": "ComGameObjectSurrogate:#EditorCommon.JsonModel",
+          "classname": "CCNode",
+          "name": null,
+          "canedit": true,
+          "objecttag": 10014,
+          "rotation": 0,
+          "scalex": 1,
+          "scaley": 1,
+          "visible": 1,
+          "x": 0,
+          "y": -6,
+          "zorder": 1,
+          "gameobjects": [],
+          "components": [
+            {
+              "__type": "ComSpriteSurrogate:#EditorCommon.JsonModel.Component",
+              "classname": "CCSprite",
+              "name": "CCSprite",
+              "file": null,
+              "fileData": {
+                "path": "UI/GameOver_Win_1/gameover_v3/[S_Heart].png",
+                "plistFile": "",
+                "resourceType": 0
+              }
+            }
+          ]
+        }
+      ],
+      "components": [
+        {
+          "__type": "ComSpriteSurrogate:#EditorCommon.JsonModel.Component",
+          "classname": "CCSprite",
+          "name": "CCSprite",
+          "file": null,
+          "fileData": {
+            "path": "",
+            "plistFile": "",
+            "resourceType": 0
+          }
+        }
+      ]
+    },
+    {
+      "__type": "ComGameObjectSurrogate:#EditorCommon.JsonModel",
+      "classname": "CCNode",
+      "name": null,
+      "canedit": true,
+      "objecttag": 502,
+      "rotation": 0,
+      "scalex": 1,
+      "scaley": 1,
+      "visible": 1,
+      "x": 767.7271728515625,
+      "y": 417.21426391601562,
+      "zorder": 1,
+      "gameobjects": [
+        {
+          "__type": "ComGameObjectSurrogate:#EditorCommon.JsonModel",
+          "classname": "CCNode",
+          "name": null,
+          "canedit": true,
+          "objecttag": 10010,
+          "rotation": 0,
+          "scalex": 1,
+          "scaley": 1,
+          "visible": 1,
+          "x": 0,
+          "y": 0,
+          "zorder": 1,
+          "gameobjects": [],
+          "components": [
+            {
+              "__type": "ComSpriteSurrogate:#EditorCommon.JsonModel.Component",
+              "classname": "CCSprite",
+              "name": "CCSprite",
+              "file": null,
+              "fileData": {
+                "path": "UI/GameOver_Win_1/gameover_v3/[S_Heart].png",
+                "plistFile": "",
+                "resourceType": 0
+              }
+            }
+          ]
+        }
+      ],
+      "components": [
+        {
+          "__type": "ComSpriteSurrogate:#EditorCommon.JsonModel.Component",
+          "classname": "CCSprite",
+          "name": "CCSprite",
+          "file": null,
+          "fileData": {
+            "path": "",
+            "plistFile": "",
+            "resourceType": 0
+          }
+        }
+      ]
+    },
+    {
+      "__type": "ComGameObjectSurrogate:#EditorCommon.JsonModel",
+      "classname": "CCNode",
+      "name": null,
+      "canedit": true,
+      "objecttag": 503,
+      "rotation": 0,
+      "scalex": 1,
+      "scaley": 1,
+      "visible": 1,
+      "x": 870.81817626953125,
+      "y": 413.75973510742188,
+      "zorder": 1,
+      "gameobjects": [
+        {
+          "__type": "ComGameObjectSurrogate:#EditorCommon.JsonModel",
+          "classname": "CCNode",
+          "name": null,
+          "canedit": true,
+          "objecttag": 10011,
+          "rotation": 0,
+          "scalex": 1,
+          "scaley": 1,
+          "visible": 1,
+          "x": 0,
+          "y": 0,
+          "zorder": 1,
+          "gameobjects": [],
+          "components": [
+            {
+              "__type": "ComSpriteSurrogate:#EditorCommon.JsonModel.Component",
+              "classname": "CCSprite",
+              "name": "CCSprite",
+              "file": null,
+              "fileData": {
+                "path": "UI/GameOver_Win_1/gameover_v3/[S_Heart].png",
+                "plistFile": "",
+                "resourceType": 0
+              }
+            }
+          ]
+        }
+      ],
+      "components": [
+        {
+          "__type": "ComSpriteSurrogate:#EditorCommon.JsonModel.Component",
+          "classname": "CCSprite",
+          "name": "CCSprite",
+          "file": null,
+          "fileData": {
+            "path": "",
+            "plistFile": "",
+            "resourceType": 0
+          }
+        }
+      ]
+    },
+    {
+      "__type": "ComGameObjectSurrogate:#EditorCommon.JsonModel",
+      "classname": "CCNode",
+      "name": null,
+      "canedit": true,
+      "objecttag": 10020,
+      "rotation": 0,
+      "scalex": 1,
+      "scaley": 1,
+      "visible": 1,
+      "x": 774.5985107421875,
+      "y": 314.26742553710938,
+      "zorder": 1,
+      "gameobjects": [
+        {
+          "__type": "ComGameObjectSurrogate:#EditorCommon.JsonModel",
+          "classname": "CCNode",
+          "name": null,
+          "canedit": true,
+          "objecttag": 10021,
+          "rotation": 0,
+          "scalex": 1,
+          "scaley": 1,
+          "visible": 1,
+          "x": 0,
+          "y": 0,
+          "zorder": 1,
+          "gameobjects": [],
+          "components": [
+            {
+              "__type": "ComSpriteSurrogate:#EditorCommon.JsonModel.Component",
+              "classname": "CCSprite",
+              "name": "CCSprite",
+              "file": null,
+              "fileData": {
+                "path": "UI/GameOver_Win_1/gameover_v3/numberx.png",
+                "plistFile": "",
+                "resourceType": 0
+              }
+            }
+          ]
+        }
+      ],
+      "components": [
+        {
+          "__type": "ComSpriteSurrogate:#EditorCommon.JsonModel.Component",
+          "classname": "CCSprite",
+          "name": "CCSprite",
+          "file": null,
+          "fileData": {
+            "path": "",
+            "plistFile": "",
+            "resourceType": 0
+          }
+        }
+      ]
+    },
+    {
+      "__type": "ComGameObjectSurrogate:#EditorCommon.JsonModel",
+      "classname": "CCNode",
+      "name": null,
+      "canedit": true,
+      "objecttag": 504,
+      "rotation": 0,
+      "scalex": 1,
+      "scaley": 1,
+      "visible": 1,
+      "x": 832.84844970703125,
+      "y": 314.8089599609375,
+      "zorder": 1,
+      "gameobjects": [
+        {
+          "__type": "ComGameObjectSurrogate:#EditorCommon.JsonModel",
+          "classname": "CCNode",
+          "name": null,
+          "canedit": true,
+          "objecttag": 10026,
+          "rotation": 0,
+          "scalex": 1,
+          "scaley": 1,
+          "visible": 1,
+          "x": 0,
+          "y": 0,
+          "zorder": 1,
+          "gameobjects": [],
+          "components": [
+            {
+              "__type": "ComSpriteSurrogate:#EditorCommon.JsonModel.Component",
+              "classname": "CCSprite",
+              "name": "CCSprite",
+              "file": null,
+              "fileData": {
+                "path": "UI/GameOver_Win_1/gameover_v3/3.png",
+                "plistFile": "",
+                "resourceType": 0
+              }
+            }
+          ]
+        }
+      ],
+      "components": [
+        {
+          "__type": "ComSpriteSurrogate:#EditorCommon.JsonModel.Component",
+          "classname": "CCSprite",
+          "name": "CCSprite",
+          "file": null,
+          "fileData": {
+            "path": "",
+            "plistFile": "",
+            "resourceType": 0
+          }
+        }
+      ]
+    }
+  ],
+  "CanvasSize": {
+    "_height": 720,
+    "_width": 1280
+  },
+  "Triggers": null,
+  "Version": "1.5.0.0",
+  "components": [
+    {
+      "__type": "ComSceneSurrogate:#EditorCommon.JsonModel.Component",
+      "classname": "CCScene",
+      "name": "CCScene",
+      "scenename": "GameOver_win"
+    },
+    {
+      "__type": "ComSimpleAudioSurrogate:#EditorCommon.JsonModel.Component",
+      "classname": "CCBackgroundAudio",
+      "name": "CCBackgroundAudio",
+      "file": null,
+      "fileData": {
+        "path": null,
+        "plistFile": null,
+        "resourceType": 0
+      },
+      "loop": 0
+    }
+  ]
+}

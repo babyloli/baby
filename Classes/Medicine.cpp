@@ -276,7 +276,6 @@ void PropsSafetyGuard::update(float dt)
 						}
 					}
 					else{ //超出保护时间
-						CCLOG("notwork");
 						m_curState = m_maxState; // 让保护罩失效
 						m_visiableG->setVisible(false);
 					}

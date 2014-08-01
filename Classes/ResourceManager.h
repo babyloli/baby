@@ -101,6 +101,8 @@ public:
 #define PATH_TOWERBASE "images/tower/towerbase.png"
 #define NUM_SECTIONS 4
 #define ANIMATION_MOUSE "animation_mouse"
+#define ANIMAITON_WIN "animation_win"
+#define ANIMATION_FAIL "animation_fail"
 #define TILESIZE 80
 	HCSVFile* sections;
 	Texture2D* background_price;

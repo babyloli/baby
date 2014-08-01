@@ -7,6 +7,23 @@
 #include <time.h>
 USING_NS_CC;
 
+const int UI_BUTTON_FAIL_RETURN = 171; 
+const int UI_BUTTON_FAIL_REPLAY = 172;
+const int UI_BUTTON_FAIL_SHOP = 173;
+
+const int UI_PANNL_SUCCESS = 408;
+const int UI_BUTTON_SUCCESS_RETURN = 411;
+const int UI_BUTTON_SUCCESS_REPLAY = 412;
+const int UI_BUTTON_SUCCESS_NEXT = 413;
+const int UI_BUTTON_SUCCESS_SHOP = 414;
+
+const int VICTORY_PANNEL = 500;
+const int VICTORY_SPRITE = 499;
+const int VICTORY_HEART_1 = 501;
+const int VICTORY_HEART_2 = 502;
+const int VICTORY_HEART_3 = 503;
+const int VICTORY_GOLD_NUMBER = 504;
+
 Game::Game(int section, int id)
 {
 	m_section = section;
@@ -732,106 +749,85 @@ void Game::deleteObject(float dt){
 }
 
 void Game::gameOver(bool isWin){
-	auto listener1 = EventListenerTouchOneByOne::create();//创建一个触摸监听    
-	listener1->setSwallowTouches(true);//设置不想向下传递触摸  true是不想 默认为false  
-	listener1->onTouchBegan = [](Touch* touch, Event* event){   
-		return true;   
-	};    
-	listener1->onTouchMoved = [](Touch* touch, Event* event){      
-	};    
-	listener1->onTouchEnded = [](Touch* touch, Event* event){    
-	};
-	this->_eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, m_modalNode);
+
 	m_modalNode->setVisible(true); //黑色那层
 
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	
-	Sprite* sprite = NULL;
-	if (isWin){
-		sprite = Sprite::create("youWin.png");
+// 	Sprite* sprite = NULL;
+// 	if (isWin){
+// 		sprite = Sprite::create("youWin.png");
+// 	}
+// 	else
+// 	{
+// 		sprite = Sprite::create("youFail.png");
+// 	}
+// 	if (sprite){
+// 		auto action = EaseBounceOut::create(MoveTo::create(0.3f, Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2)));
+// 		sprite->setPosition(Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height));
+// 		this->addChild(sprite, ZORDER_TEXT);
+// 		sprite->runAction(action);
+// 	}
+	if(isWin){
+		failGame();
 	}
-	else
-	{
-		sprite = Sprite::create("youFail.png");
-	}
-	if (sprite){
-		auto action = EaseBounceOut::create(MoveTo::create(0.3f, Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2)));
-		sprite->setPosition(Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height));
-		this->addChild(sprite, ZORDER_TEXT);
-		sprite->runAction(action);
+	else{
+		victoryGame();
 	}
 
-	if (isWin){
-		auto toolbar = this->getChildByTag(10004)->getChildByTag(300);
-		this->_eventDispatcher->removeEventListenersForTarget(m_pauseBtn);
-		this->_eventDispatcher->removeEventListenersForTarget(m_playBtn);
-		auto next = Sprite::create("UI/GameMune.psd_Psd.Dir/next.png");
-		next->setPosition(toolbar->getChildByTag(301)->getPosition());
-		toolbar->addChild(next, 2);
-		auto listener2 = EventListenerTouchOneByOne::create();//创建一个触摸监听    
-		listener2->setSwallowTouches(true);//设置不想向下传递触摸  true是不想 默认为false  
-		listener2->onTouchBegan = [next, this](Touch* touch, Event* event){
-			Rect rect = next->getTextureRect();
-			auto target = event->getCurrentTarget();
-			Vec2 point = target->convertTouchToNodeSpace(touch);
-			if (rect.containsPoint(point)){
-				//跳到下一关
-				int rows = ResourceManager::getInstance()->sections[m_section-1].getRows();
-				m_id++;
-				if (m_id >= rows)//这个section清完了
-				{
-					m_section++;
-					if (m_section >= NUM_SECTIONS) //整个游戏通关了
-					{
-						if(ResourceManager::getInstance()->isBackgroundMusicAllow()){
-							CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
-							CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("music/MenuBackgroundMusic.mp3",true);
-						}
-
-						auto scene = ISectionSelector::createScene();
-						Director::getInstance()->replaceScene(scene);
-					}
-					else	//下一个section的第一关(if any)
-					{
-						if (ResourceManager::getInstance()->sections[m_section-1].getRows() > 0){
-							auto scene = Game::createScene(m_section, 0);
-							Director::getInstance()->replaceScene(scene);
-						}
-						else
-						{
-							if(ResourceManager::getInstance()->isBackgroundMusicAllow()){
-								CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
-								CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("music/MenuBackgroundMusic.mp3",true);
-							}
-
-							auto scene = ISectionSelector::createScene();
-							Director::getInstance()->replaceScene(scene);
-						}
-					}
-				}
-				else //跳到这个section的下一关
-				{
-					auto scene = Game::createScene(m_section, m_id);
-					Director::getInstance()->replaceScene(scene);
-				}
-
-				return true;
-			}
-			return false;   
-		};
-		this->_eventDispatcher->addEventListenerWithSceneGraphPriority(listener2, next);
-	}	
 }
 
 void Game::victoryGame()
 {
-	//Sprite* mysprie = Sprite::createWithSpriteFrame();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	Size visibleSize = Director::getInstance()->getVisibleSize();
+
+	//所有关都通过后跳另外的场景！
+
+	auto node = cocostudio::SceneReader::getInstance()->createNodeWithSceneFile("UI/GameOver_Win_1/GameOver_win.json");
+	if(node){
+		node->setPosition(node->getPositionX(),node->getPositionY() - 15);
+		this->addChild(node,ZORDER_MENU);
+	}
+	auto render = static_cast<ComRender*>(node->getChildByTag(VICTORY_PANNEL)->getComponent("GUIComponent"));
+	auto widget = static_cast<Widget*>(render->getNode());
+	
+	auto returnButton = static_cast<Button*>(widget->getChildByTag(UI_BUTTON_SUCCESS_RETURN));
+	auto replayButton = static_cast<Button*>(widget->getChildByTag(UI_BUTTON_SUCCESS_REPLAY));
+	auto nextButton = static_cast<Button*>(widget->getChildByTag(UI_BUTTON_SUCCESS_NEXT));
+	auto shopButton = static_cast<Button*>(widget->getChildByTag(UI_BUTTON_SUCCESS_SHOP));
+
+	returnButton->addTouchEventListener(this,toucheventselector(Game::onTouchWinPage));
+	replayButton->addTouchEventListener(this,toucheventselector(Game::onTouchWinPage));
+	nextButton->addTouchEventListener(this,toucheventselector(Game::onTouchWinPage));
+	shopButton->addTouchEventListener(this,toucheventselector(Game::onTouchWinPage));
+
+	//auto winAction = RepeatForever::create(Animate::create(AnimationCache::getInstance()->getAnimation(ANIMAITON_WIN)));
+
 }
 
 void Game::failGame()
 {
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	Size visibleSize = Director::getInstance()->getVisibleSize();
 
+	auto failUI = GUIReader::getInstance()->widgetFromJsonFile("UI/GamOver_Fail_1/GamOver_Fail_1.ExportJson");
+	this->addChild(failUI,ZORDER_MENU);
+
+	auto failSprite = Sprite::create();
+	auto failAction = RepeatForever::create(Animate::create(AnimationCache::getInstance()->getAnimation(ANIMATION_FAIL)));
+	failSprite->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height /2 + 75);
+	failSprite->runAction(failAction);
+	this->addChild(failSprite,ZORDER_TEXT);
+
+	auto returnButton = static_cast<Button*>(Helper::seekWidgetByTag(failUI,UI_BUTTON_FAIL_RETURN));
+	auto replayButton = static_cast<Button*>(Helper::seekWidgetByTag(failUI,UI_BUTTON_FAIL_REPLAY));
+	auto shopButton = static_cast<Button*>(Helper::seekWidgetByTag(failUI,UI_BUTTON_FAIL_SHOP));
+
+	returnButton->addTouchEventListener(this, toucheventselector(Game::onTouchFailPage));
+	replayButton->addTouchEventListener(this, toucheventselector(Game::onTouchFailPage));
+	shopButton->addTouchEventListener(this, toucheventselector(Game::onTouchFailPage));
 }
 
 void Game::meetTraps(float dt)
@@ -1056,12 +1052,92 @@ void Game::towerDeleteCallback(cocos2d::Ref* pSender, int towerId, Sprite* tower
 
 void Game::onTouchWinPage(Object* pSender, TouchEventType type)
 {
-
+	int tag = (static_cast<Button*>(pSender))->getTag();
+	switch (type)
+	{
+	case TOUCH_EVENT_ENDED:
+		{
+			switch (tag)
+			{
+			case UI_BUTTON_SUCCESS_RETURN:
+				{
+					auto s = IGameLevelSelector::createScene(m_section);
+					Director::getInstance()->replaceScene(s);
+					Director::getInstance()->resume();
+					break;
+				}
+			case UI_BUTTON_SUCCESS_REPLAY:
+				{
+					auto s = Game::createScene(m_section,m_id);
+					Director::getInstance()->replaceScene(s);
+					Director::getInstance()->resume();
+					break;
+				}
+			case UI_BUTTON_SUCCESS_NEXT:
+				{
+					int sum = ResourceManager::getInstance()->sections[m_section-1].getRows();
+					if(m_id < sum - 1){
+						auto s = Game::createScene(m_section,m_id+1);
+						Director::getInstance()->replaceScene(s);
+					}
+					else{
+						auto s = Game::createScene(m_section,1);
+						Director::getInstance()->replaceScene(s);
+					}
+					Director::getInstance()->resume();
+					break;
+				}
+			case UI_BUTTON_SUCCESS_SHOP:
+				{
+					auto shop = IShop::create();
+					this->addChild(shop,ZORDER_TEXT);
+					break;
+				}
+			default:
+				break;
+			}
+			break;
+		}
+	default:
+		break;
+	}
 }
 
 void Game::onTouchFailPage(Object* pSender, TouchEventType type)
 {
-
+	int tag = (static_cast<Button*>(pSender))->getTag();
+	switch (type)
+	{
+	case TOUCH_EVENT_ENDED:
+		switch (tag)
+		{
+		case UI_BUTTON_FAIL_RETURN:
+			{
+				auto s = IGameLevelSelector::createScene(m_section);
+				Director::getInstance()->replaceScene(s);
+				Director::getInstance()->resume();
+				break;
+			}
+		case UI_BUTTON_FAIL_REPLAY:
+			{
+				auto scene = Game::createScene(m_section, m_id);
+				Director::getInstance()->replaceScene(scene);
+				Director::getInstance()->resume();
+				break;
+			}
+		case UI_BUTTON_FAIL_SHOP:
+			{
+				auto shop = IShop::create();
+				this->addChild(shop, ZORDER_TEXT + 1);
+				break;
+			}
+		default:
+			break;
+		}
+		break;
+	default:
+		break;
+	}
 }
 
 //------------------get/sets-----------------------------
