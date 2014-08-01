@@ -877,9 +877,6 @@ void Game::meetTraps(float dt)
 				if(trap->m_position.containsPoint(enemy->getPosition())){
 
 					trap->catchEnemy(enemy);
-					if(enemy->getSpeed() == 0){
-						CCLOG("stop");
-					}
 				}
 			}
 			//if(!trap->isContainable())
