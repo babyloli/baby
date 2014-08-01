@@ -117,7 +117,7 @@ void Props::AndEndlessNumber()
 {
 	if(m_mode == MODE_ENDLESS){
 		m_count++;
-		m_number->setString(std::to_string(m_count));
+		m_number->setString(itos(m_count));
 		if(m_count > 0){
 			m_sprite->setVisible(true);
 			m_notebg->setVisible(true);
