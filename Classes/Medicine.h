@@ -37,6 +37,7 @@ class PropsSlowdown : public Props
 {
 private:
 	Vector<Enemy*> m_targets;
+	bool m_isUsing;
 public:
 	PropsSlowdown(const Vector<Enemy*>& emenies, Mode mode);
 	~PropsSlowdown();

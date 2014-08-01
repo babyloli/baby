@@ -738,7 +738,7 @@ void Game::gameOver(bool isWin){
 	listener1->onTouchEnded = [](Touch* touch, Event* event){    
 	};
 	this->_eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, m_modalNode);
-	m_modalNode->setVisible(true);
+	m_modalNode->setVisible(true); //ºÚÉ«ÄÇ²ã
 
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -820,6 +820,16 @@ void Game::gameOver(bool isWin){
 	}	
 }
 
+void Game::victoryGame()
+{
+	//Sprite* mysprie = Sprite::createWithSpriteFrame();
+}
+
+void Game::failGame()
+{
+
+}
+
 void Game::meetTraps(float dt)
 {
 	PropsLandmine* landmines = (PropsLandmine*)this->getChildByTag(TYPE_PROP_LANDMIND);
@@ -870,11 +880,7 @@ void Game::meetTraps(float dt)
 			{
 				Enemy* enemy = m_enemies.at(j);
 				if(trap->m_position.containsPoint(enemy->getPosition())){
-
 					trap->catchEnemy(enemy);
-					if(enemy->getSpeed() == 0){
-						CCLOG("stop");
-					}
 				}
 			}
 			//if(!trap->isContainable())
@@ -1043,6 +1049,16 @@ void Game::towerDeleteCallback(cocos2d::Ref* pSender, int towerId, Sprite* tower
 	this->m_towers.eraseObject(tower);
 }
 
+
+void Game::onTouchWinPage(Object* pSender, TouchEventType type)
+{
+
+}
+
+void Game::onTouchFailPage(Object* pSender, TouchEventType type)
+{
+
+}
 
 //------------------get/sets-----------------------------
 

@@ -73,6 +73,7 @@ PropsSlowdown::PropsSlowdown(const Vector<Enemy*>& emenies, Mode mode)
 	m_sprite = Sprite::create("images/props/propsIcon2.png");
 	this->addChild(m_sprite);
 	m_mode = mode;
+	m_isUsing = false;
 }
 
 PropsSlowdown::~PropsSlowdown()
@@ -104,6 +105,7 @@ void PropsSlowdown::onEnter()
 bool PropsSlowdown::touchCallback(Touch* touch, Event* event)
 {
 	if (m_position.containsPoint(touch->getLocation()) && m_canBeUsed){
+		m_isUsing = true;
 		usePropsAndUpdate();
 		for(int i = 0; i < m_targets.size(); i++)
 		{
@@ -137,22 +139,26 @@ void PropsSlowdown::update(float dt)
 						enemy->setSpeed(enemy->getOriginSpeed());
 						m_targets.erase(i);
 					}
+					m_isUsing  = false;
 				}
 			}
 		}
 		break;
 					 }
 	case  MODE_ENDLESS:{
-		if(m_usedTime >= m_holdTime){
-			for(int i = 0; i < m_targets.size(); i++)
-			{
-				Enemy* enemy = m_targets.at(i);
-				enemy->setSpeed(enemy->getOriginSpeed());
-				m_targets.erase(i);
+		if(m_isUsing){
+			if(m_usedTime >= m_holdTime){
+				for(int i = 0; i < m_targets.size(); i++)
+				{
+					Enemy* enemy = m_targets.at(i);
+					enemy->setSpeed(enemy->getOriginSpeed());
+					m_targets.erase(i);
+				}
+				m_isUsing = false;
 			}
-		}
-		else{
-			m_usedTime += dt;
+			else{
+				m_usedTime += dt;
+			}
 		}
 		break;
 					   }

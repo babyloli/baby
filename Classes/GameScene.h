@@ -102,6 +102,8 @@ public:
 	void update(float dt);
 
 	void gameOver(bool isWin);
+	void victoryGame();
+	void failGame();
 
 	void setPhysicsWorld(PhysicsWorld* world);
 	void addMoney(int money);
@@ -109,5 +111,8 @@ public:
 	void addBullet(Bullet* bullet);
 	Vector<FiniteTimeAction*>& getActionsAssistant();
 	Vector<Assistant*>& getAssistants();
+private:
+	void onTouchWinPage(Object* pSender, TouchEventType type);
+	void onTouchFailPage(Object* pSender, TouchEventType type);
 };
 #endif
