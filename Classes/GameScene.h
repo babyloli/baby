@@ -79,6 +79,7 @@ public:
 	void onEnter() override;
 	void onExit() override;
 	virtual void loadData();
+	virtual void loadMap();
 	void loadMenu();
 	virtual void loadToolBar();
 	void loadPeople();

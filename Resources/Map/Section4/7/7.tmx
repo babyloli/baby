@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="16" height="9" tilewidth="80" tileheight="80">
+ <tileset firstgid="1" name="7" tilewidth="80" tileheight="80">
+  <image source="7.png" width="1280" height="720"/>
+ </tileset>
+ <layer name="块层 1" width="16" height="9">
+  <data encoding="base64" compression="zlib">
+   eJwNwwc3FgAAAMDPzJY9yqiskGzJLIpQVraQTRkNSkgpMuMnu3vvggKBQLAhhhpmuLeMMNIoo40x1jjjvW2CiSaZbIqpppluhpne8a5ZZptjrve87wPzzLfAQot8aLEllvrIMh9bboWVVlltjbXW+cR6n9pgo00222Krz3xum+2+8KUddvrKLrvt8bVv7LXPfgcc9K1DDjviqGOOO+Gk75xy2hnfO+uc8y646JLLrrjqBz+65robbvrJz37xq1tu+83v7vjDXffc96cH/vK3h/7xr0ce+88TTz3z3Asv/e+V194ABtEoyQ==
+  </data>
+ </layer>
+ <objectgroup name="road" width="16" height="9" visible="0">
+  <object x="480" y="80" width="521" height="80">
+   <properties>
+    <property name="direction" value="right"/>
+   </properties>
+  </object>
+  <object x="960" y="80" width="79" height="196">
+   <properties>
+    <property name="direction" value="down"/>
+   </properties>
+  </object>
+  <object x="919" y="241" width="120" height="80">
+   <properties>
+    <property name="direction" value="left"/>
+   </properties>
+  </object>
+  <object x="880" y="240" width="79" height="124">
+   <properties>
+    <property name="direction" value="down"/>
+   </properties>
+  </object>
+  <object x="835" y="320" width="123" height="80">
+   <properties>
+    <property name="direction" value="left"/>
+   </properties>
+  </object>
+  <object x="800" y="320" width="79" height="123">
+   <properties>
+    <property name="direction" value="down"/>
+   </properties>
+  </object>
+  <object x="753" y="400" width="124" height="79">
+   <properties>
+    <property name="direction" value="left"/>
+   </properties>
+  </object>
+  <object x="720" y="400" width="79" height="121">
+   <properties>
+    <property name="direction" value="down"/>
+   </properties>
+  </object>
+  <object x="673" y="481" width="125" height="80">
+   <properties>
+    <property name="direction" value="left"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="tower" width="16" height="9">
+  <object x="1040" y="160" width="80" height="80">
+   <properties>
+    <property name="direction" value="1,2,3,4"/>
+   </properties>
+  </object>
+  <object x="560" y="160" width="80" height="80">
+   <properties>
+    <property name="type" value="5,6,7,8"/>
+   </properties>
+  </object>
+  <object x="880" y="160" width="80" height="80">
+   <properties>
+    <property name="type" value="0,2,4,6"/>
+   </properties>
+  </object>
+  <object x="880" y="400" width="80" height="80">
+   <properties>
+    <property name="type" value="8,2,5,0"/>
+   </properties>
+  </object>
+  <object x="800" y="480" width="80" height="80">
+   <properties>
+    <property name="type" value="4,6,7,2"/>
+   </properties>
+  </object>
+  <object x="640" y="320" width="80" height="80">
+   <properties>
+    <property name="type" value="2,7,8,0"/>
+   </properties>
+  </object>
+  <object x="720" y="560" width="80" height="80">
+   <properties>
+    <property name="type" value="2,4,5,7"/>
+   </properties>
+  </object>
+  <object x="1040" y="320" width="80" height="80">
+   <properties>
+    <property name="type" value="1,6,7,8"/>
+   </properties>
+  </object>
+  <object x="640" y="160" width="80" height="80">
+   <properties>
+    <property name="type" value="0,4,6,8"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="barrier" width="16" height="9" visible="0">
+  <object x="480" y="80" width="560"/>
+  <object x="1040" y="80" height="240"/>
+  <object x="960" y="320" width="80"/>
+  <object x="960" y="320" height="80"/>
+  <object x="880" y="400" width="80"/>
+  <object x="880" y="400" height="80"/>
+  <object x="800" y="480" width="80"/>
+  <object x="800" y="480" height="80"/>
+  <object x="560" y="560" width="240"/>
+  <object x="560" y="480" width="160"/>
+  <object x="720" y="400" height="80"/>
+  <object x="720" y="400" width="80"/>
+  <object x="800" y="320" height="80"/>
+  <object x="800" y="320" width="80"/>
+  <object x="880" y="240" height="80"/>
+  <object x="880" y="240" width="80"/>
+  <object x="960" y="160" height="80"/>
+  <object x="480" y="160" width="480"/>
+  <object x="480" y="80" height="80"/>
+ </objectgroup>
+ <objectgroup name="people" width="16" height="9">
+  <object name="baby" x="560" y="480" width="80" height="80"/>
+  <object name="enemy" x="480" y="80" width="80" height="80"/>
+ </objectgroup>
+</map>
