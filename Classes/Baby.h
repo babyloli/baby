@@ -26,6 +26,7 @@ public:
 	bool touchCallback(Touch* touch, Event* event);
 	
 	void restoreHealth();
+	int getHp(){return m_hp;};
 };
 
 #endif

@@ -4,37 +4,18 @@
 	<dict>
 		<key>frames</key>
 		<dict>
-			<key>EquipmentSlot_v2_4.psd_Psd.Dir/[signal].png</key>
+			<key>sectionselect_v2.psd_Psd.Dir/young_dark.png</key>
 			<dict>
 				<key>width</key>
-				<integer>131</integer>
+				<integer>386</integer>
 				<key>height</key>
-				<integer>116</integer>
+				<integer>271</integer>
 				<key>originalWidth</key>
-				<integer>131</integer>
+				<integer>386</integer>
 				<key>originalHeight</key>
-				<integer>116</integer>
+				<integer>271</integer>
 				<key>x</key>
 				<integer>0</integer>
-				<key>y</key>
-				<integer>0</integer>
-				<key>offsetX</key>
-				<real>0</real>
-				<key>offsetY</key>
-				<real>0</real>
-			</dict>
-			<key>EquipmentSlot_v2_3.psd_Psd.Dir/[HeartIcon_dark].png</key>
-			<dict>
-				<key>width</key>
-				<integer>95</integer>
-				<key>height</key>
-				<integer>87</integer>
-				<key>originalWidth</key>
-				<integer>95</integer>
-				<key>originalHeight</key>
-				<integer>87</integer>
-				<key>x</key>
-				<integer>133</integer>
 				<key>y</key>
 				<integer>0</integer>
 				<key>offsetX</key>
@@ -48,9 +29,9 @@
 			<key>format</key>
 			<integer>0</integer>
 			<key>textureFileName</key>
-			<string>equipmentSlot_20.png</string>
+			<string>sectionSelect1.png</string>
 			<key>realTextureFileName</key>
-			<string>equipmentSlot_20.png</string>
+			<string>sectionSelect1.png</string>
 			<key>size</key>
 			<string>{2048,1024}</string>
 		</dict>

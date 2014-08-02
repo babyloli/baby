@@ -22,7 +22,8 @@ const int VICTORY_SPRITE = 499;
 const int VICTORY_HEART_1 = 501;
 const int VICTORY_HEART_2 = 502;
 const int VICTORY_HEART_3 = 503;
-const int VICTORY_GOLD_NUMBER = 504;
+const int VICTORY_GOLD_MULTI = 504;
+const int VICTORY_GOLD_NUMBER = 505;
 
 Game::Game(int section, int id)
 {
@@ -532,6 +533,35 @@ void Game::loadEquipmentSlot()
 	assistGuardProp->setTag(TYPE_PROP_ASSISTGUARD);
 	this->addChild(assistGuardProp, ZORDER_PROPS);
 
+	auto stateNote = GUIReader::getInstance()->widgetFromJsonFile("UI/equipmentSlot_2/equipmentSlot_2.ExportJson");
+	stateNote->setPosition(Vec2(origin.x+visibleSize.width - stateNote->getContentSize().width,origin.y));
+	this->addChild(stateNote,ZORDER_PROPS);
+	auto stateBar = Helper::seekWidgetByTag(stateNote,229);
+	auto state = ProgressTimer::create(Sprite::create("images/props/heart.png"));
+	state->setType(ProgressTimer::Type::BAR);
+	state->setMidpoint(Vec2(0,0.5f));
+	state->setBarChangeRate(Vec2(1,0));
+	state->setRotation(-90);
+	state->setPercentage(100);
+	state->setPosition(state->getContentSize().width/2, state->getContentSize().height/2);
+	stateBar->addChild(state,4);
+
+	int health = UserDefault::sharedUserDefault()->getIntegerForKey("Health");
+	int sum = 0;
+	for(int i = 0; i < m_section; i++)
+	{
+		for(int j = 0; j < ResourceManager::getInstance()->sections[i].getRows(); j++)
+		{
+			auto str = String::createWithFormat("Section_%ld_Level_%ld",i+1,j);
+			int heart = UserDefault::sharedUserDefault()->getIntegerForKey(str->getCString());
+			sum += heart;
+		}
+	}
+	state->setPercentage((health - sum)/3 * ResourceManager::getInstance()->sections[m_section - 1].getRows());
+	TTFConfig config("fonts/cardFont.ttf",24);
+	auto healthLabel = Label::createWithTTF(config,itos(health));
+	healthLabel->setPosition(state->getContentSize().width/2,0);
+	stateBar->addChild(healthLabel,2);
 }
 
 
@@ -749,63 +779,185 @@ void Game::deleteObject(float dt){
 	}
 }
 
-void Game::gameOver(bool isWin){
+void Game::gameOver(bool isWin)
+{
 
 	m_modalNode->setVisible(true); //黑色那层
+	this->reorderChild(m_modalNode,ZORDER_MENU);
 
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	
-// 	Sprite* sprite = NULL;
-// 	if (isWin){
-// 		sprite = Sprite::create("youWin.png");
-// 	}
-// 	else
-// 	{
-// 		sprite = Sprite::create("youFail.png");
-// 	}
-// 	if (sprite){
-// 		auto action = EaseBounceOut::create(MoveTo::create(0.3f, Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2)));
-// 		sprite->setPosition(Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height));
-// 		this->addChild(sprite, ZORDER_TEXT);
-// 		sprite->runAction(action);
-// 	}
 	if(isWin){
-		failGame();
+		winGame();
 	}
 	else{
-		victoryGame();
+		failGame();
 	}
 
 }
 
-void Game::victoryGame()
+void Game::winGame()
 {
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 
+	//TODO:
 	//所有关都通过后跳另外的场景！
 
 	auto node = cocostudio::SceneReader::getInstance()->createNodeWithSceneFile("UI/GameOver_Win_1/GameOver_win.json");
 	if(node){
-		node->setPosition(node->getPositionX(),node->getPositionY() - 15);
 		this->addChild(node,ZORDER_MENU);
+		auto inAction = EaseBounceOut::create(MoveTo::create(0.3, Vec2(node->getPositionX(),node->getPositionY() - 30)));
+		node->setPosition(Vec2(origin.x, origin.y + visibleSize.height/2));
+		node->runAction(inAction);
 	}
+	else{
+		return;
+	}
+
 	auto render = static_cast<ComRender*>(node->getChildByTag(VICTORY_PANNEL)->getComponent("GUIComponent"));
 	auto widget = static_cast<Widget*>(render->getNode());
-	
 	auto returnButton = static_cast<Button*>(widget->getChildByTag(UI_BUTTON_SUCCESS_RETURN));
 	auto replayButton = static_cast<Button*>(widget->getChildByTag(UI_BUTTON_SUCCESS_REPLAY));
 	auto nextButton = static_cast<Button*>(widget->getChildByTag(UI_BUTTON_SUCCESS_NEXT));
 	auto shopButton = static_cast<Button*>(widget->getChildByTag(UI_BUTTON_SUCCESS_SHOP));
-
 	returnButton->addTouchEventListener(this,toucheventselector(Game::onTouchWinPage));
 	replayButton->addTouchEventListener(this,toucheventselector(Game::onTouchWinPage));
 	nextButton->addTouchEventListener(this,toucheventselector(Game::onTouchWinPage));
 	shopButton->addTouchEventListener(this,toucheventselector(Game::onTouchWinPage));
 
-	//auto winAction = RepeatForever::create(Animate::create(AnimationCache::getInstance()->getAnimation(ANIMAITON_WIN)));
+	auto winAction = RepeatForever::create(Animate::create(AnimationCache::getInstance()->getAnimation(ANIMAITON_WIN)));
+	auto winspirte = static_cast<ComRender*>(node->getChildByTag(VICTORY_SPRITE)->getComponent("CCSprite"));
+	winspirte->getNode()->setScale(1.1f);
+	winspirte->getNode()->runAction(winAction);
 
+	auto heart1 = (static_cast<ComRender*>(node->getChildByTag(VICTORY_HEART_1)->getComponent("CCSprite")))->getNode();
+	auto heart2 = (static_cast<ComRender*>(node->getChildByTag(VICTORY_HEART_2)->getComponent("CCSprite")))->getNode();
+	auto heart3 = (static_cast<ComRender*>(node->getChildByTag(VICTORY_HEART_3)->getComponent("CCSprite")))->getNode();
+	auto multi = (static_cast<ComRender*>(node->getChildByTag(VICTORY_GOLD_MULTI)->getComponent("CCSprite")))->getNode();
+	auto goldNumber = (static_cast<ComRender*>(node->getChildByTag(VICTORY_GOLD_NUMBER)->getComponent("CCSprite")))->getNode();
+	goldNumber->setVisible(false);
+	HCSVFile* sectionData = &ResourceManager::getInstance()->sections[m_section-1];
+
+	int health = 0;
+	int bb_hp = m_baby->getHp();
+	if(bb_hp >= 8){
+		health = 3;
+	}
+	else if(bb_hp < 8 && bb_hp >= 6){
+		health = 2;
+	}
+	else if(bb_hp < 6 && bb_hp >= 3){
+		health = 1;
+	}
+	int gold = (m_money - std::atoi(sectionData->getData(m_id, 4))) / 1000 + m_towers.size() / 2 + health;
+	if(gold < 0){
+		gold = 0;
+	}
+	auto goldlabel = LabelBMFont::create(itos(gold),FONT_GOLD);
+	goldlabel->setPosition(origin.x,origin.y - visibleSize.height / 2);
+	this->addChild(goldlabel,ZORDER_TEXT);
+	//Animation
+	auto delay1 = DelayTime::create(0.5f);
+	auto delay2 = DelayTime::create(1.0f);
+	auto delay3 = DelayTime::create(0.05f);
+	auto scaleTrans = EaseBackInOut::create(ScaleTo::create(0.6,1));
+	auto multigoldAction = Spawn::create(EaseBounceIn::create(MoveTo::create(0.4,Vec2(0,0))),FadeIn::create(1.0f),NULL);
+	auto displaygoldAction = Spawn::create(EaseBounceIn::create(MoveTo::create(0.4,Vec2(830,300))),FadeIn::create(1.0f),NULL);
+	multi->setPosition(0,-300);
+	goldlabel->setPosition(830,0);
+
+	switch (health)
+	{
+	case 3:
+		{
+			heart1->setScale(0.00001f);
+			heart2->setScale(0.00001f);
+			heart3->setScale(0.00001f);
+			auto action1 = Sequence::create(delay1,scaleTrans,NULL);
+			auto action2 = Sequence::create(delay2,scaleTrans,NULL);
+			auto action3 = Sequence::create(delay1,delay2,scaleTrans,NULL);
+			heart1->runAction(action1);
+			heart2->runAction(action2);
+			heart3->runAction(action3);
+			//金条动画
+			auto multiAction = Sequence::create(delay2,delay2,delay3,multigoldAction,NULL);
+			auto goldNumberAction = Sequence::create(delay2,delay2,delay3,delay3,displaygoldAction,NULL);
+			multi->runAction(multiAction);
+			goldlabel->runAction(goldNumberAction);
+			break;
+		}
+	case 2:
+		{
+			heart1->setScale(0.00001f);
+			heart2->setScale(0.00001f);
+			heart3->setVisible(false);
+			auto action1 = Sequence::create(delay1,scaleTrans,NULL);
+			auto action2 = Sequence::create(delay2,scaleTrans,NULL);
+			heart1->runAction(action1);
+			heart2->runAction(action2);
+			//金条动画
+			auto multiAction = Sequence::create(delay1,delay2,delay3,multigoldAction,NULL);
+			auto goldNumberAction = Sequence::create(delay1,delay2,delay3,delay3,displaygoldAction,NULL);
+			multi->runAction(multiAction);
+			goldlabel->runAction(goldNumberAction);
+			break;
+		}
+	case 1:
+		{
+			heart1->setScale(0.00001f);
+			heart2->setVisible(false);
+			heart3->setVisible(false);
+			auto action1 = Sequence::create(delay1,scaleTrans,NULL);
+			heart1->runAction(action1);
+			//金条动画
+			auto multiAction = Sequence::create(delay2,delay3,multigoldAction,NULL);
+			auto goldNumberAction = Sequence::create(delay2,delay3,delay3,displaygoldAction,NULL);
+			multi->runAction(multiAction);
+			goldlabel->runAction(goldNumberAction);
+			break;
+		}
+	case 0:
+		{
+			heart1->setVisible(false);
+			heart2->setVisible(false);
+			heart3->setVisible(false);
+			gold = 0;
+			goldlabel->setString("0");
+			//金条动画
+			auto multiAction = Sequence::create(delay1,delay3,multigoldAction,NULL);
+			auto goldNumberAction = Sequence::create(delay1,delay3,delay3,displaygoldAction,NULL);
+			multi->runAction(multiAction);
+			goldlabel->runAction(goldNumberAction);
+			break;
+		}
+	default:
+		break;
+	}
+	//健康值以及金条写入数据库
+	auto str = String::createWithFormat("Section_%ld_Level_%ld",m_section,m_id);
+	int gotHeartNum = UserDefault::sharedUserDefault()->getIntegerForKey(str->getCString());
+	if(health > gotHeartNum){
+		UserDefault::sharedUserDefault()->setIntegerForKey(str->getCString(),health);
+		UserDefault::sharedUserDefault()->setIntegerForKey("Health",
+			UserDefault::sharedUserDefault()->getIntegerForKey("Health") + health);
+	}
+	UserDefault::sharedUserDefault()->setIntegerForKey("myGold",
+		UserDefault::sharedUserDefault()->getIntegerForKey("myGold") + gold);
+
+	//等级设为下一关
+	if(m_section == UserDefault::sharedUserDefault()->getIntegerForKey("Section") && 
+		m_id == UserDefault::sharedUserDefault()->getIntegerForKey("Level")){
+			int sum = ResourceManager::getInstance()->sections[m_section-1].getRows();
+			if(m_id < sum - 1){
+				UserDefault::sharedUserDefault()->setIntegerForKey("Level",m_id + 1);
+			}
+			else{
+				UserDefault::sharedUserDefault()->setIntegerForKey("Section",m_section + 1);
+				UserDefault::sharedUserDefault()->setIntegerForKey("Level",0);
+			}
+	}
 }
 
 void Game::failGame()
@@ -1082,7 +1234,7 @@ void Game::onTouchWinPage(Object* pSender, TouchEventType type)
 						Director::getInstance()->replaceScene(s);
 					}
 					else{
-						auto s = Game::createScene(m_section,1);
+						auto s = Game::createScene(m_section + 1,0);
 						Director::getInstance()->replaceScene(s);
 					}
 					Director::getInstance()->resume();

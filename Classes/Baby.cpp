@@ -37,6 +37,9 @@ void Baby::onEnter(){
 
 bool Baby::setDamage(int damage){
 	m_hp -= damage;
+	if(m_hp < 0){
+		m_hp = 0;
+	}
 	m_sprite->stopAllActions();
 	m_hpLabel->setString(itos(m_hp));
 	

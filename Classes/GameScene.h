@@ -103,8 +103,8 @@ public:
 	void update(float dt);
 
 	void gameOver(bool isWin);
-	void victoryGame();
-	void failGame();
+	virtual void winGame();
+	virtual void failGame();
 
 	void setPhysicsWorld(PhysicsWorld* world);
 	void addMoney(int money);

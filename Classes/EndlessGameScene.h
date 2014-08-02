@@ -21,9 +21,13 @@ public:
 	void showMouse(float dt);
 
 	bool mouseTouchCallback(Touch* touch, Event* event);
+	void winGame() override;
+	void failGame() override;
+
 private:
 	float m_elapsedTimeMouse;
 	Vector<Mouse*> m_mouses;
+	void onTouchPage(Object* pSender, TouchEventType type);
 };
 
 #endif

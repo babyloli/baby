@@ -23,6 +23,9 @@ const int UI_BUTTON_SELECT_BABY = 61;
 const int UI_BUTTON_SELECT_KID = 62;
 const int UI_BUTTON_SELECT_CHILD = 63;
 const int UI_BUTTON_SELECT_YOUTH =64;
+const int UI_LOCK_KID = 65;
+const int UI_LOCK_CHILD = 66;
+const int UI_LOCK_YOUTH = 67;
 // Tags for shop UI 
 const int UI_BUTTON_CLOSESHOP=29;
 const int UI_ICON_RESTOREHP = 30;
@@ -234,10 +237,60 @@ bool ISectionSelector::init()
 	auto kidButtion = static_cast<Button*>(Helper::seekWidgetByTag(sectionSelector,UI_BUTTON_SELECT_KID));
 	auto childButton = static_cast<Button*>(Helper::seekWidgetByTag(sectionSelector,UI_BUTTON_SELECT_CHILD));
 	auto youthButton = static_cast<Button*>(Helper::seekWidgetByTag(sectionSelector,UI_BUTTON_SELECT_YOUTH));
+	auto lockKid = Helper::seekWidgetByTag(sectionSelector,UI_LOCK_KID);
+	auto lockChild = Helper::seekWidgetByTag(sectionSelector,UI_LOCK_CHILD);
+	auto lockYouth = Helper::seekWidgetByTag(sectionSelector,UI_LOCK_YOUTH);
 	babyButton->addTouchEventListener(this,toucheventselector(ISectionSelector::onTouchSelected));
 	kidButtion->addTouchEventListener(this,toucheventselector(ISectionSelector::onTouchSelected));
 	childButton->addTouchEventListener(this,toucheventselector(ISectionSelector::onTouchSelected));
 	youthButton->addTouchEventListener(this,toucheventselector(ISectionSelector::onTouchSelected));
+
+	int section = UserDefault::sharedUserDefault()->getIntegerForKey("Section");
+	switch (section)
+	{
+	case 0:
+	case 1:
+		{
+			kidButtion->setTouchEnabled(false);
+			kidButtion->setVisible(false);
+			childButton->setTouchEnabled(false);
+			childButton->setVisible(false);
+			youthButton->setTouchEnabled(false);
+			youthButton->setVisible(false);
+			break;
+		}
+	case 2:
+		{
+			lockKid->setVisible(false);
+			childButton->setTouchEnabled(false);
+			childButton->setVisible(false);
+			youthButton->setTouchEnabled(false);
+			youthButton->setVisible(false);
+			break;
+		}
+	case 3:
+		{
+			lockKid->setVisible(false);
+			lockChild->setVisible(false);
+			youthButton->setTouchEnabled(false);
+			youthButton->setVisible(false);
+			break;
+		}
+	case 4:
+		{
+			lockKid->setVisible(false);
+			lockChild->setVisible(false);
+			lockYouth->setVisible(false);
+			break;
+		}
+	default:
+		{
+			lockKid->setVisible(false);
+			lockChild->setVisible(false);
+			lockYouth->setVisible(false);
+		}
+		break;
+	}
 
 	auto menuBar = GUIReader::getInstance()->widgetFromJsonFile("UI/chooseBar_1/chooseBar_1.ExportJson");
 	this->addChild(menuBar);

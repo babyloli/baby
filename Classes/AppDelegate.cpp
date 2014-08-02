@@ -38,10 +38,10 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	auto userdefault=UserDefault::sharedUserDefault();
 	if(!userdefault->getBoolForKey("isExisted")){
 		userdefault->setBoolForKey("isExisted",true);
-		userdefault->setIntegerForKey("Health",1000);
-		userdefault->setIntegerForKey("Section",4);
+		userdefault->setIntegerForKey("Health",0);
+		userdefault->setIntegerForKey("Section",1);
 		userdefault->setIntegerForKey("Level",0);
-		userdefault->setIntegerForKey("myGold",10000);
+		userdefault->setIntegerForKey("myGold",0);
 
 		HCSVFile* data = ResourceManager::getInstance()->propsData;
 		for (int i = 0; i < 6; i++)

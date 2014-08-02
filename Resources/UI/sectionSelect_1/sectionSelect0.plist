@@ -4,7 +4,7 @@
 	<dict>
 		<key>frames</key>
 		<dict>
-			<key>sectionselect.psd_Psd.Dir/背景 拷贝.png</key>
+			<key>sectionselect_V3.psd_Psd.Dir/BACKGROUND.png</key>
 			<dict>
 				<key>width</key>
 				<integer>1280</integer>
@@ -23,7 +23,7 @@
 				<key>offsetY</key>
 				<real>0</real>
 			</dict>
-			<key>sectionselect.psd_Psd.Dir/婴儿时期 拷贝.png</key>
+			<key>sectionselect_v2.psd_Psd.Dir/baby.png</key>
 			<dict>
 				<key>width</key>
 				<integer>396</integer>
@@ -42,7 +42,7 @@
 				<key>offsetY</key>
 				<real>0</real>
 			</dict>
-			<key>sectionselect.psd_Psd.Dir/幼儿时期 拷贝.png</key>
+			<key>sectionselect_v2.psd_Psd.Dir/kid.png</key>
 			<dict>
 				<key>width</key>
 				<integer>386</integer>
@@ -61,7 +61,7 @@
 				<key>offsetY</key>
 				<real>0</real>
 			</dict>
-			<key>sectionselect.psd_Psd.Dir/少儿时期 拷贝.png</key>
+			<key>sectionselect_v2.psd_Psd.Dir/child.png</key>
 			<dict>
 				<key>width</key>
 				<integer>373</integer>
@@ -80,7 +80,7 @@
 				<key>offsetY</key>
 				<real>0</real>
 			</dict>
-			<key>sectionselect.psd_Psd.Dir/青年时期 拷贝.png</key>
+			<key>sectionselect_v2.psd_Psd.Dir/young.png</key>
 			<dict>
 				<key>width</key>
 				<integer>386</integer>
@@ -92,6 +92,44 @@
 				<integer>271</integer>
 				<key>x</key>
 				<integer>763</integer>
+				<key>y</key>
+				<integer>722</integer>
+				<key>offsetX</key>
+				<real>0</real>
+				<key>offsetY</key>
+				<real>0</real>
+			</dict>
+			<key>sectionselect_v2.psd_Psd.Dir/kid_dark.png</key>
+			<dict>
+				<key>width</key>
+				<integer>386</integer>
+				<key>height</key>
+				<integer>236</integer>
+				<key>originalWidth</key>
+				<integer>386</integer>
+				<key>originalHeight</key>
+				<integer>236</integer>
+				<key>x</key>
+				<integer>1151</integer>
+				<key>y</key>
+				<integer>722</integer>
+				<key>offsetX</key>
+				<real>0</real>
+				<key>offsetY</key>
+				<real>0</real>
+			</dict>
+			<key>sectionselect_v2.psd_Psd.Dir/child_dark.png</key>
+			<dict>
+				<key>width</key>
+				<integer>373</integer>
+				<key>height</key>
+				<integer>257</integer>
+				<key>originalWidth</key>
+				<integer>373</integer>
+				<key>originalHeight</key>
+				<integer>257</integer>
+				<key>x</key>
+				<integer>1539</integer>
 				<key>y</key>
 				<integer>722</integer>
 				<key>offsetX</key>

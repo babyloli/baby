@@ -90,9 +90,9 @@ void ResourceManager::loadAnimation(){
 	loadAnimation("safebubble_state_0_%ld.png",3,0.2f,ANIMATION_SAFETYGUARD_STATE_1);
 	loadAnimation("safebubble_state_1_%ld.png",3,0.2f,ANIMATION_SAFETYGUARD_STATE_2);
 	loadAnimation("safebubble_state_2_%ld.png",3,0.2f,ANIMATION_SAFETYGUARD_STATE_3);
-	loadAnimation("landmine_invalidable_%ld.png",2,0.5f,ANIMATION_LANDMINE_CREATE);
-	loadAnimation("landmine_invalidable_%ld.png",2,0.03f,ANIMATION_LANDMINE_INVALIDABLESET);
-	loadAnimation("landmine_waiting_%ld.png",2,0.04f,ANIMATION_LANDMINE_WAIT);
+	loadAnimation("landmine_ create_%ld.png",5,0.15f,ANIMATION_LANDMINE_CREATE);
+	loadAnimation("landmine_invalidable_%ld.png",3,0.1f,ANIMATION_LANDMINE_INVALIDABLESET);
+	loadAnimation("landmine_waiting_%ld.png",4,0.1f,ANIMATION_LANDMINE_WAIT);
 	loadAnimation("landmine_bomb_%ld.png",5,0.1f,ANIMATION_LANDMINE_BOMB);
 	loadAnimation("trap_state_3_%ld.png",3,0.1f,ANIMATION_TRAP_STATE_1);
 	loadAnimation("trap_state_2_%ld.png",3,0.1f,ANIMATION_TRAP_STATE_2);
@@ -100,7 +100,7 @@ void ResourceManager::loadAnimation(){
 	loadAnimation("oryzae%ld.png",6,0.1f,ANIMATION_ASSISTANT);
 
 	loadAnimation("mouse%d.png",10,0.15f,ANIMATION_MOUSE);
-	loadAnimation("explosion%d.png",6,0.1f,ANIMATION_EXPLOSION);
+	loadAnimation("Explosion%d.png",6,0.1f,ANIMATION_EXPLOSION);
 	loadAnimation("win%ld.png",10,0.1f,ANIMAITON_WIN);
 	loadAnimation("fail%ld.png",9,0.1f,ANIMATION_FAIL);
 }

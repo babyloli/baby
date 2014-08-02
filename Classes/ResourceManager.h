@@ -97,6 +97,7 @@ public:
 	//----------------Price-----------------------
 #define FONTSIZE_PRICE 20
 #define FONT_PRICE "fonts/cardFont.ttf"
+#define FONT_GOLD "fonts/number.fnt"
 	//-----------------Game-----------------------
 #define PATH_TOWERBASE "images/tower/towerbase.png"
 #define NUM_SECTIONS 4

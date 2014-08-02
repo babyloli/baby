@@ -3,6 +3,9 @@
 #include "IHomeMenuScene.h"
 #include "ResourceManager.h"
 
+const int UI_BUTTON_ENDLESS_RETURN = 73;
+const int UI_BUTTON_ENDLESS_REPLAY = 74;
+
 Endless::Endless()
 	:Game(1, 0)
 {
@@ -352,4 +355,88 @@ bool Endless::mouseTouchCallback(Touch* touch, Event* event){
 		return true;
 	}
 	return false;
+}
+
+void Endless::winGame()
+{
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	Size visibleSize = Director::getInstance()->getVisibleSize();
+
+	auto failUI = GUIReader::getInstance()->widgetFromJsonFile("UI/gomeOver_Endless_1/gomeOver_Endless_1.ExportJson");
+	this->addChild(failUI,ZORDER_MENU);
+	auto action = EaseBounceOut::create(MoveTo::create(0.3, origin));
+	failUI->setPosition(Vec2(origin.x, origin.y + visibleSize.height));
+	failUI->runAction(action);
+
+	auto failSprite = Sprite::create();
+	auto failAction = RepeatForever::create(Animate::create(AnimationCache::getInstance()->getAnimation(ANIMAITON_WIN)));
+	failSprite->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height /2 + 45);
+	failSprite->runAction(failAction);
+	this->addChild(failSprite,ZORDER_TEXT);
+
+	auto label = LabelBMFont::create(itos(m_curRound - 1), FONT_GOLD);
+	label->setPosition(origin.x + visibleSize.width / 2 + 10, origin.y + visibleSize.height / 2 - 90);
+	this->addChild(label,ZORDER_TEXT);
+
+	auto returnButton = static_cast<Button*>(Helper::seekWidgetByTag(failUI,UI_BUTTON_ENDLESS_RETURN));
+	auto replayButton = static_cast<Button*>(Helper::seekWidgetByTag(failUI,UI_BUTTON_ENDLESS_REPLAY));
+	returnButton->addTouchEventListener(this, toucheventselector(Endless::onTouchPage));
+	replayButton->addTouchEventListener(this, toucheventselector(Endless::onTouchPage));
+}
+
+void Endless::failGame()
+{
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	Size visibleSize = Director::getInstance()->getVisibleSize();
+
+	auto failUI = GUIReader::getInstance()->widgetFromJsonFile("UI/gomeOver_Endless_1/gomeOver_Endless_1.ExportJson");
+	this->addChild(failUI,ZORDER_MENU);
+	auto action = EaseBounceOut::create(MoveTo::create(0.3, origin));
+	failUI->setPosition(Vec2(origin.x, origin.y + visibleSize.height));
+	failUI->runAction(action);
+
+	auto failSprite = Sprite::create();
+	auto failAction = RepeatForever::create(Animate::create(AnimationCache::getInstance()->getAnimation(ANIMATION_FAIL)));
+	failSprite->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height /2 + 45);
+	failSprite->runAction(failAction);
+	this->addChild(failSprite,ZORDER_TEXT);
+
+	auto label = LabelBMFont::create(itos(m_curRound - 1), FONT_GOLD);
+	label->setPosition(origin.x + visibleSize.width / 2 + 10, origin.y + visibleSize.height / 2 - 90);
+	this->addChild(label,ZORDER_TEXT);
+
+	auto returnButton = static_cast<Button*>(Helper::seekWidgetByTag(failUI,UI_BUTTON_ENDLESS_RETURN));
+	auto replayButton = static_cast<Button*>(Helper::seekWidgetByTag(failUI,UI_BUTTON_ENDLESS_REPLAY));
+	returnButton->addTouchEventListener(this, toucheventselector(Endless::onTouchPage));
+	replayButton->addTouchEventListener(this, toucheventselector(Endless::onTouchPage));
+}
+
+void Endless::onTouchPage(Object* pSender, TouchEventType type)
+{
+	int tag = (static_cast<Button*>(pSender))->getTag();
+	switch (type)
+	{
+	case TOUCH_EVENT_ENDED:
+		switch (tag)
+		{
+		case UI_BUTTON_ENDLESS_RETURN:
+			{
+				auto scene = IHomeMenu::createScene();
+				Director::getInstance()->replaceScene(scene);
+				Director::getInstance()->resume();
+				break;
+			}
+		case UI_BUTTON_ENDLESS_REPLAY:
+			{
+				auto scene = Endless::createScene();
+				Director::getInstance()->replaceScene(scene);
+				Director::getInstance()->resume();
+				break;
+			}
+		default:
+			break;
+		}
+	default:
+		break;
+	}
 }

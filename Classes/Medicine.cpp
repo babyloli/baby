@@ -198,8 +198,8 @@ PropsSafetyGuard::PropsSafetyGuard(Baby* bb, Mode mode)
 	bb->addChild(m_visiableG);
 	m_visiableG->setVisible(false);
 
-	m_curState = m_maxState;
-	m_lastState = m_maxState;
+	m_curState = RAND_MAX;
+	m_lastState = RAND_MAX;
 	m_mode = mode;
 }
 
@@ -475,7 +475,7 @@ PropsTrap::PropsTrap(const std::vector<Road>& roads, Mode mode)
 	m_sprite = Sprite::create("images/props/propsIcon5.png");
 	this->addChild(m_sprite);
 
-	m_trapcreate = Sprite::create("images/props/5.png");
+	m_trapcreate = Sprite::create("images/props/trap.png");
 	this->addChild(m_trapcreate);
 	m_trapcreate->setVisible(false);
 

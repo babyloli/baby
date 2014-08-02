@@ -4,16 +4,16 @@
 	<dict>
 		<key>frames</key>
 		<dict>
-			<key>EquipmentSlot_v2_4.psd_Psd.Dir/[signal].png</key>
+			<key>gameover_v4.psd_Psd.Dir/Pannel.png</key>
 			<dict>
 				<key>width</key>
-				<integer>131</integer>
+				<integer>479</integer>
 				<key>height</key>
-				<integer>116</integer>
+				<integer>477</integer>
 				<key>originalWidth</key>
-				<integer>131</integer>
+				<integer>479</integer>
 				<key>originalHeight</key>
-				<integer>116</integer>
+				<integer>477</integer>
 				<key>x</key>
 				<integer>0</integer>
 				<key>y</key>
@@ -23,18 +23,37 @@
 				<key>offsetY</key>
 				<real>0</real>
 			</dict>
-			<key>EquipmentSlot_v2_3.psd_Psd.Dir/[HeartIcon_dark].png</key>
+			<key>gameover_v4.psd_Psd.Dir/S_Return.png</key>
 			<dict>
 				<key>width</key>
-				<integer>95</integer>
+				<integer>184</integer>
 				<key>height</key>
-				<integer>87</integer>
+				<integer>68</integer>
 				<key>originalWidth</key>
-				<integer>95</integer>
+				<integer>184</integer>
 				<key>originalHeight</key>
-				<integer>87</integer>
+				<integer>68</integer>
 				<key>x</key>
-				<integer>133</integer>
+				<integer>481</integer>
+				<key>y</key>
+				<integer>0</integer>
+				<key>offsetX</key>
+				<real>0</real>
+				<key>offsetY</key>
+				<real>0</real>
+			</dict>
+			<key>gameover_v4.psd_Psd.Dir/F_Repley.png</key>
+			<dict>
+				<key>width</key>
+				<integer>184</integer>
+				<key>height</key>
+				<integer>69</integer>
+				<key>originalWidth</key>
+				<integer>184</integer>
+				<key>originalHeight</key>
+				<integer>69</integer>
+				<key>x</key>
+				<integer>667</integer>
 				<key>y</key>
 				<integer>0</integer>
 				<key>offsetX</key>
@@ -48,9 +67,9 @@
 			<key>format</key>
 			<integer>0</integer>
 			<key>textureFileName</key>
-			<string>equipmentSlot_20.png</string>
+			<string>gomeOver_Endless0.png</string>
 			<key>realTextureFileName</key>
-			<string>equipmentSlot_20.png</string>
+			<string>gomeOver_Endless0.png</string>
 			<key>size</key>
 			<string>{2048,1024}</string>
 		</dict>
