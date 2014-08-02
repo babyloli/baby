@@ -55,6 +55,7 @@ public:
 	HCSVFile * towerData;
 	//----------------Enemy----------------------
 #define ANIMATION_EXPLOSION "animation_explosion"
+#define ANIMATION_KILLED "animation_killed"
 	HCSVFile * enemyData;
 	HCSVFile * enemyDesc;
 	Texture2D* hpBar;

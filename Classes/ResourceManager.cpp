@@ -33,10 +33,10 @@ void ResourceManager::init(){
 	spriteFrameCache->addSpriteFramesWithFile("images/props/traps.plist");
 	spriteFrameCache->addSpriteFramesWithFile("images/props/assist.plist");
 	spriteFrameCache->addSpriteFramesWithFile("images/mouse/Mouse.plist");
-	spriteFrameCache->addSpriteFramesWithFile("images/enemy/Explosion.plist");
+	spriteFrameCache->addSpriteFramesWithFile("images/enemy/ExplosionMonster.plist");
+	spriteFrameCache->addSpriteFramesWithFile("images/enemy/Killed.plist");
 	spriteFrameCache->addSpriteFramesWithFile("images/gameover/win.plist");
 	spriteFrameCache->addSpriteFramesWithFile("images/gameover/fail.plist");
-	spriteFrameCache->addSpriteFramesWithFile("images/gameover/number.plist");
 	loadAnimation();
 
 	//---------------------Texture----------------------------
@@ -100,7 +100,8 @@ void ResourceManager::loadAnimation(){
 	loadAnimation("oryzae%ld.png",6,0.1f,ANIMATION_ASSISTANT);
 
 	loadAnimation("mouse%d.png",10,0.15f,ANIMATION_MOUSE);
-	loadAnimation("Explosion%d.png",6,0.1f,ANIMATION_EXPLOSION);
+	loadAnimation("explosion%d.png",6,0.1f,ANIMATION_EXPLOSION);
+	loadAnimation("killed%ld.png",3,0.08f,ANIMATION_KILLED);
 	loadAnimation("win%ld.png",10,0.1f,ANIMAITON_WIN);
 	loadAnimation("fail%ld.png",9,0.1f,ANIMATION_FAIL);
 }

@@ -4,83 +4,83 @@
     <dict>
         <key>frames</key>
         <dict>
-            <key>Explosion1.png</key>
+            <key>explosion1.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{158,39},{20,21}}</string>
+                <string>{{44,266},{72,60}}</string>
                 <key>offset</key>
-                <string>{0,0}</string>
+                <string>{0,-1}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{20,21}}</string>
+                <string>{{29,36},{72,60}}</string>
                 <key>sourceSize</key>
-                <string>{20,21}</string>
+                <string>{130,130}</string>
             </dict>
-            <key>Explosion2.png</key>
+            <key>explosion2.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{114,46},{15,15}}</string>
+                <string>{{2,2},{112,88}}</string>
                 <key>offset</key>
-                <string>{0,0}</string>
+                <string>{-6,-2}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{15,15}}</string>
+                <string>{{3,23},{112,88}}</string>
                 <key>sourceSize</key>
-                <string>{15,15}</string>
+                <string>{130,130}</string>
             </dict>
-            <key>Explosion3.png</key>
+            <key>explosion3.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{158,2},{35,35}}</string>
+                <string>{{2,184},{110,80}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{35,35}}</string>
+                <string>{{10,25},{110,80}}</string>
                 <key>sourceSize</key>
-                <string>{35,35}</string>
+                <string>{130,130}</string>
             </dict>
-            <key>Explosion4.png</key>
+            <key>explosion4.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{114,2},{42,42}}</string>
+                <string>{{2,92},{110,90}}</string>
                 <key>offset</key>
-                <string>{0,0}</string>
+                <string>{-6,13}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{42,42}}</string>
+                <string>{{4,7},{110,90}}</string>
                 <key>sourceSize</key>
-                <string>{42,42}</string>
+                <string>{130,130}</string>
             </dict>
-            <key>Explosion5.png</key>
+            <key>explosion5.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{64,2},{48,48}}</string>
+                <string>{{2,266},{62,40}}</string>
                 <key>offset</key>
-                <string>{0,0}</string>
+                <string>{2,4}</string>
                 <key>rotated</key>
-                <false/>
+                <true/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{48,48}}</string>
+                <string>{{36,41},{62,40}}</string>
                 <key>sourceSize</key>
-                <string>{48,48}</string>
+                <string>{130,130}</string>
             </dict>
-            <key>Explosion6.png</key>
+            <key>explosion6.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,2},{60,60}}</string>
+                <string>{{114,92},{1,1}}</string>
                 <key>offset</key>
-                <string>{0,0}</string>
+                <string>{-149.5,149.5}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{60,60}}</string>
+                <string>{{0,0},{1,1}}</string>
                 <key>sourceSize</key>
-                <string>{60,60}</string>
+                <string>{300,300}</string>
             </dict>
         </dict>
         <key>metadata</key>
@@ -88,13 +88,13 @@
             <key>format</key>
             <integer>2</integer>
             <key>realTextureFileName</key>
-            <string>Explosion.png</string>
+            <string>ExplosionMonster.png</string>
             <key>size</key>
-            <string>{195,64}</string>
+            <string>{118,330}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:faeda7e2924bd122738ea7c22fa3dd63:20692a0a0607b6447abbbeee8e7bc903:fe049886709682b4c74f6865e9893d85$</string>
+            <string>$TexturePacker:SmartUpdate:5aff5e7ce05eae4fee3a8a4f51b1bb32:0f56b1a1ffe8d983a72d09f25e5231b0:6da52a32e24aebfa90e1102658a03d24$</string>
             <key>textureFileName</key>
-            <string>Explosion.png</string>
+            <string>ExplosionMonster.png</string>
         </dict>
     </dict>
 </plist>

@@ -802,8 +802,13 @@ void Game::winGame()
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 
-	//TODO:
-	//所有关都通过后跳另外的场景！
+	//通关了
+	if(m_section == 4 && m_id == ResourceManager::getInstance()->sections[3].getRows() - 1){
+		auto scene = ISuccessPage::createScene();
+		Director::getInstance()->replaceScene(scene);
+		Director::getInstance()->resume();
+		return;
+	}
 
 	auto node = cocostudio::SceneReader::getInstance()->createNodeWithSceneFile("UI/GameOver_Win_1/GameOver_win.json");
 	if(node){

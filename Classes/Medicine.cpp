@@ -110,7 +110,7 @@ bool PropsSlowdown::touchCallback(Touch* touch, Event* event)
 		for(int i = 0; i < m_targets.size(); i++)
 		{
 			auto enemy = m_targets.at(i);
-			enemy->setSpeed(enemy->getSpeed() / 20);
+			enemy->setSpeed(enemy->getSpeed() / 10);
 		}
 		return true;
 	}

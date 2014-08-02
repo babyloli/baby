@@ -81,8 +81,8 @@ void Enemy::initial(int id){
 }
 
 void Enemy::killed(){
-	m_sprite->runAction(Sequence::create(
-		Animate::create(AnimationCache::getInstance()->getAnimation(ANIMATION_EXPLOSION))
+	m_sprite->runAction(Sequence::create(EaseSineIn::create(
+		Animate::create(AnimationCache::getInstance()->getAnimation(ANIMATION_KILLED)))
 		, CallFuncN::create([this](Node* node){
 			this->removeFromParent();
 		}), NULL));

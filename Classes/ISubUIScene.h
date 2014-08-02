@@ -110,4 +110,15 @@ private:
 };
 
 
+
+class ISuccessPage : public Layer
+{
+public:
+	static Scene* createScene();
+	virtual bool init();
+	CREATE_FUNC(ISuccessPage);
+	void ontouchButton(Object* pSender, TouchEventType type);
+};
+
+
 #endif

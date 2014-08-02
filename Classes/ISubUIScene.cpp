@@ -53,8 +53,8 @@ const int UI_BUTTON_BUY_TRAP = 101;
 const int UI_BUTTON_BUY_ASSIST = 50;
 const int UI_MONEYTEXT = 54;
 const int UI_BUTTON_ADDMONEY = 110;
-
-
+const int UI_BUTTON_SUCCESS_RETURN = 6;   
+const int UI_BUTTON_SUCCESS_YES = 5;
 
 TTFConfig configShop("fonts/cardFont.ttf",24);
 
@@ -449,8 +449,10 @@ TableViewCell* IGameLevelSelector::tableCellAtIndex(TableView* table, ssize_t id
 		sprite->setPosition(Vec2(cellSize.width/2,cellSize.height/2));
 		cell->addChild(sprite);
 
-		auto label = LabelTTF::create(string->getCString(),"Helvetica",60.0);
-		label->setColor(Color3B(255, 0, 0));
+// 		auto label = LabelTTF::create(string->getCString(),"Helvetica",60.0);
+// 		label->setColor(Color3B(255, 0, 0));
+		auto label = LabelBMFont::create(string->getCString(),FONT_GOLD);
+		label->setScale(1.5f);
 		label->setPosition(Vec2(cellSize.width/2 -10,200));
 		label->setTag(456);
 		cell->addChild(label);
@@ -867,6 +869,53 @@ void IShop::onTouchBuyButton(Object* pSender, TouchEventType type){
 			break;
 		}
 		break;
+	default:
+		break;
+	}
+}
+
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////////
+Scene* ISuccessPage::createScene()
+{
+	auto scene = Scene::create();
+	auto layer = ISuccessPage::create();
+	scene->addChild(layer);
+	return scene;
+}
+
+bool ISuccessPage::init()
+{
+	if(!Layer::init()){
+		return false;
+	}
+
+	auto page = GUIReader::getInstance()->widgetFromJsonFile("UI/Final_1/Final_1.ExportJson");
+	this->addChild(page);
+
+	auto yesButton = static_cast<Button*>(Helper::seekWidgetByTag(page,UI_BUTTON_SUCCESS_YES));
+	auto returnButton = static_cast<Button*>(Helper::seekWidgetByTag(page,UI_BUTTON_SUCCESS_RETURN));
+	yesButton->addTouchEventListener(this,toucheventselector(ISuccessPage::ontouchButton));
+	returnButton->addTouchEventListener(this,toucheventselector(ISuccessPage::ontouchButton));
+
+	return true;
+}
+
+void ISuccessPage::ontouchButton(Object* pSender, TouchEventType type)
+{
+	switch (type)
+	{
+	case  TOUCH_EVENT_ENDED:
+		{
+			auto scene = IHomeMenu::createScene();
+			Director::getInstance()->replaceScene(scene);
+			Director::getInstance()->resume();
+			break;
+		}
 	default:
 		break;
 	}
