@@ -98,7 +98,7 @@ public:
 	void onTouchBuyButton(Object* pSender, TouchEventType type);
 	int coins;
 	int price[6];
-	Text* Money_text;
+	Label* moneylabel;
 	Button* item1_num;
 	Button* item2_num;
 	Button* item3_num;

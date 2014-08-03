@@ -84,6 +84,7 @@ public:
 #define UI_POSITION_LANDMINE 224
 #define UI_POSITION_TRAP 225
 #define UI_POSITION_ASSISTGUARD 226
+#define  TAG_SLOWSNOW 288
 	HCSVFile * propsData;
 	//----------------Baby-----------------------
 #define ANIMATION_BABY_LAUGH "baby_laugh"

@@ -111,6 +111,12 @@ bool PropsSlowdown::touchCallback(Touch* touch, Event* event)
 		{
 			auto enemy = m_targets.at(i);
 			enemy->setSpeed(enemy->getSpeed() / 10);
+			if(m_mode == MODE_GROWUP){
+				auto snow = Sprite::create("images/props/slow.png");
+				snow->setTag(TAG_SLOWSNOW);
+				snow->setPosition(0, -enemy->getEnemy()->getContentSize().height/2);
+				enemy->addChild(snow,ZORDER_ENEMY);
+			}
 		}
 		return true;
 	}
@@ -137,6 +143,10 @@ void PropsSlowdown::update(float dt)
 					{
 						Enemy* enemy = m_targets.at(i);
 						enemy->setSpeed(enemy->getOriginSpeed());
+						auto snow = enemy->getChildByTag(TAG_SLOWSNOW);
+						if(snow){
+							snow->removeFromParentAndCleanup(true);
+						}
 						m_targets.erase(i);
 					}
 					m_isUsing  = false;

@@ -561,7 +561,8 @@ bool IShop::init()
 	auto LockItemLM = Helper::seekWidgetByTag(ShopUI,UI_LOCK_LANDMINE);
 	auto LockItemTrap = Helper::seekWidgetByTag(ShopUI,UI_LOCK_TRAP);
 	auto LockItemAS = Helper::seekWidgetByTag(ShopUI,UI_LOCK_ASSIST);
-	Money_text=(Text*)(ShopUI->getChildByTag(UI_MONEYTEXT));
+	auto Money_text=(Text*)(ShopUI->getChildByTag(UI_MONEYTEXT));
+	Money_text->setVisible(false);
 	////////////////////////////////////////////////////////////////////////////
 	ResourceManager* instance=ResourceManager::getInstance();
 	HCSVFile* data = instance->propsData;
@@ -570,7 +571,6 @@ bool IShop::init()
 		price[i]=atoi(data->getData(i,2));
 	}
 
-	//auto priceLabel1 = Label::createWithTTF(configShop,std::to_string(1));
 	Label* priceLabeRHP = Label::createWithTTF(configShop,data->getData(0,2));
 	priceLabeRHP->setPosition(ccpAdd(BuyItemButtonRHP->getPosition(),Vec2(8,0)));
 	this->addChild(priceLabeRHP);
@@ -705,13 +705,11 @@ bool IShop::init()
 		}
 	}
 
-	std::string money;
-	int m=UserDefault::sharedUserDefault()->getIntegerForKey("myGold");
-	coins=m;
-	std::stringstream ss;
-	ss<<m;
-	std::string s1=ss.str();
-	Money_text->setString(s1); 
+	coins = UserDefault::sharedUserDefault()->getIntegerForKey("myGold");
+	moneylabel = Label::createWithTTF(configShop,itos(coins));
+	moneylabel->setPosition(Money_text->getPosition());
+	this->addChild(moneylabel);
+
 	return true;
 }
 
@@ -730,18 +728,12 @@ void IShop::onTouchBuyButton(Object* pSender, TouchEventType type){
 		case UI_BUTTON_BUY_RESTOREHP:
 			{
 				if(coins>=price[0]){
-					int n=UserDefault::sharedUserDefault()->getIntegerForKey(data->getData(0,1));
-					UserDefault::sharedUserDefault()->setIntegerForKey(data->getData(0,1),++n);
+					int n=UserDefault::sharedUserDefault()->getIntegerForKey(data->getData(0,1)) + 1;
+					UserDefault::sharedUserDefault()->setIntegerForKey(data->getData(0,1),n);
 					coins=coins-price[0];
 					UserDefault::sharedUserDefault()->setIntegerForKey("myGold",coins);
-					std::stringstream ss;
-					ss<<coins;
-					std::string s1=ss.str();
-					Money_text->setString(s1);
-					std::stringstream ss2;
-					ss2<<n;
-					s1=ss2.str();
-					item1_num->setTitleText(s1);
+					moneylabel->setString(itos(coins));
+					item1_num->setTitleText(itos(n));
 					item1_num->setVisible(true);
 				}
 				else
@@ -753,18 +745,12 @@ void IShop::onTouchBuyButton(Object* pSender, TouchEventType type){
 		case UI_BUTTON_BUY_SLOWDOWN:
 			{
 				if(coins>=price[1]){
-					int n=UserDefault::sharedUserDefault()->getIntegerForKey(data->getData(1,1));
-					UserDefault::sharedUserDefault()->setIntegerForKey(data->getData(1,1),++n);
+					int n=UserDefault::sharedUserDefault()->getIntegerForKey(data->getData(1,1))+1;
+					UserDefault::sharedUserDefault()->setIntegerForKey(data->getData(1,1),n);
 					coins=coins-price[1];
 					UserDefault::sharedUserDefault()->setIntegerForKey("myGold",coins);
-					std::stringstream ss;
-					ss<<coins;
-					std::string s1=ss.str();
-					Money_text->setString(s1);
-					std::stringstream ss2;
-					ss2<<n;
-					s1=ss2.str();
-					item2_num->setTitleText(s1);
+					moneylabel->setString(itos(coins));
+					item2_num->setTitleText(itos(n));
 					item2_num->setVisible(true);
 				}
 				else
@@ -776,18 +762,12 @@ void IShop::onTouchBuyButton(Object* pSender, TouchEventType type){
 		case UI_BUTTON_BUY_SAFEGUARD:
 			{
 				if(coins>=price[2]){
-					int n=UserDefault::sharedUserDefault()->getIntegerForKey(data->getData(2,1));
-					UserDefault::sharedUserDefault()->setIntegerForKey(data->getData(2,1),++n);
+					int n=UserDefault::sharedUserDefault()->getIntegerForKey(data->getData(2,1)) + 1;
+					UserDefault::sharedUserDefault()->setIntegerForKey(data->getData(2,1),n);
 					coins=coins-price[2];
 					UserDefault::sharedUserDefault()->setIntegerForKey("myGold",coins);
-					std::stringstream ss;
-					ss<<coins;
-					std::string s1=ss.str();
-					Money_text->setString(s1);
-					std::stringstream ss2;
-					ss2<<n;
-					s1=ss2.str();
-					item3_num->setTitleText(s1);
+					moneylabel->setString(itos(coins));
+					item3_num->setTitleText(itos(n));
 					item3_num->setVisible(true);
 				}
 				else
@@ -799,18 +779,12 @@ void IShop::onTouchBuyButton(Object* pSender, TouchEventType type){
 		case UI_BUTTON_BUY_LANDMINE:
 			{
 				if(coins>=price[3]){
-					int n=UserDefault::sharedUserDefault()->getIntegerForKey(data->getData(3,1));
-					UserDefault::sharedUserDefault()->setIntegerForKey(data->getData(3,1),++n);
+					int n=UserDefault::sharedUserDefault()->getIntegerForKey(data->getData(3,1))+1;
+					UserDefault::sharedUserDefault()->setIntegerForKey(data->getData(3,1),n);
 					coins=coins-price[3];
 					UserDefault::sharedUserDefault()->setIntegerForKey("myGold",coins);
-					std::stringstream ss;
-					ss<<coins;
-					std::string s1=ss.str();
-					Money_text->setString(s1);
-					std::stringstream ss2;
-					ss2<<n;
-					s1=ss2.str();
-					item4_num->setTitleText(s1);
+					moneylabel->setString(itos(coins));
+					item4_num->setTitleText(itos(n));
 					item4_num->setVisible(true);
 				}
 				else
@@ -822,18 +796,12 @@ void IShop::onTouchBuyButton(Object* pSender, TouchEventType type){
 		case UI_BUTTON_BUY_TRAP:
 			{
 				if(coins>=price[4]){
-					int n=UserDefault::sharedUserDefault()->getIntegerForKey(data->getData(4,1));
-					UserDefault::sharedUserDefault()->setIntegerForKey(data->getData(4,1),++n);
+					int n=UserDefault::sharedUserDefault()->getIntegerForKey(data->getData(4,1)) + 1;
+					UserDefault::sharedUserDefault()->setIntegerForKey(data->getData(4,1),n);
 					coins=coins-price[4];
 					UserDefault::sharedUserDefault()->setIntegerForKey("myGold",coins);
-					std::stringstream ss;
-					ss<<coins;
-					std::string s1=ss.str();
-					Money_text->setString(s1);
-					std::stringstream ss2;
-					ss2<<n;
-					s1=ss2.str();
-					item5_num->setTitleText(s1);
+					moneylabel->setString(itos(coins));
+					item5_num->setTitleText(itos(n));
 					item5_num->setVisible(true);
 				}
 				else
@@ -845,18 +813,12 @@ void IShop::onTouchBuyButton(Object* pSender, TouchEventType type){
 		case UI_BUTTON_BUY_ASSIST:
 			{
 				if(coins>=price[5]){
-					int n=UserDefault::sharedUserDefault()->getIntegerForKey(data->getData(5,1));
-					UserDefault::sharedUserDefault()->setIntegerForKey(data->getData(5,1),++n);
+					int n=UserDefault::sharedUserDefault()->getIntegerForKey(data->getData(5,1))+1;
+					UserDefault::sharedUserDefault()->setIntegerForKey(data->getData(5,1),n);
 					coins=coins-price[5];
 					UserDefault::sharedUserDefault()->setIntegerForKey("myGold",coins);
-					std::stringstream ss;
-					ss<<coins;
-					std::string s1=ss.str();
-					Money_text->setString(s1);
-					std::stringstream ss2;
-					ss2<<n;
-					s1=ss2.str();
-					item6_num->setTitleText(s1);
+					moneylabel->setString(itos(coins));
+					item6_num->setTitleText(itos(n));
 					item6_num->setVisible(true);
 				}
 				else
