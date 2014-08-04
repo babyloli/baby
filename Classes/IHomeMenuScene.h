@@ -24,6 +24,9 @@ public:
     
 	// a selector callback
 	void onTouchButton(Object* pSender, TouchEventType type);
+
+	void onTouchIntro(Ref* pSender);
+
 	CREATE_FUNC(IHomeMenu);
 };
 

@@ -55,6 +55,35 @@ const int UI_MONEYTEXT = 54;
 const int UI_BUTTON_ADDMONEY = 110;
 const int UI_BUTTON_SUCCESS_RETURN = 6;   
 const int UI_BUTTON_SUCCESS_YES = 5;
+//TAGs for Intro page
+const int UI_BUTTON_INTRO_G1 = 1001;
+const int UI_BUTTON_INTRO_G2 = 1002;
+const int UI_BUTTON_INTRO_G3 = 1003;
+const int UI_BUTTON_INTRO_G4 = 1004;
+const int UI_BUTTON_INTRO_G5 = 1005;
+const int UI_BUTTON_INTRO_G6 = 1006;
+const int UI_BUTTON_INTRO_G7 = 1007;
+const int UI_BUTTON_INTRO_G8 = 1008;
+const int UI_BUTTON_INTRO_G9 = 1009;
+const int UI_BUTTON_INTRO_G10 = 1010;
+const int UI_BUTTON_INTRO_G11 = 1011;
+const int UI_BUTTON_INTRO_G12 = 1012;
+const int UI_DISPLAY_INTRO_G1 = 1013;
+const int UI_DISPLAY_INTRO_G2 = 1014;
+const int UI_DISPLAY_INTRO_G3 = 1015;
+const int UI_DISPLAY_INTRO_G4 = 1016;
+const int UI_DISPLAY_INTRO_G5 = 1017;
+const int UI_DISPLAY_INTRO_G6 = 1018;
+const int UI_DISPLAY_INTRO_G7 = 1019;
+const int UI_DISPLAY_INTRO_G8 = 1020;
+const int UI_DISPLAY_INTRO_G9 = 1021;
+const int UI_DISPLAY_INTRO_G10 = 1022;
+const int UI_DISPLAY_INTRO_G11 = 1023;
+const int UI_DISPLAY_INTRO_G12 = 1024;
+const int UI_DISPLAY_INTRO_FIR = 1025;
+const int UI_INTRO_CLOSE = 1026;
+
+
 
 TTFConfig configShop("fonts/cardFont.ttf",24);
 
@@ -154,9 +183,7 @@ bool IBGMusicSetter::init()
 	//musicCheckBox->setSelectedState(CocosDenshion::SimpleAudioEngine::getInstance()->isBackgroundMusicPlaying());
 	musicCheckBox->setSelectedState(ResourceManager::getInstance()->isBackgroundMusicAllow());
 	effectCheckBox->setSelectedState(ResourceManager::getInstance()->isEffectMusicAllow());
-	//if(SimpleAudioEngine::getInstance()->
-	//effectCheckBox->setSelectedState(true);
-	
+
 	return true;
 }
 
@@ -878,6 +905,305 @@ void ISuccessPage::ontouchButton(Object* pSender, TouchEventType type)
 			Director::getInstance()->resume();
 			break;
 		}
+	default:
+		break;
+	}
+}
+
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////////
+Scene* IIntroPage::createScene()
+{
+	auto scene = Scene::create();
+	auto layer = IIntroPage::create();
+	scene->addChild(layer);
+	return scene;
+}
+
+bool IIntroPage::init()
+{
+	if(!Layer::init()){
+		return false;
+	}
+
+	auto introPage = GUIReader::getInstance()->widgetFromJsonFile("UI/Intro_1/Intro_1.ExportJson");
+	this->addChild(introPage);
+
+	auto g1_Button = static_cast<Button*>(Helper::seekWidgetByTag(introPage,UI_BUTTON_INTRO_G1));
+	auto g2_Button = static_cast<Button*>(Helper::seekWidgetByTag(introPage,UI_BUTTON_INTRO_G2));
+	auto g3_Button = static_cast<Button*>(Helper::seekWidgetByTag(introPage,UI_BUTTON_INTRO_G3));
+	auto g4_Button = static_cast<Button*>(Helper::seekWidgetByTag(introPage,UI_BUTTON_INTRO_G4));
+	auto g5_Button = static_cast<Button*>(Helper::seekWidgetByTag(introPage,UI_BUTTON_INTRO_G5));
+	auto g6_Button = static_cast<Button*>(Helper::seekWidgetByTag(introPage,UI_BUTTON_INTRO_G6));
+	auto g7_Button = static_cast<Button*>(Helper::seekWidgetByTag(introPage,UI_BUTTON_INTRO_G7));
+	auto g8_Button = static_cast<Button*>(Helper::seekWidgetByTag(introPage,UI_BUTTON_INTRO_G8));
+	auto g9_Button = static_cast<Button*>(Helper::seekWidgetByTag(introPage,UI_BUTTON_INTRO_G9));
+	auto g10_Button = static_cast<Button*>(Helper::seekWidgetByTag(introPage,UI_BUTTON_INTRO_G10));
+	auto g11_Button = static_cast<Button*>(Helper::seekWidgetByTag(introPage,UI_BUTTON_INTRO_G11));
+	auto g12_Button = static_cast<Button*>(Helper::seekWidgetByTag(introPage,UI_BUTTON_INTRO_G12));
+	auto closeButton = static_cast<Button*>(Helper::seekWidgetByTag(introPage,UI_INTRO_CLOSE));
+	g1_Button->addTouchEventListener(this,toucheventselector(IIntroPage::ontouchButton));
+	g2_Button->addTouchEventListener(this,toucheventselector(IIntroPage::ontouchButton));
+	g3_Button->addTouchEventListener(this,toucheventselector(IIntroPage::ontouchButton));
+	g4_Button->addTouchEventListener(this,toucheventselector(IIntroPage::ontouchButton));
+	g5_Button->addTouchEventListener(this,toucheventselector(IIntroPage::ontouchButton));
+	g6_Button->addTouchEventListener(this,toucheventselector(IIntroPage::ontouchButton));
+	g7_Button->addTouchEventListener(this,toucheventselector(IIntroPage::ontouchButton));
+	g8_Button->addTouchEventListener(this,toucheventselector(IIntroPage::ontouchButton));
+	g9_Button->addTouchEventListener(this,toucheventselector(IIntroPage::ontouchButton));
+	g10_Button->addTouchEventListener(this,toucheventselector(IIntroPage::ontouchButton));
+	g11_Button->addTouchEventListener(this,toucheventselector(IIntroPage::ontouchButton));
+	g12_Button->addTouchEventListener(this,toucheventselector(IIntroPage::ontouchButton));
+	closeButton->addTouchEventListener(this,toucheventselector(IIntroPage::ontouchButton));
+
+	intro_g1 = Helper::seekWidgetByTag(introPage,UI_DISPLAY_INTRO_G1);
+	intro_g2 = Helper::seekWidgetByTag(introPage,UI_DISPLAY_INTRO_G2);
+	intro_g3 = Helper::seekWidgetByTag(introPage,UI_DISPLAY_INTRO_G3);
+	intro_g4 = Helper::seekWidgetByTag(introPage,UI_DISPLAY_INTRO_G4);
+	intro_g5 = Helper::seekWidgetByTag(introPage,UI_DISPLAY_INTRO_G5);
+	intro_g6 = Helper::seekWidgetByTag(introPage,UI_DISPLAY_INTRO_G6);
+	intro_g7 = Helper::seekWidgetByTag(introPage,UI_DISPLAY_INTRO_G7);
+	intro_g8 = Helper::seekWidgetByTag(introPage,UI_DISPLAY_INTRO_G8);
+	intro_g9 = Helper::seekWidgetByTag(introPage,UI_DISPLAY_INTRO_G9);
+	intro_g10 = Helper::seekWidgetByTag(introPage,UI_DISPLAY_INTRO_G10);
+	intro_g11 = Helper::seekWidgetByTag(introPage,UI_DISPLAY_INTRO_G11);
+	intro_g12 = Helper::seekWidgetByTag(introPage,UI_DISPLAY_INTRO_G12);
+	intro_first = Helper::seekWidgetByTag(introPage,UI_DISPLAY_INTRO_FIR);
+	intro_g1->setVisible(false);
+	intro_g2->setVisible(false);
+	intro_g3->setVisible(false);
+	intro_g4->setVisible(false);
+	intro_g5->setVisible(false);
+	intro_g6->setVisible(false);
+	intro_g7->setVisible(false);
+	intro_g8->setVisible(false);
+	intro_g9->setVisible(false);
+	intro_g10->setVisible(false);
+	intro_g11->setVisible(false);
+	intro_g12->setVisible(false);
+	intro_first->setVisible(true);
+}
+
+void IIntroPage::ontouchButton(Object* pSender, TouchEventType type)
+{
+	int tag = (static_cast<Button*>(pSender))->getTag();
+	switch (type)
+	{
+	case TOUCH_EVENT_ENDED:
+		switch(tag){
+		case UI_BUTTON_INTRO_G1:
+			{
+				intro_g1->setVisible(true);
+				intro_g2->setVisible(false);
+				intro_g3->setVisible(false);
+				intro_g4->setVisible(false);
+				intro_g5->setVisible(false);
+				intro_g6->setVisible(false);
+				intro_g7->setVisible(false);
+				intro_g8->setVisible(false);
+				intro_g9->setVisible(false);
+				intro_g10->setVisible(false);
+				intro_g11->setVisible(false);
+				intro_g12->setVisible(false);
+				intro_first->setVisible(false);
+				break;
+			}
+		case UI_BUTTON_INTRO_G2:
+			{
+				intro_g1->setVisible(false);
+				intro_g2->setVisible(true);
+				intro_g3->setVisible(false);
+				intro_g4->setVisible(false);
+				intro_g5->setVisible(false);
+				intro_g6->setVisible(false);
+				intro_g7->setVisible(false);
+				intro_g8->setVisible(false);
+				intro_g9->setVisible(false);
+				intro_g10->setVisible(false);
+				intro_g11->setVisible(false);
+				intro_g12->setVisible(false);
+				intro_first->setVisible(false);
+				break;
+			}
+		case UI_BUTTON_INTRO_G3:
+			{
+				intro_g1->setVisible(false);
+				intro_g2->setVisible(false);
+				intro_g3->setVisible(true);
+				intro_g4->setVisible(false);
+				intro_g5->setVisible(false);
+				intro_g6->setVisible(false);
+				intro_g7->setVisible(false);
+				intro_g8->setVisible(false);
+				intro_g9->setVisible(false);
+				intro_g10->setVisible(false);
+				intro_g11->setVisible(false);
+				intro_g12->setVisible(false);
+				intro_first->setVisible(false);
+				break;
+			}
+		case UI_BUTTON_INTRO_G4:
+			{
+				intro_g1->setVisible(false);
+				intro_g2->setVisible(false);
+				intro_g3->setVisible(false);
+				intro_g4->setVisible(true);
+				intro_g5->setVisible(false);
+				intro_g6->setVisible(false);
+				intro_g7->setVisible(false);
+				intro_g8->setVisible(false);
+				intro_g9->setVisible(false);
+				intro_g10->setVisible(false);
+				intro_g11->setVisible(false);
+				intro_g12->setVisible(false);
+				intro_first->setVisible(false);
+				break;
+			}
+		case UI_BUTTON_INTRO_G5:
+			{
+				intro_g1->setVisible(false);
+				intro_g2->setVisible(false);
+				intro_g3->setVisible(false);
+				intro_g4->setVisible(false);
+				intro_g5->setVisible(true);
+				intro_g6->setVisible(false);
+				intro_g7->setVisible(false);
+				intro_g8->setVisible(false);
+				intro_g9->setVisible(false);
+				intro_g10->setVisible(false);
+				intro_g11->setVisible(false);
+				intro_g12->setVisible(false);
+				intro_first->setVisible(false);
+				break;
+			}
+		case UI_BUTTON_INTRO_G6:
+			{
+				intro_g1->setVisible(false);
+				intro_g2->setVisible(false);
+				intro_g3->setVisible(false);
+				intro_g4->setVisible(false);
+				intro_g5->setVisible(false);
+				intro_g6->setVisible(true);
+				intro_g7->setVisible(false);
+				intro_g8->setVisible(false);
+				intro_g9->setVisible(false);
+				intro_g10->setVisible(false);
+				intro_g11->setVisible(false);
+				intro_g12->setVisible(false);
+				intro_first->setVisible(false);
+				break;
+			}
+		case UI_BUTTON_INTRO_G7:
+			{
+				intro_g1->setVisible(false);
+				intro_g2->setVisible(false);
+				intro_g3->setVisible(false);
+				intro_g4->setVisible(false);
+				intro_g5->setVisible(false);
+				intro_g6->setVisible(false);
+				intro_g7->setVisible(true);
+				intro_g8->setVisible(false);
+				intro_g9->setVisible(false);
+				intro_g10->setVisible(false);
+				intro_g11->setVisible(false);
+				intro_g12->setVisible(false);
+				intro_first->setVisible(false);
+				break;
+			}
+		case UI_BUTTON_INTRO_G8:
+			{
+				intro_g1->setVisible(false);
+				intro_g2->setVisible(false);
+				intro_g3->setVisible(false);
+				intro_g4->setVisible(false);
+				intro_g5->setVisible(false);
+				intro_g6->setVisible(false);
+				intro_g7->setVisible(false);
+				intro_g8->setVisible(true);
+				intro_g9->setVisible(false);
+				intro_g10->setVisible(false);
+				intro_g11->setVisible(false);
+				intro_g12->setVisible(false);
+				intro_first->setVisible(false);
+				break;
+			}
+		case UI_BUTTON_INTRO_G9:
+			{
+				intro_g1->setVisible(false);
+				intro_g2->setVisible(false);
+				intro_g3->setVisible(false);
+				intro_g4->setVisible(false);
+				intro_g5->setVisible(false);
+				intro_g6->setVisible(false);
+				intro_g7->setVisible(false);
+				intro_g8->setVisible(false);
+				intro_g9->setVisible(true);
+				intro_g10->setVisible(false);
+				intro_g11->setVisible(false);
+				intro_g12->setVisible(false);
+				intro_first->setVisible(false);
+				break;
+			}
+		case UI_BUTTON_INTRO_G10:
+			{
+				intro_g1->setVisible(false);
+				intro_g2->setVisible(false);
+				intro_g3->setVisible(false);
+				intro_g4->setVisible(false);
+				intro_g5->setVisible(false);
+				intro_g6->setVisible(false);
+				intro_g7->setVisible(false);
+				intro_g8->setVisible(false);
+				intro_g9->setVisible(false);
+				intro_g10->setVisible(true);
+				intro_g11->setVisible(false);
+				intro_g12->setVisible(false);
+				intro_first->setVisible(false);
+				break;
+			}
+		case UI_BUTTON_INTRO_G11:
+			{
+				intro_g1->setVisible(false);
+				intro_g2->setVisible(false);
+				intro_g3->setVisible(false);
+				intro_g4->setVisible(false);
+				intro_g5->setVisible(false);
+				intro_g6->setVisible(false);
+				intro_g7->setVisible(false);
+				intro_g8->setVisible(false);
+				intro_g9->setVisible(false);
+				intro_g10->setVisible(false);
+				intro_g11->setVisible(true);
+				intro_g12->setVisible(false);
+				intro_first->setVisible(false);
+				break;
+			}
+		case UI_BUTTON_INTRO_G12:
+			{
+				intro_g1->setVisible(false);
+				intro_g2->setVisible(false);
+				intro_g3->setVisible(false);
+				intro_g4->setVisible(false);
+				intro_g5->setVisible(false);
+				intro_g6->setVisible(false);
+				intro_g7->setVisible(false);
+				intro_g8->setVisible(false);
+				intro_g9->setVisible(false);
+				intro_g10->setVisible(false);
+				intro_g11->setVisible(false);
+				intro_g12->setVisible(true);
+				intro_first->setVisible(false);
+				break;
+			}
+		case UI_INTRO_CLOSE:
+			this->removeFromParentAndCleanup(true);
+			break;
+		}
+		break;
 	default:
 		break;
 	}

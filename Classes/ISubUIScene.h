@@ -121,4 +121,28 @@ public:
 };
 
 
+
+class IIntroPage : public Layer
+{
+public:
+	static Scene* createScene();
+	virtual bool init();
+	CREATE_FUNC(IIntroPage);
+	void ontouchButton(Object* pSender, TouchEventType type);
+private:
+	Widget* intro_g1;
+	Widget* intro_g2;
+	Widget* intro_g3;
+	Widget* intro_g4;
+	Widget* intro_g5;
+	Widget* intro_g6;
+	Widget* intro_g7;
+	Widget* intro_g8;
+	Widget* intro_g9;
+	Widget* intro_g10;
+	Widget* intro_g11;
+	Widget* intro_g12;
+	Widget* intro_first;
+};
+
 #endif

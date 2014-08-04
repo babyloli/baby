@@ -73,6 +73,13 @@ bool IHomeMenu::init()
 	auto bgAnimation = Animation::createWithSpriteFrames(oryzaeFrames,1.0f/6.0f);
 	bgOryzae->runAction(RepeatForever::create(Animate::create(bgAnimation)));
  
+	auto introItem = MenuItemImage::create("help.png","help.png",CC_CALLBACK_1(IHomeMenu::onTouchIntro,this));
+	introItem->setPosition(Vec2(origin.x + visibleSize.width - introItem->getContentSize().width/2 ,
+		origin.y + visibleSize.height - introItem->getContentSize().height/2));
+	auto menu = Menu::create(introItem,NULL);
+	menu->setPosition(Vec2::ZERO);
+	this->addChild(menu);
+
     return true;
 }
 
@@ -114,4 +121,10 @@ void IHomeMenu::onTouchButton(Object* pSender, TouchEventType type)
 		break;
 	}
 
+}
+
+void IHomeMenu::onTouchIntro(Ref* pSender)
+{
+	auto introPage = IIntroPage::create();
+	this->addChild(introPage);
 }
