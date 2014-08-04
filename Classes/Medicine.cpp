@@ -107,6 +107,15 @@ bool PropsSlowdown::touchCallback(Touch* touch, Event* event)
 	if (m_position.containsPoint(touch->getLocation()) && m_canBeUsed){
 		m_isUsing = true;
 		usePropsAndUpdate();
+		
+		auto game = (Game*)this->getParent();
+		//减速道具在可用的情况下， 更新减速道具的目标怪兽
+		if(game){
+			if(getTargetsNumber() != game->getEnemies().size()){
+				setSlowdownTargets(game->getEnemies());
+			}
+		}
+
 		for(int i = 0; i < m_targets.size(); i++)
 		{
 			auto enemy = m_targets.at(i);

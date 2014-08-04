@@ -31,6 +31,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	ResourceManager::getInstance()->init();
     // create a scene. it's an autorelease object
     auto scene = IHomeMenu::createScene();
+	//CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("music/MenuBackgroundMusic.mp3");
+	
 	CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("music/MenuBackgroundMusic.mp3");
 	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("music/MenuBackgroundMusic.mp3",true);
 

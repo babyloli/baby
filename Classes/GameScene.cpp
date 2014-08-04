@@ -99,11 +99,11 @@ void Game::update(float dt){
 	findEnemy(dt);
 
 	//减速道具在可用的情况下， 更新减速道具的目标怪兽
-	auto sd = this->getChildByTag(TYPE_PROP_SLOWDOWN);
-	auto slowdown = (PropsSlowdown*)sd;
-	if(slowdown->isAvailable() && slowdown->getTargetsNumber() != m_enemies.size()){
-		slowdown->setSlowdownTargets(m_enemies);
-	}
+	//auto sd = this->getChildByTag(TYPE_PROP_SLOWDOWN);
+	//auto slowdown = (PropsSlowdown*)sd;
+	//if(slowdown->isAvailable() && slowdown->getTargetsNumber() != m_enemies.size()){
+	//	slowdown->setSlowdownTargets(m_enemies);
+	//}
 
 }
 
@@ -221,6 +221,10 @@ void Game::loadToolBar(){
 					CocosDenshion::SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
 				}
 
+				if(ResourceManager::getInstance()->isEffectMusicAllow()){
+					CocosDenshion::SimpleAudioEngine::getInstance()->pauseAllEffects();
+				}
+
 				auto listener1 = EventListenerTouchOneByOne::create();//创建一个触摸监听    
 				listener1->setSwallowTouches(true);//设置不想向下传递触摸  true是不想 默认为false  
 				listener1->onTouchBegan = [](Touch* touch, Event* event){   
@@ -254,6 +258,11 @@ void Game::loadToolBar(){
 				if(ResourceManager::getInstance()->isBackgroundMusicAllow()){
 					CocosDenshion::SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
 				}
+
+				if(ResourceManager::getInstance()->isEffectMusicAllow()){
+					CocosDenshion::SimpleAudioEngine::getInstance()->resumeAllEffects();
+				}
+
 				return true;
 			}		
 		}
@@ -566,6 +575,10 @@ void Game::loadEquipmentSlot()
 
 
 void Game::countDown(float dt){
+
+	if(ResourceManager::getInstance()->isEffectMusicAllow()){
+		//CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("music/sceneSound/ohmygod.mp3");
+	}
 
 	if (m_countdown <= 0){
 		this->unschedule(schedule_selector(Game::countDown));

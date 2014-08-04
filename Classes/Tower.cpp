@@ -115,6 +115,11 @@ void Tower::shotBullet(Bullet* bullet, Enemy* target)
 	if (!m_bulletRotateEnable)
 		bullet->setRotation(angle);
 	bullet->setBulletVelocity(direction * bullet->getSpeed());
+	
+	if(ResourceManager::getInstance()->isEffectMusicAllow()){
+		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
+			ResourceManager::getInstance()->towerData->getData(m_id,17));
+	}
 }
 
 //-------------------------get/sets------------------------

@@ -461,7 +461,7 @@ TableViewCell* IGameLevelSelector::tableCellAtIndex(TableView* table, ssize_t id
 	String* string = String::createWithFormat("%d", idx);
 	TableViewCell* cell = table->dequeueCell();
 	
-	auto str = String::createWithFormat("Map/Section%d/%d/%d.png", m_section, idx, idx);
+	auto str = String::createWithFormat("Map/Section%d/%d/m%d.png", m_section, idx, idx);
 	if (!cell)
 	{
 		//创建单元，如果自定义单元效果，需要继承tableViewCell, 并且重载draw
@@ -471,7 +471,7 @@ TableViewCell* IGameLevelSelector::tableCellAtIndex(TableView* table, ssize_t id
 		
 		Sprite* sprite = Sprite::create(str->getCString());
 		auto cellSize = tableCellSizeForIndex(table, idx);
-		sprite->setScale(0.5f);
+		//sprite->setScale(0.5f);
 		sprite->setTag(123);
 		sprite->setPosition(Vec2(cellSize.width/2,cellSize.height/2));
 		cell->addChild(sprite);

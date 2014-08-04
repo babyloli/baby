@@ -107,6 +107,10 @@ public:
 #define ANIMAITON_WIN "animation_win"
 #define ANIMATION_FAIL "animation_fail"
 #define TILESIZE 80
+		//----------------Music-------------
+#define BACKGROUND_MUSIC_MENU "music/MenuBackgroundMusic.mp3"
+#define BACKGROUND_MUSIC_GAMESCENE_1 "music/GameSceneMusic0.mp3"
+
 	HCSVFile* sections;
 	Texture2D* background_price;
 	Texture2D* background_price_big;

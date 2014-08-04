@@ -1,4 +1,4 @@
 id,type,generateTime,generateRate,number
-0,monster,1,0.9,10
+0,monster,1,0.9,8
 1,litBoss,1,0.1,2
 2,bigBoss,0,0,1

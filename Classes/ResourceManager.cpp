@@ -43,6 +43,20 @@ void ResourceManager::init(){
 	background_price = textureCache->addImage("images/priceBackground.png");
 	background_price_big = textureCache->addImage("images/priceBackground2.png");
 	hpBar = textureCache->addImage("images/enemy/Maxhpbar.png");
+
+	//---------------------PreLoad Music and Effect sound------------
+	CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic(BACKGROUND_MUSIC_MENU);
+	CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic(BACKGROUND_MUSIC_GAMESCENE_1);
+	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("music/sceneSound/321go.mp3");
+	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("music/sceneSound/ohmygod.mp3");
+	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("music/sceneSound/ohno.mp3");
+	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("music/sceneSound/victory.mp3");
+	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("music/sceneSound/youwin.mp3");
+
+	for (int i = 0; i < towerData->getRows(); i++) 
+	{
+		CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect(towerData->getData(i,17));
+	}
 }
 
 void ResourceManager::loadAnimation(const char* mosterName, const char* direction, int size, float delay, const std::string &name){
@@ -50,7 +64,7 @@ void ResourceManager::loadAnimation(const char* mosterName, const char* directio
 	char str[100] = {0};
 	Vector<SpriteFrame*> spriteFrames;
 	for (int i = 1; i <= size; i++){
-		sprintf(str, "%s%s%1d.png", mosterName, direction, i);
+		sprintf(str, "%s%s%1d.png", mosterName, "right", i);
 		spriteFrames.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName(str));
 	}
 	animationCache->addAnimation(Animation::createWithSpriteFrames(spriteFrames, delay), name);
