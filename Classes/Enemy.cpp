@@ -43,9 +43,17 @@ bool Enemy::initWithId(int id, int curRound, bool mode){
 
 	//attach physics body
 	auto body = PhysicsBody::createBox(Size(50, 50), PhysicsMaterial(0.5f, 0.0f, 0.5f));
-	body->setCategoryBitmask(CategoryBitMask_Enemy);
-	body->setContactTestBitmask(ContactTestBitMask_Enemy);
-	body->setCollisionBitmask(CollisionBitMask_Enemy);
+
+	if(m_type == 2){
+		body->setCategoryBitmask(CategoryBitMask_Boss);
+		body->setContactTestBitmask(ContactTestBitMask_Boss);
+		body->setCollisionBitmask(CollisionBitMask_Boss);
+	} else {
+		body->setCategoryBitmask(CategoryBitMask_Enemy);
+		body->setContactTestBitmask(ContactTestBitMask_Enemy);
+		body->setCollisionBitmask(CollisionBitMask_Enemy);
+	}
+
 	body->setRotationEnable(false);
 	this->setPhysicsBody(body);
 
@@ -231,6 +239,10 @@ bool Enemy::getMode(){
 
 void Enemy::setMode(bool b){
 	m_mode = b;
+}
+
+int Enemy::getType(){
+	return m_type;
 }
 
 Sprite* Enemy::getEnemy(){
