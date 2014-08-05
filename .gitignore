@@ -7,5 +7,5 @@ proj.ios_mac/
 proj.linux/
 proj.win32/
 proj.wp8-xaml/
-publish/
+publish/android/
 AppActivity.java
