@@ -364,7 +364,7 @@ void Endless::winGame()
 
 	auto failUI = GUIReader::getInstance()->widgetFromJsonFile("UI/gomeOver_Endless_1/gomeOver_Endless_1.ExportJson");
 	this->addChild(failUI,ZORDER_MENU);
-	auto action = EaseBounceOut::create(MoveTo::create(0.3, origin));
+	auto action = EaseBounceOut::create(MoveTo::create(0.3f, origin));
 	failUI->setPosition(Vec2(origin.x, origin.y + visibleSize.height));
 	failUI->runAction(action);
 
@@ -391,7 +391,7 @@ void Endless::failGame()
 
 	auto failUI = GUIReader::getInstance()->widgetFromJsonFile("UI/gomeOver_Endless_1/gomeOver_Endless_1.ExportJson");
 	this->addChild(failUI,ZORDER_MENU);
-	auto action = EaseBounceOut::create(MoveTo::create(0.3, origin));
+	auto action = EaseBounceOut::create(MoveTo::create(0.3f, origin));
 	failUI->setPosition(Vec2(origin.x, origin.y + visibleSize.height));
 	failUI->runAction(action);
 

@@ -378,7 +378,7 @@ void Game::loadTower(){
 				menu->addChild(towerItem);
 			}			
 		}
-		menu->setPosition(Vec2(tower->getPositionX(), tower->getPositionY() + tower->getContentSize().height));
+		menu->setPosition(Vec2(tower->getPositionX(), tower->getPositionY()));
 		m_menus.pushBack(menu);
 
 		Sprite* updateSprite = Sprite::create("images/tower/update.png");	//Éý¼¶°´Å¥
@@ -402,23 +402,24 @@ void Game::loadTower(){
 			Vec2 point = target->convertTouchToNodeSpace(touch);
 			if (rect.containsPoint(point)){
 //				tower->stopAction(actionRepeateFadeOutIn);
-				Menu* menu = this->m_menus.at(towerId);
-				if (menu->getParent() == NULL){
-					for (Node* node : menu->getChildren())
-					{
-						MenuItemTower* item = dynamic_cast<MenuItemTower*>(node);
-						if (item){
-							if (item->getPrice() > m_money){
-								item->setEnabled(false);
-							}else
-							{
-								item->setEnabled(true);
-							}
-						}
-					}
-					this->addChild(menu);
-					this->reorderChild(menu, ZORDER_MENUITEMTOWER);
+				for (Menu* m : this->m_menus){
+					this->removeChild(m, false);
 				}
+				Menu* menu = this->m_menus.at(towerId);				
+				for (Node* node : menu->getChildren())
+				{
+					MenuItemTower* item = static_cast<MenuItemTower*>(node);
+					if (item->getPrice() > m_money){
+						item->setEnabled(false);
+					}else
+					{
+						item->setEnabled(true);
+					}
+				}
+				this->addChild(menu);
+				this->reorderChild(menu, ZORDER_MENUITEMTOWER);	
+				
+				return true;
 			}
 			else
 			{
@@ -826,7 +827,7 @@ void Game::winGame()
 	auto node = cocostudio::SceneReader::getInstance()->createNodeWithSceneFile("UI/GameOver_Win_1/GameOver_win.json");
 	if(node){
 		this->addChild(node,ZORDER_MENU);
-		auto inAction = EaseBounceOut::create(MoveTo::create(0.3, Vec2(node->getPositionX(),node->getPositionY() - 30)));
+		auto inAction = EaseBounceOut::create(MoveTo::create(0.3f, Vec2(node->getPositionX(),node->getPositionY() - 30)));
 		node->setPosition(Vec2(origin.x, origin.y + visibleSize.height/2));
 		node->runAction(inAction);
 	}
@@ -880,9 +881,9 @@ void Game::winGame()
 	auto delay1 = DelayTime::create(0.5f);
 	auto delay2 = DelayTime::create(1.0f);
 	auto delay3 = DelayTime::create(0.05f);
-	auto scaleTrans = EaseBackInOut::create(ScaleTo::create(0.6,1));
-	auto multigoldAction = Spawn::create(EaseBounceIn::create(MoveTo::create(0.4,Vec2(0,0))),FadeIn::create(1.0f),NULL);
-	auto displaygoldAction = Spawn::create(EaseBounceIn::create(MoveTo::create(0.4,Vec2(830,300))),FadeIn::create(1.0f),NULL);
+	auto scaleTrans = EaseBackInOut::create(ScaleTo::create(0.6f,1));
+	auto multigoldAction = Spawn::create(EaseBounceIn::create(MoveTo::create(0.4f,Vec2(0,0))),FadeIn::create(1.0f),NULL);
+	auto displaygoldAction = Spawn::create(EaseBounceIn::create(MoveTo::create(0.4f,Vec2(830,300))),FadeIn::create(1.0f),NULL);
 	multi->setPosition(0,-300);
 	goldlabel->setPosition(830,0);
 
@@ -1070,11 +1071,11 @@ void Game::onEnter(){
 		int tagA = nodeA->getTag();
 		int tagB = nodeB->getTag();
 		if (TAG_BULLET == tagA && TAG_ENEMY == tagB){
-			bullet = dynamic_cast<Bullet*>(nodeA);
-			enemy = dynamic_cast<Enemy*>(nodeB);
+			bullet = static_cast<Bullet*>(nodeA);
+			enemy = static_cast<Enemy*>(nodeB);
 		} else if (TAG_ENEMY == tagA && TAG_BULLET == tagB){
-			bullet = dynamic_cast<Bullet*>(nodeB);
-			enemy = dynamic_cast<Enemy*>(nodeA);
+			bullet = static_cast<Bullet*>(nodeB);
+			enemy = static_cast<Enemy*>(nodeA);
 		}
 		if (bullet && enemy){
 			int damage = bullet->getDamage();
@@ -1087,12 +1088,12 @@ void Game::onEnter(){
 		if(m_assistants.size() > 0){
 			Assistant* assistant = NULL;
 			if(TAG_ASSISTANT == tagA && TAG_ENEMY == tagB){
-				assistant =dynamic_cast<Assistant*>(nodeA);
-				enemy = dynamic_cast<Enemy*>(nodeB);
+				assistant = static_cast<Assistant*>(nodeA);
+				enemy = static_cast<Enemy*>(nodeB);
 			}
 			else if(TAG_ENEMY == tagA &&TAG_ASSISTANT == tagB){
-				enemy = dynamic_cast<Enemy*>(nodeA);
-				assistant = dynamic_cast<Assistant*>(nodeB);
+				enemy = static_cast<Enemy*>(nodeA);
+				assistant = static_cast<Assistant*>(nodeB);
 			}
 			if(enemy && assistant){
 				int damage = assistant->getPhysicalDefence() - enemy->getPhysicalDefence();

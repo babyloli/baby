@@ -986,6 +986,7 @@ bool IIntroPage::init()
 	intro_g11->setVisible(false);
 	intro_g12->setVisible(false);
 	intro_first->setVisible(true);
+	return true;
 }
 
 void IIntroPage::ontouchButton(Object* pSender, TouchEventType type)
