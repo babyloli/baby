@@ -577,8 +577,8 @@ void Game::loadEquipmentSlot()
 
 void Game::countDown(float dt){
 
-	if(ResourceManager::getInstance()->isEffectMusicAllow()){
-		//CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("music/sceneSound/ohmygod.mp3");
+	if(ResourceManager::getInstance()->isEffectMusicAllow() && m_countdown == 3){
+		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("music/sceneSound/321go.mp3");
 	}
 
 	if (m_countdown <= 0){
@@ -855,6 +855,12 @@ void Game::winGame()
 		return;
 	}
 
+	if (ResourceManager::getInstance()->isEffectMusicAllow()){
+		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("music/sceneSound/victory.mp3");
+	}
+
+
+
 	auto render = static_cast<ComRender*>(node->getChildByTag(VICTORY_PANNEL)->getComponent("GUIComponent"));
 	auto widget = static_cast<Widget*>(render->getNode());
 	auto returnButton = static_cast<Button*>(widget->getChildByTag(UI_BUTTON_SUCCESS_RETURN));
@@ -1006,6 +1012,10 @@ void Game::failGame()
 
 	auto failUI = GUIReader::getInstance()->widgetFromJsonFile("UI/GamOver_Fail_1/GamOver_Fail_1.ExportJson");
 	this->addChild(failUI,ZORDER_MENU);
+
+	if (ResourceManager::getInstance()->isEffectMusicAllow()){
+		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("music/sceneSound/ohmygod.mp3");
+	}
 
 	auto failSprite = Sprite::create();
 	auto failAction = RepeatForever::create(Animate::create(AnimationCache::getInstance()->getAnimation(ANIMATION_FAIL)));
