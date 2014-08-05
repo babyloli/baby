@@ -366,7 +366,7 @@ void Game::loadTower(){
 		std::vector<std::string> types;
 		split(type, ",", &types);
 		int mid = types.size()/2;
-		for (int j = 0; j < types.size(); j++)
+		for (int j = 0; j < (int)types.size(); j++)
 		{
 			int temp = std::atoi(types.at(j).c_str());
 			std::string spriteFrameName = rm->towerData->getData(temp, 1);
@@ -736,7 +736,7 @@ void Game::moveEnemy(float dt){
 					}
 					else //如果走到了其他路上
 					{
-						for (int k = 0; k < m_roads.size(); k++){
+						for (int k = 0; k < (int)m_roads.size(); k++){
 							Road* it = &m_roads.at(k);
 							if (it->containsPoint(enemy_position)){
 								enemy->setDirection(it->getDirection());
@@ -1083,6 +1083,7 @@ void Game::onEnter(){
 			if (damage > 0)
 				enemy->setHp(enemy->getHp() - damage);
 			bullet->setDie();
+
 			return true;
 		}
 		if(m_assistants.size() > 0){

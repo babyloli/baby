@@ -34,22 +34,26 @@ public:
 #define ZORDER_ENEMY 4
 	//----------------PhysicsMask----------------
 #define CategoryBitMask_Bullet		0x0000000F
+#define CategoryBitMask_Bullet2		0x0F000000
 #define CategoryBitMask_Barrier		0x000000F0
 #define CategoryBitMask_Enemy		0x00000F00
 #define CategoryBitMask_Assist		0x0FF00000
+#define CategoryBitMask_Boss		0x00F80000
 
-#define ContactTestBitMask_Bullet	0x00000F00
+#define ContactTestBitMask_Bullet	0x00080F00
+#define ContactTestBitMask_Bullet2	0x00080F00
 #define ContactTestBitMask_Barrier	0x00000000
 #define ContactTestBitMask_Enemy	0x0F00000F
-#define ContactTestBitMask_Assist	0x00000F00
+#define ContactTestBitMask_Assist	0x00080F00
+#define ContactTestBitMask_Boss		0x0F00000F
 
 #define CollisionBitMask_Bullet		0x00000F00
+#define CollisionBitMask_Bullet2	0x00000000
 #define CollisionBitMask_Barrier	0x00F00F00
 #define CollisionBitMask_Enemy		0x000000FF
 #define CollisionBitMask_Assist		0x000000F0
+#define CollisionBitMask_Boss		0x000000F0
 
-#define CategoryBitMask_Bullet2		0x0F000000
-#define CollisionBitMask_Bullet2	0x00000000
 	//----------------Tower----------------------
 #define MAX_RANGE 9999
 	HCSVFile * towerData;

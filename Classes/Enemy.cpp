@@ -42,10 +42,20 @@ bool Enemy::initWithId(int id, int curRound, bool mode){
 	this->addChild(m_sprite);
 
 	//attach physics body
-	auto body = PhysicsBody::createBox(Size(50, 50), PhysicsMaterial(0.5f, 0.0f, 0.5f));
-	body->setCategoryBitmask(CategoryBitMask_Enemy);
-	body->setContactTestBitmask(ContactTestBitMask_Enemy);
-	body->setCollisionBitmask(CollisionBitMask_Enemy);
+//	auto body = PhysicsBody::createBox(Size(50, 50), PhysicsMaterial(0.5f, 0.0f, 0.5f));
+	auto body = PhysicsBody::createCircle(20.0f, PhysicsMaterial(0.5f, 0.0f, 0.5f));
+	if (m_type < 2)
+	{
+		body->setCategoryBitmask(CategoryBitMask_Enemy);
+		body->setContactTestBitmask(ContactTestBitMask_Enemy);
+		body->setCollisionBitmask(CollisionBitMask_Enemy);
+	}
+	else
+	{
+		body->setCategoryBitmask(CategoryBitMask_Boss);
+		body->setContactTestBitmask(ContactTestBitMask_Boss);
+		body->setCollisionBitmask(CollisionBitMask_Boss);
+	}
 	body->setRotationEnable(false);
 	this->setPhysicsBody(body);
 
