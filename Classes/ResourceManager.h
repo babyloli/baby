@@ -47,12 +47,14 @@ public:
 #define ContactTestBitMask_Assist	0x00080F00
 #define ContactTestBitMask_Boss		0x0F00000F
 
+
 #define CollisionBitMask_Bullet		0x00000F00
 #define CollisionBitMask_Bullet2	0x00000000
 #define CollisionBitMask_Barrier	0x00F00F00
 #define CollisionBitMask_Enemy		0x000000FF
 #define CollisionBitMask_Assist		0x000000F0
 #define CollisionBitMask_Boss		0x000000F0
+
 
 	//----------------Tower----------------------
 #define MAX_RANGE 9999
@@ -114,6 +116,9 @@ public:
 		//----------------Music-------------
 #define BACKGROUND_MUSIC_MENU "music/MenuBackgroundMusic.mp3"
 #define BACKGROUND_MUSIC_GAMESCENE_1 "music/GameSceneMusic0.mp3"
+#define BACKGROUND_MUSIC_GAMESCENE_2 "music/GameSceneMusic1.mp3"
+#define BACKGROUND_MUSIC_GAMESCENE_3 "music/GameSceneMusic2.mp3"
+#define BACKGROUND_MUSIC_GAMESCENE_4 "music/GameSceneMusic3.mp3"
 
 	HCSVFile* sections;
 	Texture2D* background_price;

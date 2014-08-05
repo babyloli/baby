@@ -601,8 +601,28 @@ void Game::countDown(float dt){
 		}
 
 		if(ResourceManager::getInstance()->isBackgroundMusicAllow()){		
-			CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("music/GameSceneMusic0.mp3");
-			CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("music/GameSceneMusic0.mp3",true);
+			switch (m_section){
+			case 1:
+				{
+					CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(BACKGROUND_MUSIC_GAMESCENE_1,true);
+					break;
+				}
+			case 2:
+				{
+					CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(BACKGROUND_MUSIC_GAMESCENE_2,true);
+					break;
+				}
+			case 3:
+				{
+					CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(BACKGROUND_MUSIC_GAMESCENE_3,true);
+					break;
+				}
+			case 4:
+				{
+					CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(BACKGROUND_MUSIC_GAMESCENE_4,true);
+					break;
+				}
+			}
 		}
 	}
 	else
@@ -1235,6 +1255,10 @@ void Game::onTouchWinPage(Object* pSender, TouchEventType type)
 			case UI_BUTTON_SUCCESS_RETURN:
 				{
 					auto s = IGameLevelSelector::createScene(m_section);
+					if(ResourceManager::getInstance()->isBackgroundMusicAllow()){
+						CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+						CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(BACKGROUND_MUSIC_MENU,true);
+					}
 					Director::getInstance()->replaceScene(s);
 					Director::getInstance()->resume();
 					break;

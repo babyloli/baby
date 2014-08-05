@@ -243,6 +243,10 @@ void Enemy::setMode(bool b){
 	m_mode = b;
 }
 
+int Enemy::getType(){
+	return m_type;
+}
+
 Sprite* Enemy::getEnemy(){
 	return m_sprite;	
 }
