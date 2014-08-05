@@ -366,6 +366,12 @@ void ISectionSelector::onTouchBar(Object* pSender, TouchEventType type)
 			this->addChild(shopUI);
 			break;
 							}
+		case UI_BUTTON_HEALTH:{
+			auto healthUI=IHealth::create();
+			this->addChild(healthUI);
+			break;
+							  }
+
 		default:
 			break;
 		}
@@ -528,6 +534,7 @@ void IGameLevelSelector::ontouchBar(Object* pSender, TouchEventType type)
 			Director::getInstance()->replaceScene(homescene);
 			break;
 							}
+
 		default:
 			break;
 		}
@@ -1207,5 +1214,53 @@ void IIntroPage::ontouchButton(Object* pSender, TouchEventType type)
 		break;
 	default:
 		break;
+	}
+}
+
+//////////////////////////////////////////////////
+Scene* IHealth::createScene()
+{
+	auto scene = Scene::create();
+	auto layer = IHealth::create();
+	scene->addChild(layer);
+	return scene;
+}
+
+bool IHealth::init()
+{
+	if(!Layer::init()){
+		return false;
+	}
+
+	auto healthpage = GUIReader::getInstance()->widgetFromJsonFile("UI/HealthUi_1/HealthUi_1.ExportJson");
+	this->addChild(healthpage);
+	health1=(TextAtlas*)Helper::seekWidgetByTag(healthpage,11);
+	health2=(TextAtlas*)Helper::seekWidgetByTag(healthpage,9);
+	int health=UserDefault::getInstance()->getIntegerForKey("Health");
+	health1->setStringValue(itos(health));
+	int health3=(UserDefault::getInstance()->getIntegerForKey("Section"))*16-health;
+	if(health3<=0||UserDefault::getInstance()->getIntegerForKey("Section")==4){
+		health3=0;
+	}
+	health2->setString(itos(health3));
+	auto back_Button = static_cast<Button*>(Helper::seekWidgetByTag(healthpage,14));
+	back_Button->addTouchEventListener(this,toucheventselector(IHealth::ontouchButton));
+	return true;
+}
+
+void IHealth::ontouchButton(Object* pSender, TouchEventType type){
+	int tag = (static_cast<Button*>(pSender))->getTag();
+	switch (type)
+	{
+	case TOUCH_EVENT_ENDED:
+		switch(tag){
+		case 14:{
+			this->removeFromParentAndCleanup(true);
+			break;
+				}
+		default:{
+			break;
+				}
+		}
 	}
 }

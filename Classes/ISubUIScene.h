@@ -145,4 +145,16 @@ private:
 	Widget* intro_first;
 };
 
+class IHealth : public Layer{
+public:
+	static Scene* createScene();
+	virtual bool init();
+	CREATE_FUNC(IHealth);
+	void ontouchButton(Object* pSender, TouchEventType type);
+private:
+	TextAtlas* health1;
+	TextAtlas* health2;
+
+};
+
 #endif
