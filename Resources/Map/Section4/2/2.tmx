@@ -134,11 +134,6 @@
     <property name="type" value="1,2,3"/>
    </properties>
   </object>
-  <object x="480" y="480" width="80" height="80">
-   <properties>
-    <property name="type" value="1,2,3"/>
-   </properties>
-  </object>
   <object x="160" y="480" width="80" height="80">
    <properties>
     <property name="type" value="1,2,3"/>

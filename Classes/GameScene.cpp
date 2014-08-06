@@ -140,15 +140,15 @@ void Game::loadMenu(){
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-	auto physicsItem = MenuItemImage::create("CloseNormal.png",
-		"CloseSelected.png",
-		CC_CALLBACK_1(Game::menuPhysicsCallback, this));
-	physicsItem->setPosition(Vec2(origin.x + visibleSize.width - physicsItem->getContentSize().width/2 ,
-		origin.y + visibleSize.height - physicsItem->getContentSize().height));
+	//auto physicsItem = MenuItemImage::create("CloseNormal.png",
+	//	"CloseSelected.png",
+	//	CC_CALLBACK_1(Game::menuPhysicsCallback, this));
+	//physicsItem->setPosition(Vec2(origin.x + visibleSize.width - physicsItem->getContentSize().width/2 ,
+	//	origin.y + visibleSize.height - physicsItem->getContentSize().height));
 
-	auto menu = Menu::create(physicsItem, NULL);
-	menu->setPosition(Vec2::ZERO);
-	this->addChild(menu, ZORDER_MENU);
+	//auto menu = Menu::create(physicsItem, NULL);
+	//menu->setPosition(Vec2::ZERO);
+	//this->addChild(menu, ZORDER_MENU);
 
 	m_modalNode = DrawNode::create();
 	Vec2 vecs[4];
