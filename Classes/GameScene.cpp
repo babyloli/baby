@@ -97,6 +97,14 @@ void Game::update(float dt){
 	addEnemy(dt);
 //	moveEnemy(dt);
 	findEnemy(dt);
+
+	//减速道具在可用的情况下， 更新减速道具的目标怪兽
+	//auto sd = this->getChildByTag(TYPE_PROP_SLOWDOWN);
+	//auto slowdown = (PropsSlowdown*)sd;
+	//if(slowdown->isAvailable() && slowdown->getTargetsNumber() != m_enemies.size()){
+	//	slowdown->setSlowdownTargets(m_enemies);
+	//}
+
 }
 
 void Game::loadData(){
@@ -267,6 +275,7 @@ void Game::loadToolBar(){
 		auto target = event->getCurrentTarget();
 		Vec2 point = target->convertTouchToNodeSpace(touch);
 		if (rect.containsPoint(point)){
+			CocosDenshion::SimpleAudioEngine::getInstance()->stopAllEffects();
 			auto scene = Game::createScene(m_section, m_id);
 			Director::getInstance()->replaceScene(scene);
 			Director::getInstance()->resume();
@@ -281,6 +290,7 @@ void Game::loadToolBar(){
 		auto target = event->getCurrentTarget();
 		Vec2 point = target->convertTouchToNodeSpace(touch);
 		if (rect.containsPoint(point)){
+			CocosDenshion::SimpleAudioEngine::getInstance()->stopAllEffects();
 
 			if(ResourceManager::getInstance()->isBackgroundMusicAllow()){
 				CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
@@ -550,7 +560,7 @@ void Game::loadEquipmentSlot()
 
 	int health = UserDefault::sharedUserDefault()->getIntegerForKey("Health");
 	int sum = 0;
-	for(int i = 1; i < m_section; i++)
+	for(int i = 0; i < m_section; i++)
 	{
 		for(int j = 0; j < ResourceManager::getInstance()->sections[i].getRows(); j++)
 		{
@@ -559,9 +569,7 @@ void Game::loadEquipmentSlot()
 			sum += heart;
 		}
 	}
-	//现阶段的section已获得的heart占该section的所有heart的总数之比
-	int a= ( health - sum)* 100 /(3 * ResourceManager::getInstance()->sections[m_section - 1].getRows());
-	state->setPercentage(a);
+	state->setPercentage((health - sum)/3 * ResourceManager::getInstance()->sections[m_section - 1].getRows());
 	TTFConfig config("fonts/cardFont.ttf",24);
 	auto healthLabel = Label::createWithTTF(config,itos(health));
 	healthLabel->setPosition(state->getContentSize().width/2,0);
@@ -816,12 +824,6 @@ void Game::gameOver(bool isWin)
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	
-	if(m_section > UserDefault::sharedUserDefault()->getIntegerForKey("Section"))
-	{
-		UserDefault::sharedUserDefault()->setIntegerForKey("Section",m_section);
-		UserDefault::sharedUserDefault()->setIntegerForKey("Level",m_id);
-	}
-
 	if(isWin){
 		winGame();
 	}
@@ -872,7 +874,6 @@ void Game::winGame()
 	nextButton->addTouchEventListener(this,toucheventselector(Game::onTouchWinPage));
 	shopButton->addTouchEventListener(this,toucheventselector(Game::onTouchWinPage));
 
-
 	auto winAction = RepeatForever::create(Animate::create(AnimationCache::getInstance()->getAnimation(ANIMAITON_WIN)));
 	auto winspirte = static_cast<ComRender*>(node->getChildByTag(VICTORY_SPRITE)->getComponent("CCSprite"));
 	winspirte->getNode()->setScale(1.1f);
@@ -886,7 +887,6 @@ void Game::winGame()
 	goldNumber->setVisible(false);
 	HCSVFile* sectionData = &ResourceManager::getInstance()->sections[m_section-1];
 
-	//本关获得的heart
 	int health = 0;
 	int bb_hp = m_baby->getHp();
 	if(bb_hp >= 8){
@@ -898,7 +898,6 @@ void Game::winGame()
 	else if(bb_hp < 6 && bb_hp >= 3){
 		health = 1;
 	}
-	//获得的金条计算
 	int gold = (m_money - std::atoi(sectionData->getData(m_id, 4))) / 1000 + m_towers.size() / 2 + health;
 	if(gold < 0){
 		gold = 0;
@@ -1002,14 +1001,8 @@ void Game::winGame()
 				UserDefault::sharedUserDefault()->setIntegerForKey("Level",m_id + 1);
 			}
 			else{
-				//健康值达到该section的三分之二就可以开启下一关
-				int myhealth = UserDefault::sharedUserDefault()->getIntegerForKey("Health");
-				if(myhealth > m_section * 16){
-					UserDefault::sharedUserDefault()->setIntegerForKey("Section",m_section + 1);
-					UserDefault::sharedUserDefault()->setIntegerForKey("Level",0);
-					nextButton->setTouchEnabled(false);
-					nextButton->setColor(Color3B(150,150,150));
-				}
+				UserDefault::sharedUserDefault()->setIntegerForKey("Section",m_section + 1);
+				UserDefault::sharedUserDefault()->setIntegerForKey("Level",0);
 			}
 	}
 }
@@ -1275,6 +1268,7 @@ void Game::onTouchWinPage(Object* pSender, TouchEventType type)
 				{
 					auto s = IGameLevelSelector::createScene(m_section);
 					if(ResourceManager::getInstance()->isBackgroundMusicAllow()){
+						CocosDenshion::SimpleAudioEngine::getInstance()->stopAllEffects();
 						CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
 						CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(BACKGROUND_MUSIC_MENU,true);
 					}
@@ -1284,6 +1278,7 @@ void Game::onTouchWinPage(Object* pSender, TouchEventType type)
 				}
 			case UI_BUTTON_SUCCESS_REPLAY:
 				{
+					CocosDenshion::SimpleAudioEngine::getInstance()->stopAllEffects();
 					auto s = Game::createScene(m_section,m_id);
 					Director::getInstance()->replaceScene(s);
 					Director::getInstance()->resume();
@@ -1291,6 +1286,8 @@ void Game::onTouchWinPage(Object* pSender, TouchEventType type)
 				}
 			case UI_BUTTON_SUCCESS_NEXT:
 				{
+					
+					CocosDenshion::SimpleAudioEngine::getInstance()->stopAllEffects();
 					int sum = ResourceManager::getInstance()->sections[m_section-1].getRows();
 					if(m_id < sum - 1){
 						auto s = Game::createScene(m_section,m_id+1);
@@ -1329,6 +1326,8 @@ void Game::onTouchFailPage(Object* pSender, TouchEventType type)
 		{
 		case UI_BUTTON_FAIL_RETURN:
 			{
+				
+				CocosDenshion::SimpleAudioEngine::getInstance()->stopAllEffects();
 				auto s = IGameLevelSelector::createScene(m_section);
 				Director::getInstance()->replaceScene(s);
 				Director::getInstance()->resume();
@@ -1336,6 +1335,7 @@ void Game::onTouchFailPage(Object* pSender, TouchEventType type)
 			}
 		case UI_BUTTON_FAIL_REPLAY:
 			{
+				CocosDenshion::SimpleAudioEngine::getInstance()->stopAllEffects();
 				auto scene = Game::createScene(m_section, m_id);
 				Director::getInstance()->replaceScene(scene);
 				Director::getInstance()->resume();
