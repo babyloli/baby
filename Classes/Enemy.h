@@ -62,6 +62,7 @@ public:
 	void setPrice(int price);
 	bool getMode();
 	void setMode(bool b);
+	int getType();
 	virtual Sprite* getEnemy();
 };
 #endif

@@ -47,6 +47,9 @@ void ResourceManager::init(){
 	//---------------------PreLoad Music and Effect sound------------
 	CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic(BACKGROUND_MUSIC_MENU);
 	CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic(BACKGROUND_MUSIC_GAMESCENE_1);
+	CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic(BACKGROUND_MUSIC_GAMESCENE_2);
+	CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic(BACKGROUND_MUSIC_GAMESCENE_3);
+	CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic(BACKGROUND_MUSIC_GAMESCENE_4);
 	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("music/sceneSound/321go.mp3");
 	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("music/sceneSound/ohmygod.mp3");
 	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("music/sceneSound/ohno.mp3");

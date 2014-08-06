@@ -358,7 +358,7 @@ void Game::loadTower(){
 		std::vector<std::string> types;
 		split(type, ",", &types);
 		int mid = types.size()/2;
-		for (int j = 0; j < types.size(); j++)
+		for (int j = 0; j < (int)types.size(); j++)
 		{
 			int temp = std::atoi(types.at(j).c_str());
 			std::string spriteFrameName = rm->towerData->getData(temp, 1);
@@ -571,8 +571,8 @@ void Game::loadEquipmentSlot()
 
 void Game::countDown(float dt){
 
-	if(ResourceManager::getInstance()->isEffectMusicAllow()){
-		//CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("music/sceneSound/ohmygod.mp3");
+	if(ResourceManager::getInstance()->isEffectMusicAllow() && m_countdown == 3){
+		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("music/sceneSound/321go.mp3");
 	}
 
 	if (m_countdown <= 0){
@@ -595,8 +595,28 @@ void Game::countDown(float dt){
 		}
 
 		if(ResourceManager::getInstance()->isBackgroundMusicAllow()){		
-			CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("music/GameSceneMusic0.mp3");
-			CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("music/GameSceneMusic0.mp3",true);
+			switch (m_section){
+			case 1:
+				{
+					CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(BACKGROUND_MUSIC_GAMESCENE_1,true);
+					break;
+				}
+			case 2:
+				{
+					CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(BACKGROUND_MUSIC_GAMESCENE_2,true);
+					break;
+				}
+			case 3:
+				{
+					CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(BACKGROUND_MUSIC_GAMESCENE_3,true);
+					break;
+				}
+			case 4:
+				{
+					CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(BACKGROUND_MUSIC_GAMESCENE_4,true);
+					break;
+				}
+			}
 		}
 	}
 	else
@@ -730,7 +750,7 @@ void Game::moveEnemy(float dt){
 					}
 					else //如果走到了其他路上
 					{
-						for (int k = 0; k < m_roads.size(); k++){
+						for (int k = 0; k < (int)m_roads.size(); k++){
 							Road* it = &m_roads.at(k);
 							if (it->containsPoint(enemy_position)){
 								enemy->setDirection(it->getDirection());
@@ -834,6 +854,12 @@ void Game::winGame()
 	else{
 		return;
 	}
+
+	if (ResourceManager::getInstance()->isEffectMusicAllow()){
+		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("music/sceneSound/victory.mp3");
+	}
+
+
 
 	auto render = static_cast<ComRender*>(node->getChildByTag(VICTORY_PANNEL)->getComponent("GUIComponent"));
 	auto widget = static_cast<Widget*>(render->getNode());
@@ -996,6 +1022,10 @@ void Game::failGame()
 	auto failUI = GUIReader::getInstance()->widgetFromJsonFile("UI/GamOver_Fail_1/GamOver_Fail_1.ExportJson");
 	this->addChild(failUI,ZORDER_MENU);
 
+	if (ResourceManager::getInstance()->isEffectMusicAllow()){
+		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("music/sceneSound/ohmygod.mp3");
+	}
+
 	auto failSprite = Sprite::create();
 	auto failAction = RepeatForever::create(Animate::create(AnimationCache::getInstance()->getAnimation(ANIMATION_FAIL)));
 	failSprite->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height /2 + 75);
@@ -1092,6 +1122,7 @@ void Game::onEnter(){
 			if (damage > 0)
 				enemy->setHp(enemy->getHp() - damage);
 			bullet->setDie();
+
 			return true;
 		}
 		if(m_assistants.size() > 0){
@@ -1243,6 +1274,10 @@ void Game::onTouchWinPage(Object* pSender, TouchEventType type)
 			case UI_BUTTON_SUCCESS_RETURN:
 				{
 					auto s = IGameLevelSelector::createScene(m_section);
+					if(ResourceManager::getInstance()->isBackgroundMusicAllow()){
+						CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+						CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(BACKGROUND_MUSIC_MENU,true);
+					}
 					Director::getInstance()->replaceScene(s);
 					Director::getInstance()->resume();
 					break;
