@@ -98,7 +98,7 @@
   </object>
   <object x="640" y="160" width="80" height="80">
    <properties>
-    <property name="type" value="0,4,6,8"/>
+    <property name="type" value="6,7,8"/>
    </properties>
   </object>
  </objectgroup>

@@ -95,37 +95,57 @@
  <objectgroup name="tower" width="16" height="9">
   <object x="480" y="159" width="80" height="80">
    <properties>
-    <property name="type" value="5"/>
+    <property name="type" value="2,4,5"/>
    </properties>
   </object>
   <object x="322" y="408" width="80" height="80">
    <properties>
-    <property name="type" value="5"/>
+    <property name="type" value="2,4,5"/>
    </properties>
   </object>
   <object x="723" y="314" width="80" height="80">
    <properties>
-    <property name="type" value="5"/>
+    <property name="type" value="2,4,5"/>
    </properties>
   </object>
   <object x="800" y="400" width="80" height="80">
    <properties>
-    <property name="type" value="5"/>
+    <property name="type" value="2,4,5"/>
    </properties>
   </object>
   <object x="562" y="316" width="80" height="80">
    <properties>
-    <property name="type" value="5"/>
+    <property name="type" value="2,4,5"/>
    </properties>
   </object>
   <object x="721" y="158" width="80" height="80">
    <properties>
-    <property name="type" value="5"/>
+    <property name="type" value="2,4,5"/>
    </properties>
   </object>
   <object x="1040" y="160" width="80" height="80">
    <properties>
-    <property name="type" value="5"/>
+    <property name="type" value="2,4,5"/>
+   </properties>
+  </object>
+  <object x="80" y="400" width="80" height="80">
+   <properties>
+    <property name="type" value="2,4,5"/>
+   </properties>
+  </object>
+  <object x="80" y="160" width="80" height="80">
+   <properties>
+    <property name="type" value="2,4,5"/>
+   </properties>
+  </object>
+  <object x="880" y="160" width="80" height="80">
+   <properties>
+    <property name="type" value="2,4,5"/>
+   </properties>
+  </object>
+  <object x="400" y="560" width="80" height="80">
+   <properties>
+    <property name="type" value="2,4,5"/>
    </properties>
   </object>
  </objectgroup>

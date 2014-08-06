@@ -22,32 +22,32 @@
  <objectgroup name="tower" width="16" height="9">
   <object x="560" y="80" width="80" height="80">
    <properties>
-    <property name="type" value="0"/>
+    <property name="type" value="0,1,2"/>
    </properties>
   </object>
   <object x="320" y="240" width="80" height="80">
    <properties>
-    <property name="type" value="0"/>
+    <property name="type" value="0,1,2"/>
    </properties>
   </object>
   <object x="800" y="240" width="80" height="80">
    <properties>
-    <property name="type" value="0"/>
+    <property name="type" value="0,1,2"/>
    </properties>
   </object>
   <object x="1040" y="240" width="80" height="80">
    <properties>
-    <property name="type" value="0"/>
+    <property name="type" value="0,1,2"/>
    </properties>
   </object>
   <object x="720" y="480" width="80" height="80">
    <properties>
-    <property name="type" value="0"/>
+    <property name="type" value="0,1,2"/>
    </properties>
   </object>
   <object x="160" y="480" width="80" height="80">
    <properties>
-    <property name="type" value="0"/>
+    <property name="type" value="0,1,2"/>
    </properties>
   </object>
  </objectgroup>

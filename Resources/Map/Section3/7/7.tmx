@@ -11,17 +11,32 @@
  <objectgroup name="tower" width="16" height="9">
   <object x="400" y="400" width="80" height="80">
    <properties>
-    <property name="type" value="2,3"/>
+    <property name="type" value="2,3,5,7"/>
    </properties>
   </object>
   <object x="640" y="240" width="80" height="80">
    <properties>
-    <property name="type" value="1,5"/>
+    <property name="type" value="1,2,4,5,6"/>
    </properties>
   </object>
   <object x="880" y="400" width="80" height="80">
    <properties>
-    <property name="type" value="6,7"/>
+    <property name="type" value="3,6,7,8"/>
+   </properties>
+  </object>
+  <object x="960" y="240" width="80" height="80">
+   <properties>
+    <property name="type" value="3,6,7,8"/>
+   </properties>
+  </object>
+  <object x="720" y="400" width="80" height="80">
+   <properties>
+    <property name="type" value="1,2,4,5,6"/>
+   </properties>
+  </object>
+  <object x="320" y="240" width="80" height="80">
+   <properties>
+    <property name="type" value="2,3,5,7"/>
    </properties>
   </object>
  </objectgroup>

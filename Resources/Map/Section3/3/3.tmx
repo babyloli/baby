@@ -8,7 +8,7 @@
    eJwNwwc3FgAAAMDPzJY9yqiskGzJLIpQVraQTRkNSkgpMuMnu3vvggKBQLAhhhpmuLeMMNIoo40x1jjjvW2CiSaZbIqpppluhpne8a5ZZptjrve87wPzzLfAQot8aLEllvrIMh9bboWVVlltjbXW+cR6n9pgo00222Krz3xum+2+8KUddvrKLrvt8bVv7LXPfgcc9K1DDjviqGOOO+Gk75xy2hnfO+uc8y646JLLrrjqBz+65robbvrJz37xq1tu+83v7vjDXffc96cH/vK3h/7xr0ce+88TTz3z3Asv/e+V194ABtEoyQ==
   </data>
  </layer>
- <objectgroup name="road" width="16" height="9">
+ <objectgroup name="road" width="16" height="9" visible="0">
   <object x="768" y="560" width="348" height="76">
    <properties>
     <property name="direction" value="left"/>
@@ -39,70 +39,120 @@
     <property name="direction" value="down"/>
    </properties>
   </object>
-  <object x="160" y="240" width="354" height="80">
+  <object x="160" y="240" width="371" height="79">
    <properties>
     <property name="direction" value="right"/>
    </properties>
   </object>
-  <object x="480" y="240" width="80" height="360">
+  <object x="491" y="239" width="80" height="284">
    <properties>
     <property name="direction" value="down"/>
    </properties>
   </object>
-  <object x="160" y="560" width="400" height="80">
+  <object x="161" y="489" width="409" height="80">
    <properties>
     <property name="direction" value="left"/>
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="people" width="16" height="9">
+ <objectgroup name="people" width="16" height="9" visible="0">
   <object name="enemy" x="1040" y="560" width="80" height="80"/>
-  <object name="baby" x="80" y="560" width="80" height="80"/>
-  <object name="assistant" x="163" y="584" width="33" height="36"/>
+  <object name="baby" x="77" y="484" width="80" height="80"/>
+  <object name="assistant" x="160" y="507" width="33" height="36"/>
  </objectgroup>
  <objectgroup name="tower" width="16" height="9">
   <object x="800" y="480" width="80" height="80">
    <properties>
-    <property name="type" value="5,6,7"/>
+    <property name="type" value="6,7,8"/>
    </properties>
   </object>
   <object x="640" y="400" width="80" height="80">
    <properties>
-    <property name="type" value="5,6,7"/>
+    <property name="type" value="6,7,8"/>
    </properties>
   </object>
-  <object x="560" y="400" width="80" height="80">
+  <object x="247" y="573" width="80" height="80">
    <properties>
-    <property name="type" value="5,6,7"/>
+    <property name="type" value="6,7,8"/>
    </properties>
   </object>
-  <object x="400" y="480" width="80" height="80">
+  <object x="1120" y="240" width="80" height="80">
    <properties>
-    <property name="type" value="5,6,7"/>
-   </properties>
-  </object>
-  <object x="240" y="320" width="80" height="80">
-   <properties>
-    <property name="type" value="5,6,7"/>
-   </properties>
-  </object>
-  <object x="960" y="320" width="80" height="80">
-   <properties>
-    <property name="type" value="5,6,7"/>
+    <property name="type" value="6,7,8"/>
    </properties>
   </object>
   <object x="400" y="160" width="80" height="80">
    <properties>
-    <property name="type" value="5,6,7"/>
+    <property name="type" value="6,7,8"/>
    </properties>
   </object>
   <object x="800" y="160" width="80" height="80">
    <properties>
-    <property name="type" value="5,6,7"/>
+    <property name="type" value="6,7,8"/>
+   </properties>
+  </object>
+  <object x="327" y="573" width="80" height="80">
+   <properties>
+    <property name="type" value="6,7,8"/>
+   </properties>
+  </object>
+  <object x="407" y="573" width="80" height="80">
+   <properties>
+    <property name="type" value="6,7,8"/>
+   </properties>
+  </object>
+  <object x="487" y="573" width="80" height="80">
+   <properties>
+    <property name="type" value="6,7,8"/>
+   </properties>
+  </object>
+  <object x="1120" y="160" width="80" height="80">
+   <properties>
+    <property name="type" value="6,7,8"/>
+   </properties>
+  </object>
+  <object x="880" y="480" width="80" height="80">
+   <properties>
+    <property name="type" value="6,7,8"/>
+   </properties>
+  </object>
+  <object x="960" y="480" width="80" height="80">
+   <properties>
+    <property name="type" value="6,7,8"/>
+   </properties>
+  </object>
+  <object x="560" y="160" width="80" height="80">
+   <properties>
+    <property name="type" value="6,7,8"/>
+   </properties>
+  </object>
+  <object x="640" y="160" width="80" height="80">
+   <properties>
+    <property name="type" value="6,7,8"/>
+   </properties>
+  </object>
+  <object x="720" y="160" width="80" height="80">
+   <properties>
+    <property name="type" value="6,7,8"/>
+   </properties>
+  </object>
+  <object x="480" y="160" width="80" height="80">
+   <properties>
+    <property name="type" value="6,7,8"/>
+   </properties>
+  </object>
+  <object x="80" y="160" width="80" height="80">
+   <properties>
+    <property name="type" value="6,7,8"/>
+   </properties>
+  </object>
+  <object x="80" y="240" width="80" height="80">
+   <properties>
+    <property name="type" value="6,7,8"/>
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="barrier" width="16" height="9">
+ <objectgroup name="barrier" width="16" height="9" visible="0">
   <object x="800" y="320" height="240"/>
   <object x="800" y="560" width="320"/>
   <object x="1120" y="560" height="80"/>
@@ -112,15 +162,15 @@
   <object x="1040" y="160" height="80"/>
   <object x="240" y="160" width="800"/>
   <object x="240" y="160" height="80"/>
-  <object x="240" y="240" width="320"/>
-  <object x="560" y="240" height="400"/>
-  <object x="80" y="640" width="480"/>
-  <object x="80" y="560" width="400"/>
-  <object x="480" y="320" height="240"/>
-  <object x="160" y="320" width="320"/>
+  <object x="240" y="240" width="336"/>
+  <object x="160" y="320" width="329"/>
   <object x="160" y="80" height="240"/>
   <object x="160" y="80" width="960"/>
   <object x="1120" y="80" height="240"/>
   <object x="800" y="320" width="320"/>
+  <object x="575" y="243" height="327"/>
+  <object x="101" y="487" width="389" height="3"/>
+  <object x="99" y="569" width="477" height="3"/>
+  <object x="491" y="321" height="167"/>
  </objectgroup>
 </map>

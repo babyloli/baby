@@ -82,52 +82,67 @@
  <objectgroup name="tower" width="16" height="9">
   <object x="80" y="400" width="80" height="80">
    <properties>
-    <property name="type" value="1,4,7"/>
+    <property name="type" value="0,1,2"/>
    </properties>
   </object>
   <object x="400" y="400" width="80" height="80">
    <properties>
-    <property name="type" value="1,4,7"/>
+    <property name="type" value="0,1,2"/>
    </properties>
   </object>
-  <object x="320" y="80" width="80" height="80">
+  <object x="240" y="160" width="80" height="80">
    <properties>
-    <property name="type" value="1,4,7"/>
+    <property name="type" value="0,1,2"/>
    </properties>
   </object>
   <object x="560" y="240" width="80" height="80">
    <properties>
-    <property name="type" value="1,4,7"/>
+    <property name="type" value="0,1,2"/>
    </properties>
   </object>
   <object x="480" y="80" width="80" height="80">
    <properties>
-    <property name="type" value="1,4,7"/>
+    <property name="type" value="0,1,2"/>
    </properties>
   </object>
   <object x="640" y="80" width="80" height="80">
    <properties>
-    <property name="type" value="1,4,7"/>
+    <property name="type" value="0,1,2"/>
    </properties>
   </object>
-  <object x="800" y="80" width="80" height="80">
+  <object x="160" y="560" width="80" height="80">
    <properties>
-    <property name="type" value="1,4,7"/>
+    <property name="type" value="0,1,2"/>
    </properties>
   </object>
-  <object x="960" y="80" width="80" height="80">
+  <object x="80" y="320" width="80" height="80">
    <properties>
-    <property name="type" value="1,4,7"/>
+    <property name="type" value="0,1,2"/>
    </properties>
   </object>
   <object x="1040" y="240" width="80" height="80">
    <properties>
-    <property name="type" value="1,4,7"/>
+    <property name="type" value="0,1,2"/>
    </properties>
   </object>
   <object x="1040" y="400" width="80" height="80">
    <properties>
-    <property name="type" value="1,4,7"/>
+    <property name="type" value="0,1,2"/>
+   </properties>
+  </object>
+  <object x="800" y="240" width="80" height="80">
+   <properties>
+    <property name="type" value="0,1,2"/>
+   </properties>
+  </object>
+  <object x="80" y="480" width="80" height="80">
+   <properties>
+    <property name="type" value="0,1,2"/>
+   </properties>
+  </object>
+  <object x="320" y="80" width="80" height="80">
+   <properties>
+    <property name="type" value="0,1,2"/>
    </properties>
   </object>
  </objectgroup>
