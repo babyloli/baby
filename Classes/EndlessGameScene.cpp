@@ -13,6 +13,8 @@ Endless::Endless()
 }
 
 Scene* Endless::createScene(){
+	CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+
 	auto scene = Scene::createWithPhysics();
 	scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_NONE);
 	auto layer = Endless::create();
@@ -41,7 +43,6 @@ bool Endless::init(){
 	if (!Game::init())
 		return false;
 	loadMousePosition();
-
 	this->schedule(schedule_selector(Endless::showMouse));
 	return true;
 }
@@ -105,7 +106,11 @@ void Endless::loadToolBar(){
 				m_playBtn->setVisible(true);
 				modalSprite->setVisible(true);
 
-				if(ResourceManager::getInstance()->isBackgroundMusicAllow()){
+				if(ResourceManager::getInstance()->isEffectMusicAllow()){
+					CocosDenshion::SimpleAudioEngine::getInstance()->pauseAllEffects();
+				}
+
+				if(CocosDenshion::SimpleAudioEngine::getInstance()->isBackgroundMusicPlaying()){
 					CocosDenshion::SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
 				}
 
@@ -139,7 +144,10 @@ void Endless::loadToolBar(){
 				modalSprite->setVisible(false);
 				this->_eventDispatcher->removeEventListenersForTarget(modalSprite);
 
-				if(ResourceManager::getInstance()->isBackgroundMusicAllow()){
+				if(ResourceManager::getInstance()->isEffectMusicAllow()){
+					CocosDenshion::SimpleAudioEngine::getInstance()->resumeAllEffects();
+				}
+				if(CocosDenshion::SimpleAudioEngine::getInstance()->isBackgroundMusicPlaying()){
 					CocosDenshion::SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
 				}
 				return true;
@@ -154,6 +162,8 @@ void Endless::loadToolBar(){
 		auto target = event->getCurrentTarget();
 		Vec2 point = target->convertTouchToNodeSpace(touch);
 		if (rect.containsPoint(point)){
+			CocosDenshion::SimpleAudioEngine::getInstance()->stopAllEffects();
+
 			auto scene = Endless::createScene();
 			Director::getInstance()->replaceScene(scene);
 			Director::getInstance()->resume();
@@ -168,6 +178,8 @@ void Endless::loadToolBar(){
 		auto target = event->getCurrentTarget();
 		Vec2 point = target->convertTouchToNodeSpace(touch);
 		if (rect.containsPoint(point)){
+			CocosDenshion::SimpleAudioEngine::getInstance()->stopAllEffects();
+
 			if(ResourceManager::getInstance()->isBackgroundMusicAllow()){
 				CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
 				CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("music/MenuBackgroundMusic.mp3",true);
