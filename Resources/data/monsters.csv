@@ -9,4 +9,4 @@ id,level,name,numberOfFrame,physics_defense,magic_defense,moveSpeed,attack,money
 7,0,G8,5,0,0,100,1,40,15,150
 8,1,G9,10,0,0,90,2,25,10,300
 9,1,G10,4,0,0,30,2,40,15,300
-10,2,G11,4,0,0,10,10,500,0,1000
+10,2,G11,4,0,0,10,10,500,0,2000
