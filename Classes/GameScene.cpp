@@ -25,6 +25,8 @@ const int VICTORY_HEART_3 = 503;
 const int VICTORY_GOLD_MULTI = 504;
 const int VICTORY_GOLD_NUMBER = 505;
 
+const float assistantSpeed = 0.3;
+
 Game::Game(int section, int id)
 {
 	m_section = section;
@@ -467,7 +469,7 @@ void Game::loadRoadAndBarriers(){
 			duration = height / 40;
 		}
 		m_roads.push_back(Road(x, y, width, height, direction));	//把这个对象看作长方形储存到数组里
-		m_actionsAssistant.pushBack(MoveTo::create(duration, destination));		
+		m_actionsAssistant.pushBack(MoveTo::create(duration * assistantSpeed, destination));		
 	}
 	m_actionsAssistant.reverse();
 
@@ -1129,7 +1131,7 @@ void Game::onEnter(){
 				assistant = static_cast<Assistant*>(nodeB);
 			}
 			if(enemy && assistant){
-				int damage = assistant->getPhysicalDefence() - enemy->getPhysicalDefence();
+				float damage = assistant->getPhysicalDefence() - enemy->getPhysicalDefence();
 				damage = damage < 0 ? -damage : damage;
 				float rate = enemy->getPhysicalDefence() / (assistant->getPhysicalDefence() + enemy->getPhysicalDefence());
 				enemy->setHp(enemy->getHp() - damage * ( 1 - rate ));

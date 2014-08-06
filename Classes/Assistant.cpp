@@ -23,10 +23,10 @@ bool Assistant::init()
 	m_direction = ROAD_NONE;
 
 	//根据等级确定攻击力,速度等
-	int level = UserDefault::sharedUserDefault()->getIntegerForKey("Level");
-	m_curSpeed = 40;
-	m_physicalDefence = 80;
-	m_magicalDefence = 80;
+	int health = UserDefault::sharedUserDefault()->getIntegerForKey("Health");
+	m_curSpeed = 40;//没有用到
+	m_physicalDefence = 2 * health;
+	m_magicalDefence = 2 * health;
 	m_isDie = false;
 
 	m_assistant = Sprite::create();
