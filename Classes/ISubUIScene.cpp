@@ -273,51 +273,80 @@ bool ISectionSelector::init()
 	youthButton->addTouchEventListener(this,toucheventselector(ISectionSelector::onTouchSelected));
 
 	int section = UserDefault::sharedUserDefault()->getIntegerForKey("Section");
-	switch (section)
-	{
-	case 0:
-	case 1:
-		{
-			kidButtion->setTouchEnabled(false);
-			kidButtion->setVisible(false);
-			childButton->setTouchEnabled(false);
-			childButton->setVisible(false);
-			youthButton->setTouchEnabled(false);
-			youthButton->setVisible(false);
-			break;
-		}
-	case 2:
-		{
-			lockKid->setVisible(false);
-			childButton->setTouchEnabled(false);
-			childButton->setVisible(false);
-			youthButton->setTouchEnabled(false);
-			youthButton->setVisible(false);
-			break;
-		}
-	case 3:
-		{
-			lockKid->setVisible(false);
-			lockChild->setVisible(false);
-			youthButton->setTouchEnabled(false);
-			youthButton->setVisible(false);
-			break;
-		}
-	case 4:
-		{
-			lockKid->setVisible(false);
-			lockChild->setVisible(false);
-			lockYouth->setVisible(false);
-			break;
-		}
-	default:
-		{
-			lockKid->setVisible(false);
-			lockChild->setVisible(false);
-			lockYouth->setVisible(false);
-		}
-		break;
+	int level =  UserDefault::sharedUserDefault()->getIntegerForKey("Level");
+	int health = UserDefault::sharedUserDefault()->getIntegerForKey("Health");
+	if(section >= 4 || (section == 3 && level == 7 && health >= 48 )){
+		lockKid->setVisible(false);
+		lockChild->setVisible(false);
+		lockYouth->setVisible(false);
 	}
+	else if(section == 3 ||(section == 2 && level == 7 && health >= 32 )){//后面是解锁条件
+		lockKid->setVisible(false);
+		lockChild->setVisible(false);
+		youthButton->setTouchEnabled(false);
+		youthButton->setVisible(false);
+	}
+	else if(section == 2 ||(section == 1 && level == 7 && health >= 16)){
+		lockKid->setVisible(false);
+		childButton->setTouchEnabled(false);
+		childButton->setVisible(false);
+		youthButton->setTouchEnabled(false);
+		youthButton->setVisible(false);
+	}
+	else{
+		kidButtion->setTouchEnabled(false);
+		kidButtion->setVisible(false);
+		childButton->setTouchEnabled(false);
+		childButton->setVisible(false);
+		youthButton->setTouchEnabled(false);
+		youthButton->setVisible(false);
+	}
+
+// 	switch (section)
+// 	{
+// 	case 0:
+// 	case 1:
+// 		{
+// 			kidButtion->setTouchEnabled(false);
+// 			kidButtion->setVisible(false);
+// 			childButton->setTouchEnabled(false);
+// 			childButton->setVisible(false);
+// 			youthButton->setTouchEnabled(false);
+// 			youthButton->setVisible(false);
+// 			break;
+// 		}
+// 	case 2:
+// 		{
+// 			lockKid->setVisible(false);
+// 			childButton->setTouchEnabled(false);
+// 			childButton->setVisible(false);
+// 			youthButton->setTouchEnabled(false);
+// 			youthButton->setVisible(false);
+// 			break;
+// 		}
+// 	case 3:
+// 		{
+// 			lockKid->setVisible(false);
+// 			lockChild->setVisible(false);
+// 			youthButton->setTouchEnabled(false);
+// 			youthButton->setVisible(false);
+// 			break;
+// 		}
+// 	case 4:
+// 		{
+// 			lockKid->setVisible(false);
+// 			lockChild->setVisible(false);
+// 			lockYouth->setVisible(false);
+// 			break;
+// 		}
+// 	default:
+// 		{
+// 			lockKid->setVisible(false);
+// 			lockChild->setVisible(false);
+// 			lockYouth->setVisible(false);
+// 		}
+// 		break;
+// 	}
 
 	auto menuBar = GUIReader::getInstance()->widgetFromJsonFile("UI/chooseBar_1/chooseBar_1.ExportJson");
 	this->addChild(menuBar);
@@ -376,6 +405,8 @@ void ISectionSelector::onTouchBar(Object* pSender, TouchEventType type)
 }
 
 
+
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Scene* IGameLevelSelector::createScene(int section)
 {
@@ -423,12 +454,16 @@ bool IGameLevelSelector::init(int section)
 	shopButton->addTouchEventListener(this,toucheventselector(IGameLevelSelector::ontouchBar));
 	homeButton->addTouchEventListener(this,toucheventselector(IGameLevelSelector::ontouchBar));
 
+	m_curSection = UserDefault::sharedUserDefault()->getIntegerForKey("Section");
+	m_curLevel = UserDefault::sharedUserDefault()->getIntegerForKey("Level");
+
 	TableView* tableView = TableView::create(this,Size(1280, 360));      // 创建一个tableView
 	tableView->setDirection(TableView::Direction::HORIZONTAL);   // 设置方向
 	tableView->setPosition(origin.x, origin.y + 180);      //设置位置
 	tableView->setDelegate(this);  //该步骤非常关键，把tableView和当前类绑定在一起，故后面后面调用的主体是tableView
 	this->addChild(tableView,0);
 	tableView->reloadData();  
+
 
 	return true;
 }
@@ -445,8 +480,14 @@ void IGameLevelSelector::tableCellTouched(cocos2d::extension::TableView* table, 
 {
 	CCLOG("cell touched at index: %ld", cell->getIdx());
 	int i = cell->getIdx();
-	auto gamescene1 = Game::createScene(m_section, i);
-	Director::getInstance()->replaceScene(gamescene1);
+// 
+// 	if((m_curSection == m_section && m_curLevel >= i) || m_curSection > m_section){
+		auto gamescene1 = Game::createScene(m_section, i);
+		Director::getInstance()->replaceScene(gamescene1);
+// 	}
+// 	else{
+// 		return;
+// 	}
 }
 
 Size IGameLevelSelector::tableCellSizeForIndex(TableView* table, ssize_t idx)
@@ -458,16 +499,16 @@ Size IGameLevelSelector::tableCellSizeForIndex(TableView* table, ssize_t idx)
 TableViewCell* IGameLevelSelector::tableCellAtIndex(TableView* table, ssize_t idx)
 {
 	idx++;
+	CCLOG("%ld", idx);
 	String* string = String::createWithFormat("%d", idx);
 	TableViewCell* cell = table->dequeueCell();
 	
 	auto str = String::createWithFormat("Map/Section%d/%d/m%d.png", m_section, idx, idx);
+		
 	if (!cell)
 	{
 		//创建单元，如果自定义单元效果，需要继承tableViewCell, 并且重载draw
 		cell = TableViewCell::create();
-//		cell = new TableViewCell();
-//		cell->autorelease();	
 		
 		Sprite* sprite = Sprite::create(str->getCString());
 		auto cellSize = tableCellSizeForIndex(table, idx);
@@ -476,13 +517,18 @@ TableViewCell* IGameLevelSelector::tableCellAtIndex(TableView* table, ssize_t id
 		sprite->setPosition(Vec2(cellSize.width/2,cellSize.height/2));
 		cell->addChild(sprite);
 
-// 		auto label = LabelTTF::create(string->getCString(),"Helvetica",60.0);
-// 		label->setColor(Color3B(255, 0, 0));
 		auto label = LabelBMFont::create(string->getCString(),FONT_GOLD);
 		label->setScale(1.5f);
 		label->setPosition(Vec2(cellSize.width/2 -10,200));
 		label->setTag(456);
 		cell->addChild(label);
+		int i =cell->getIdx();
+// 		if(m_curLevel+1 < idx ){
+// 			auto s = Sprite::create("help.png");
+// 			sprite->addChild(s);
+// 			sprite->setColor(Color3B(150,150,150));
+// 			label->setColor(Color3B(150,150,150));
+// 		}
 	}
 	else
 	{
@@ -490,8 +536,13 @@ TableViewCell* IGameLevelSelector::tableCellAtIndex(TableView* table, ssize_t id
 		Sprite* sprite = (Sprite*)cell->getChildByTag(123);
 		sprite->setTexture(texture);
 
-		auto label = (LabelTTF*)cell->getChildByTag(456);
+		auto label = (LabelBMFont*)cell->getChildByTag(456);
 		label->setString(string->getCString());
+		int i = cell->getIdx();
+// 		if(m_curLevel+1 < idx ){
+// 			sprite->setColor(Color3B(150,150,150));
+// 			label->setColor(Color3B(150,150,150));
+// 		}
 	}
 
 	return cell;

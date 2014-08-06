@@ -13,7 +13,7 @@
 #include "Medicine.h"
 #include "Trap.h"
 #include "Assistant.h"
-
+ 
 USING_NS_CC;
 class Game : public cocos2d::Layer
 {

@@ -83,6 +83,9 @@ public:
 
 private:
 	int m_section;
+	int m_curSection;
+	int m_curLevel;
+	
 };
 
 
